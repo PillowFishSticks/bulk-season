@@ -2,7 +2,7 @@
 <html lang="en">
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Bulk Season</title>
-<meta name="theme-color" content="#120d0a">
+<meta name="theme-color" content="#120d0a"><link rel="manifest" href="manifest.webmanifest"><link rel="apple-touch-icon" href="desktop/icon.png"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%8D%94%3C/text%3E%3C/svg%3E">
 <link rel="stylesheet" href="fonts/fonts.css">
 <style>
@@ -215,7 +215,7 @@ body.touch .glyph{display:none!important}
 .credEnd{position:absolute;inset:0;display:grid;place-items:center;background:rgba(8,9,12,.6)}
 /* ---------- TITLE ---------- */
 #title{display:grid;place-items:center;cursor:pointer}
-.tstage{position:relative;display:grid;justify-items:center;gap:10px;text-align:center;transform:scale(var(--tk,1))}
+.tstage{position:absolute;left:50%;top:50%;translate:-50% -50%;width:max-content;display:grid;justify-items:center;gap:10px;text-align:center;transform:scale(var(--tk,1))}
 .logo.big{font-size:110px;-webkit-text-stroke:4px var(--out);text-shadow:0 8px 0 var(--out),0 0 60px rgba(242,194,48,.35)}
 .tsub{font:800 18px/1 var(--ui);letter-spacing:.4em;color:var(--muted);text-transform:uppercase}
 #titleCv{width:760px;height:auto;border-radius:16px;border:4px solid var(--out);box-shadow:0 10px 0 rgba(0,0,0,.5);margin-top:8px}
@@ -224,6 +224,12 @@ body.touch .glyph{display:none!important}
 body.pad .press .kbtxt{display:none} body.pad .press .padtxt{display:inline}
 body.touch .press .kbtxt{display:none} body.touch .press .tchtxt{display:inline}
 .tnote{font:700 15px/1 var(--ui);color:var(--muted)}
+.tfs{position:absolute;top:calc(14px + env(safe-area-inset-top,0px));right:calc(14px + env(safe-area-inset-right,0px));z-index:2;font-size:18px;padding:10px 16px}
+body.fs .tfs,body.nofs .tfs,body.nofs #fsBtn,body.nofs #fsBtn2{display:none}
+/* in a run on touch: a fullscreen button beside pause while the browser bar is showing */
+.runFs{display:none;position:absolute;left:calc(50% + 34px);bottom:calc(10px + env(safe-area-inset-bottom,0px));width:46px;height:46px;border-radius:50%;padding:0;font-size:20px}
+body.touch:not(.fs):not(.nofs) .runFs{display:grid;place-items:center}
+body.touch .tnote{display:none}
 @keyframes blink{50%{opacity:.35}}
 /* landscape screens: the hub is laid out at 1600×900 and scaled to fit, like a console game */
 body.staged #gym{overflow:hidden}
@@ -318,10 +324,10 @@ body.phone .stage{grid-template-rows:auto minmax(0,1fr) auto}
 
 /* on-screen controller (touch): a floating stick on the left, skills as a face-button cluster on the right */
 .vstick{display:none;position:absolute;left:calc(120px + env(safe-area-inset-left,0px));top:calc(100% - 120px - env(safe-area-inset-bottom,0px));width:150px;height:150px;margin:-75px 0 0 -75px;border-radius:50%;background:radial-gradient(rgba(255,255,255,.04),rgba(255,255,255,.13));border:3px solid rgba(255,255,255,.28);box-shadow:0 0 0 3px rgba(0,0,0,.35);pointer-events:none;opacity:.4;transition:opacity .2s}
-body.touch .vstick{display:block}
+body.touch .vstick{display:block;scale:var(--ck,1)}
 .vstick.on{opacity:1;transition:none}
 .vstick i{position:absolute;left:50%;top:50%;width:68px;height:68px;margin:-34px 0 0 -34px;border-radius:50%;background:linear-gradient(#4f596e,#2a303c);border:3px solid #0b0c10;box-shadow:inset 0 2px 0 rgba(255,255,255,.22),0 4px 0 rgba(0,0,0,.5)}
-body.touch .skillbar{left:auto;right:calc(14px + env(safe-area-inset-right,0px));bottom:calc(10px + env(safe-area-inset-bottom,0px));transform:none;display:grid;grid-template-columns:repeat(3,64px);grid-template-rows:repeat(3,58px);grid-template-areas:". y ." "x . b" ". a .";gap:0;place-items:center}
+body.touch .skillbar{scale:var(--ck,1);transform-origin:100% 100%;left:auto;right:calc(14px + env(safe-area-inset-right,0px));bottom:calc(10px + env(safe-area-inset-bottom,0px));transform:none;display:grid;grid-template-columns:repeat(3,64px);grid-template-rows:repeat(3,58px);grid-template-areas:". y ." "x . b" ". a .";gap:0;place-items:center}
 body.touch .sk{width:70px;height:70px;border-radius:50%;font-size:32px}
 body.touch .sk .cd{border-radius:50%}
 body.touch .sk[data-id=dash]{grid-area:a;width:84px;height:84px;font-size:38px}
@@ -419,6 +425,7 @@ body.touch .hnote .kbt{display:none} body.touch .hnote .tct{display:inline}
   <div id="rotate"><div class="rph">📱</div><div>Turn your phone sideways to play</div><small style="font:600 15px var(--ui);color:var(--muted)">Bulk Season plays in landscape</small></div>
   <section id="title" class="screen">
     <div class="vig"></div>
+    <button class="btn tfs" id="tfsBtn">⛶ Fullscreen</button>
     <div class="tstage">
       <h1 class="logo big">BULK SEASON</h1>
       <div class="tsub">Eat · Lift · Repeat</div>
@@ -530,6 +537,7 @@ body.touch .hnote .kbt{display:none} body.touch .hnote .tct{display:inline}
     <div class="skillbar" id="skillbar"></div>
     <div class="vstick" id="vstick"><i></i></div>
     <button class="pauseBtn" id="pauseBtn" aria-label="Pause">II</button>
+    <button class="btn runFs" id="runFs" aria-label="Fullscreen">⛶</button>
     <div class="hint" id="hint"></div>
   </section>
 
@@ -1242,6 +1250,12 @@ $("#saveLoad").onclick=()=>{
 };
 function toggleFS(){try{if(document.fullscreenElement)document.exitFullscreen();else document.documentElement.requestFullscreen({navigationUI:"hide"}).catch(()=>toast("Fullscreen isn't available here"));}catch(e){toast("Fullscreen isn't available here");}}
 $("#fsBtn").onclick=toggleFS;$("#fsBtn2").onclick=toggleFS;
+$("#tfsBtn").addEventListener("pointerdown",e=>e.stopPropagation());
+$("#tfsBtn").onclick=e=>{e.stopPropagation();toggleFS();};
+$("#runFs").addEventListener("pointerdown",e=>e.stopPropagation());
+$("#runFs").onclick=e=>{e.stopPropagation();toggleFS();};
+if(!document.fullscreenEnabled)document.body.classList.add("nofs");
+document.addEventListener("fullscreenchange",()=>{document.body.classList.toggle("fs",!!document.fullscreenElement);if(document.fullscreenElement&&document.body.classList.contains("touch"))try{screen.orientation.lock("landscape").catch(()=>{});}catch(e){}});
 document.addEventListener("fullscreenchange",()=>{$("#fsBtn").firstChild.textContent=document.fullscreenElement?"Exit fullscreen ":"Fullscreen ";});
 $("#seasonBtn").onclick=()=>{
   const m=medalsFor(S.seasonKcal);
@@ -1742,7 +1756,7 @@ function setupHazards(){
 const KEYS={};
 function toWorld(cx,cy){return[(cx-OX)/SCL,(cy-OY)/SCL];}
 // Touch: the first finger down anywhere on the arena becomes a floating stick centred where it landed
-const VS={id:null,ox:0,oy:0,dx:0,dy:0},VR=60;
+const VS={id:null,ox:0,oy:0,dx:0,dy:0};let VR=60;
 function vsDraw(){const el=$("#vstick");el.classList.toggle("on",VS.id!==null);el.style.left=VS.id!==null?VS.ox+"px":"";el.style.top=VS.id!==null?VS.oy+"px":"";el.firstElementChild.style.transform=`translate(${VS.dx*VR}px,${VS.dy*VR}px)`;}
 function vsReset(){VS.id=null;VS.dx=VS.dy=0;vsDraw();}
 cv.addEventListener("pointerdown",e=>{if(!R||paused)return;try{cv.setPointerCapture(e.pointerId);}catch(err){}ac();
@@ -2563,7 +2577,11 @@ function fitScreen(){
   b.style.setProperty("--k",k.toFixed(4));
   b.style.setProperty("--hk",land?clamp(Math.min(vw/1500,vh/840),1,1.9).toFixed(3):1);
   b.style.setProperty("--mk",land?clamp(k*1.05,.8,1.9).toFixed(3):1);
-  b.style.setProperty("--tk",clamp(Math.min(vw/1100,vh/900),.35,2).toFixed(3));
+  // touch controls shrink on short screens (a phone with the browser bar showing)
+  const ck=clamp(vh/400,.68,1);b.style.setProperty("--ck",ck.toFixed(3));VR=60*ck;
+  // title: measure its real size and fit it (phones in a browser can have under 300px of height)
+  const ts=document.querySelector(".tstage");
+  b.style.setProperty("--tk",(ts&&ts.offsetHeight?clamp(Math.min(vw*.94/ts.offsetWidth,vh*.92/ts.offsetHeight),.15,2):clamp(Math.min(vw/1100,vh/900),.35,2)).toFixed(3));
 }
 addEventListener("resize",fitScreen);fitScreen();
 // On landscape phones every menu card scales down to fit the screen, so nothing ever scrolls
@@ -2583,10 +2601,12 @@ function leaveTitle(goFS){
   if(awayEarned>=1)setTimeout(()=>banner("💷","Welcome back!",`Your gym earned ${money(awayEarned)} while you were away`,"gold"),400);
   homeTree();
 }
-$("#title").addEventListener("pointerdown",e=>{if(e.pointerType==="touch")setMode("touch");leaveTitle(true);});
+$("#title").addEventListener("pointerdown",e=>{if(e.pointerType==="touch")setMode("touch");else leaveTitle(true);});
+// touch starts on the tap's end: that's when the browser allows fullscreen
+$("#title").addEventListener("click",()=>leaveTitle(true));
 if(DEBUG){$("#title").hidden=true;$("#gym").hidden=false;}
 homeTree(); // small screens: start the tree on its root
-if(document.fonts&&document.fonts.ready)document.fonts.ready.then(()=>{SPR.clear();renderGym();});
+if(document.fonts&&document.fonts.ready)document.fonts.ready.then(()=>{SPR.clear();renderGym();fitScreen();});
 requestAnimationFrame(frame);
 
 /* ---------- DEBUG: balance simulator (open with #debug) ---------- */

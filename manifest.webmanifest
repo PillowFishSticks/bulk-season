@@ -1,0 +1,11 @@
+{
+  "name": "Bulk Season",
+  "short_name": "Bulk Season",
+  "start_url": "./",
+  "scope": "./",
+  "display": "fullscreen",
+  "orientation": "landscape",
+  "background_color": "#120d0a",
+  "theme_color": "#120d0a",
+  "icons": [{ "src": "desktop/icon.png", "sizes": "512x512", "type": "image/png", "purpose": "any" }]
+}
