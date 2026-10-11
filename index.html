@@ -1,0 +1,503 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Bulk Season</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bungee&family=Barlow+Semi+Condensed:wght@500;600;700&display=swap">
+<style>
+/* Layout: one-screen app. Gym hub (scrolling list of plates/upgrades) <-> full-bleed market run on a canvas. */
+:root{
+  --floor:#14161f; --panel:#1d2030; --panel-2:#252940; --line:#30354d;
+  --ink:#f3efe4; --muted:#9ba1ba;
+  --red:#e5383b; --blue:#3a7be0; --yellow:#f2c230; --green:#2fa36b; --white:#e8e4d8;
+  --skin:#f0c08a;
+  --display:"Bungee","Arial Black",Impact,sans-serif;
+  --body:"Barlow Semi Condensed","Arial Narrow",system-ui,sans-serif;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html,body{height:100%}
+body{margin:0;background:var(--floor);color:var(--ink);font:500 16px/1.4 var(--body);-webkit-tap-highlight-color:transparent;overflow:hidden}
+button{font:inherit;color:inherit;cursor:pointer}
+button:focus-visible{outline:3px solid var(--yellow);outline-offset:2px}
+#app{position:relative;height:100%;overflow:hidden}
+.screen{position:absolute;inset:0}
+
+/* ---------- GYM ---------- */
+#gym{overflow-y:auto;overflow-x:hidden;padding-inline:16px;padding-block:16px 40px}
+.wrap{max-width:720px;margin:0 auto;display:grid;grid-template-columns:minmax(0,1fr);gap:18px}
+.top{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.logo{font:400 clamp(28px,8vw,40px)/1 var(--display);letter-spacing:.02em;margin:0;color:var(--yellow);text-shadow:3px 3px 0 var(--red)}
+.bank{display:flex;flex-direction:column;align-items:flex-end}
+.bank b{font:400 24px/1 var(--display);font-variant-numeric:tabular-nums}
+.bank span,.lbl{font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);font-weight:700}
+.lifter{display:grid;grid-template-columns:120px 1fr;gap:16px;align-items:center;background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:14px}
+.lifter canvas{width:120px;height:120px}
+.lifter>*{min-width:0}
+.stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.stat b{display:block;white-space:nowrap;font:700 20px/1.1 var(--body);font-variant-numeric:tabular-nums}
+.zones{display:flex;gap:8px;overflow-x:auto;padding-bottom:4px;scrollbar-width:none}
+.zone{flex:0 0 auto;border:2px solid var(--line);background:var(--panel);border-radius:999px;padding:8px 14px;font-weight:700;white-space:nowrap}
+.zone[aria-pressed="true"]{border-color:var(--yellow);background:var(--panel-2)}
+.zone.locked{color:var(--muted);border-style:dashed}
+.zone.locked.afford{color:var(--ink);border-color:var(--green)}
+.go{border:0;border-radius:14px;padding:18px;background:var(--yellow);color:#1b1500;font:400 22px/1 var(--display);box-shadow:0 5px 0 #a8820f;transition:transform .08s}
+.go:active{transform:translateY(4px);box-shadow:0 1px 0 #a8820f}
+.group{display:grid;gap:8px}
+.ghead{display:flex;align-items:center;gap:10px;margin-top:6px}
+.plate{width:30px;height:30px;border-radius:50%;background:var(--c);display:grid;place-items:center;font:700 11px/1 var(--body);color:#111;box-shadow:inset 0 0 0 4px rgba(0,0,0,.18)}
+.plate::after{content:"";width:7px;height:7px;border-radius:50%;background:var(--floor)}
+.ghead h2{margin:0;font:400 16px/1 var(--display);letter-spacing:.03em}
+.ghead small{color:var(--muted);font-weight:600}
+.up{display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center;background:var(--panel);border:1px solid var(--line);border-left:4px solid var(--c);border-radius:10px;padding:10px 12px}
+.up h3{margin:0;font:700 17px/1.2 var(--body)}
+.up p{margin:2px 0 0;color:var(--muted);font-size:14px}
+.up p em{font-style:normal;color:var(--ink)}
+.pips{display:flex;gap:3px;margin-top:6px;flex-wrap:wrap}
+.pips i{width:8px;height:8px;border-radius:2px;background:var(--line)}
+.pips i.on{background:var(--c)}
+.buy{min-width:92px;border:0;border-radius:10px;padding:10px 12px;background:var(--panel-2);font-weight:700;font-variant-numeric:tabular-nums;box-shadow:inset 0 0 0 2px var(--line)}
+.buy.ok{background:var(--green);color:#04170d;box-shadow:none}
+.buy:disabled{cursor:default;opacity:.7}
+.foot{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;color:var(--muted);font-size:14px}
+.link{background:none;border:0;color:var(--muted);text-decoration:underline;padding:4px}
+
+/* ---------- RUN ---------- */
+#run{touch-action:none;user-select:none;-webkit-user-select:none}
+#run canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
+.hud{position:absolute;left:0;right:0;top:0;padding:10px 16px;display:grid;gap:6px;pointer-events:none;background:linear-gradient(var(--floor) 60%,transparent)}
+.hrow{display:flex;justify-content:space-between;align-items:baseline;gap:10px}
+.hrow .zn{font:400 15px/1 var(--display)}
+.hrow .kc{font:700 22px/1 var(--body);font-variant-numeric:tabular-nums;color:var(--yellow)}
+.bar{position:relative;height:16px;border-radius:8px;background:var(--panel-2);overflow:hidden}
+.bar i{position:absolute;inset:0 auto 0 0;width:0;background:var(--c)}
+.bar span{position:absolute;inset:0;padding:0 8px;display:flex;justify-content:space-between;align-items:center;font:700 11px/1 var(--body);letter-spacing:.1em;text-transform:uppercase;color:#fff;text-shadow:0 1px 2px #000}
+.bar.full i{animation:flash .4s infinite alternate}
+@keyframes flash{to{filter:brightness(1.6)}}
+.hint{position:absolute;left:0;right:0;bottom:calc(24px + env(safe-area-inset-bottom,0px));text-align:center;color:var(--muted);font-weight:700;pointer-events:none;transition:opacity .6s}
+
+/* ---------- RESULTS ---------- */
+.modal{position:absolute;inset:0;background:rgba(10,11,16,.78);display:grid;place-items:center;padding:16px;z-index:5}
+.card{width:min(420px,100%);background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:20px;display:grid;gap:14px;text-align:center}
+.card h2{margin:0;font:400 30px/1 var(--display);color:var(--yellow)}
+.card .big{font:700 40px/1 var(--body);font-variant-numeric:tabular-nums}
+.ate{display:flex;flex-wrap:wrap;justify-content:center;gap:6px 12px;color:var(--muted)}
+.ate b{color:var(--ink)}
+.toast{position:absolute;left:50%;top:16px;transform:translateX(-50%);background:var(--green);color:#04170d;font-weight:700;padding:8px 14px;border-radius:999px;z-index:9;pointer-events:none}
+@media (min-width:640px){.lifter{grid-template-columns:140px 1fr}.lifter canvas{width:140px;height:140px}}
+@media (prefers-reduced-motion:reduce){.go,.bar.full i{transition:none;animation:none}}
+</style>
+
+<div id="app">
+  <section id="gym" class="screen">
+    <div class="wrap">
+      <div class="top">
+        <h1 class="logo">BULK SEASON</h1>
+        <div class="bank"><b id="bankKcal">0</b><span>kcal to burn</span></div>
+      </div>
+      <div class="lifter">
+        <canvas id="portrait" width="280" height="280" aria-label="Your lifter"></canvas>
+        <div class="stats">
+          <div class="stat"><span class="lbl">Bench</span><b id="stBench">20 kg</b></div>
+          <div class="stat"><span class="lbl">Best run</span><b id="stBest">0</b></div>
+          <div class="stat"><span class="lbl">Sessions</span><b id="stRuns">0</b></div>
+        </div>
+      </div>
+      <div>
+        <div class="lbl" style="margin-bottom:8px">Where to eat</div>
+        <div class="zones" id="zones"></div>
+      </div>
+      <button class="go" id="goBtn">Hit the market</button>
+      <div id="ups"></div>
+      <div class="foot">
+        <span>Eat until the clock runs out. Burn the kcal here on upgrades.</span>
+        <span><button class="link" id="muteBtn">Sound: on</button> <button class="link" id="resetBtn">Reset progress</button></span>
+      </div>
+    </div>
+  </section>
+
+  <section id="run" class="screen" hidden>
+    <canvas id="cv"></canvas>
+    <div class="hud" id="hud">
+      <div class="hrow"><span class="zn" id="hZone"></span><span class="kc" id="hKcal">0 kcal</span></div>
+      <div class="bar" style="--c:var(--blue)"><i id="hTime"></i><span><b>Appetite</b><b id="hTimeTxt"></b></span></div>
+      <div class="bar" id="stomBar" style="--c:var(--red)"><i id="hStom"></i><span><b>Stomach</b><b id="hStomTxt"></b></span></div>
+    </div>
+    <div class="hint" id="hint">Drag to move. Walk into food to eat it.</div>
+  </section>
+
+  <div class="modal" id="results" hidden>
+    <div class="card">
+      <h2 id="rTitle">Time's up</h2>
+      <div><div class="lbl">Eaten this run</div><div class="big" id="rKcal">0 kcal</div></div>
+      <div class="ate" id="rAte"></div>
+      <div id="rExtra" class="lbl"></div>
+      <button class="go" id="backBtn">Back to the gym</button>
+    </div>
+  </div>
+</div>
+
+<script>
+(()=>{
+"use strict";
+const $=s=>document.querySelector(s);
+const RM=matchMedia("(prefers-reduced-motion: reduce)").matches;
+const CSS=getComputedStyle(document.documentElement);
+const C=n=>CSS.getPropertyValue("--"+n).trim();
+const COL={red:C("red"),blue:C("blue"),yellow:C("yellow"),green:C("green"),white:C("white"),skin:C("skin"),ink:C("ink"),floor:C("floor")};
+const EMOJI='"Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",sans-serif';
+
+/* ---------- DATA ---------- */
+// F(emoji, name, fill, kcal, opts) — fill/kcal are for the whole item
+const F=(e,name,fill,kcal,o={})=>({e,name,fill,kcal,w:o.w??1,bites:o.bites??1,flee:!!o.flee,spicy:!!o.spicy,size:o.size??1});
+const ZONES=[
+ {id:"shop",name:"Corner Shop",cost:0,awn:[COL.blue,COL.white],tiles:["#1a1d2b","#1f2334"],
+  foods:[F("🍌","Banana",6,12,{w:3}),F("🍪","Cookie",5,20,{w:3}),F("🍫","Choc bar",8,34,{w:2}),F("🥪","Meal deal",14,64,{w:1.5,bites:2,size:1.15}),F("🥧","Pork pie",12,110,{w:.5})]},
+ {id:"chippy",name:"The Chippy",cost:900,awn:[COL.yellow,COL.blue],tiles:["#1b1f27","#21262f"],
+  foods:[F("🍟","Chips",10,70,{w:3}),F("🥚","Pickled egg",5,40,{w:2}),F("🌭","Saveloy",9,80,{w:2}),F("🐟","Battered cod",16,190,{w:1,flee:1,size:1.2}),F("🍔","Chip butty",18,240,{w:.6,bites:2,size:1.2})]},
+ {id:"curry",name:"Curry House",cost:7500,awn:[COL.red,"#f2a33a"],tiles:["#22191c","#291e22"],
+  foods:[F("🍚","Pilau rice",10,180,{w:3}),F("🥟","Samosa",8,200,{w:2.5}),F("🍛","Tikka masala",18,560,{w:1.2,bites:2,size:1.2}),F("🌶️","Vindaloo chilli",6,260,{w:.8,spicy:1}),F("🍢","Seekh kebab",10,360,{w:1,flee:1})]},
+ {id:"street",name:"Street Food",cost:40000,awn:[COL.green,COL.white],tiles:["#17201c","#1c2722"],
+  foods:[F("🌮","Taco",8,620,{w:3}),F("🍡","Dango",6,520,{w:2.5}),F("🍜","Ramen",16,1600,{w:1.5,bites:2,size:1.2}),F("🌯","Burrito",22,2300,{w:1,bites:3,size:1.25}),F("🍩","Doughnut",8,1150,{w:1,flee:1})]},
+ {id:"buffet",name:"The Buffet",cost:220000,awn:["#c9a227","#7a1f2b"],tiles:["#211c14","#29231a"],boss:true,
+  foods:[F("🍕","Pizza slice",10,3300,{w:3}),F("🍗","Chicken leg",12,4300,{w:2}),F("🍤","Prawn",5,2500,{w:2,flee:1}),F("🍰","Gateau",18,7800,{w:1,bites:2,size:1.2}),F("🍖","Rib",16,7000,{w:1})]},
+];
+const ROAST={e:"🦃",name:"The Sunday Roast",bites:300,fill:4,kcal:22000};
+
+// Upgrades grouped by bumper-plate colour (25kg red … 5kg white)
+const GROUPS=[
+ {c:"red",kg:25,name:"Belly",sub:"How much you can hold"},
+ {c:"blue",kg:20,name:"Engine",sub:"How long and how well you burn"},
+ {c:"yellow",kg:15,name:"Jaw",sub:"How fast you get it down"},
+ {c:"green",kg:10,name:"Footwork",sub:"Getting to the food"},
+ {c:"white",kg:5,name:"Market",sub:"What turns up"},
+];
+const UPS=[
+ {id:"stomach",g:"red",name:"Stomach size",max:25,base:40,k:1.42,v:L=>100*(1+.3*L),f:v=>`${Math.round(v)} capacity`},
+ {id:"digest",g:"red",name:"Digestion",max:25,base:60,k:1.48,v:L=>4*(1+.35*L),f:v=>`${v.toFixed(1)} digested / sec`},
+ {id:"appetite",g:"blue",name:"Appetite",max:15,base:80,k:1.6,v:L=>20+3*L,f:v=>`${v}s per run`},
+ {id:"metab",g:"blue",name:"Metabolism",max:30,base:120,k:1.45,v:L=>1+.2*L,f:v=>`×${v.toFixed(1)} kcal`},
+ {id:"chew",g:"yellow",name:"Chew speed",max:15,base:90,k:1.55,v:L=>.38*Math.pow(.86,L),f:v=>`${(1/v).toFixed(1)} bites / sec`},
+ {id:"jaw",g:"yellow",name:"Jaw strength",max:10,base:400,k:1.95,v:L=>1+L,f:v=>`${v} bite${v>1?"s":""} per chomp`},
+ {id:"speed",g:"green",name:"Footwork",max:12,base:50,k:1.55,v:L=>1+.1*L,f:v=>`×${v.toFixed(1)} speed`},
+ {id:"reach",g:"green",name:"Long arms",max:12,base:70,k:1.55,v:L=>6+7*L,f:v=>`+${v} reach`},
+ {id:"crowd",g:"white",name:"Busy stalls",max:10,base:100,k:1.6,v:L=>7+2*L,f:v=>`${v} foods out at once`},
+ {id:"lucky",g:"white",name:"Chef's favourite",max:10,base:250,k:1.7,v:L=>.02+.015*L,f:v=>`${Math.round(v*100)}% golden food (×5)`},
+];
+const UPI=Object.fromEntries(UPS.map(u=>[u.id,u]));
+
+/* ---------- SAVE ---------- */
+const KEY="bulkSeason.v1";
+const fresh=()=>({kcal:0,total:0,best:0,runs:0,lv:{},zones:["shop"],zone:"shop",roast:ROAST.bites,won:false,muted:false});
+let S=fresh();
+try{const raw=localStorage.getItem(KEY);if(raw)S=Object.assign(fresh(),JSON.parse(raw));}catch(e){}
+const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(S));}catch(e){}};
+const lv=id=>S.lv[id]||0;
+const stat=id=>UPI[id].v(lv(id));
+const cost=u=>Math.round(u.base*Math.pow(u.k,lv(u.id)));
+const levels=()=>UPS.reduce((a,u)=>a+lv(u.id),0);
+const bench=()=>20+2.5*levels();
+const bulk=()=>Math.min(1.9,1+levels()*.012);
+
+const fmt=n=>{n=Math.floor(n);if(n<1e4)return n.toLocaleString("en-GB");if(n<1e6)return (n/1e3).toFixed(n<1e5?1:0)+"k";return (n/1e6).toFixed(n<1e7?2:1)+"M"};
+
+/* ---------- SOUND ---------- */
+let AC=null;
+function blip(freq,dur=.07,type="square",vol=.06){
+  if(S.muted)return;
+  try{
+    AC=AC||new (window.AudioContext||window.webkitAudioContext)();
+    const o=AC.createOscillator(),g=AC.createGain(),t=AC.currentTime;
+    o.type=type;o.frequency.setValueAtTime(freq,t);o.frequency.exponentialRampToValueAtTime(freq*.6,t+dur);
+    g.gain.setValueAtTime(vol,t);g.gain.exponentialRampToValueAtTime(.0001,t+dur);
+    o.connect(g).connect(AC.destination);o.start(t);o.stop(t+dur);
+  }catch(e){}
+}
+
+/* ---------- DRAW LIFTER ---------- */
+function circ(c,x,y,r){c.beginPath();c.arc(x,y,r,0,Math.PI*2);c.fill();}
+function drawLifter(c,x,y,r,o){
+  const fill=o.fill||0,b=o.bulk||1,mouth=o.mouth||0;
+  const belly=r*(1+.45*fill);
+  const arm=r*.38*b;
+  c.fillStyle=COL.skin;
+  circ(c,x-belly-arm*.35,y+r*.15,arm);circ(c,x+belly+arm*.35,y+r*.15,arm);
+  c.fillStyle=COL.red;circ(c,x,y+r*.35,belly);
+  c.fillStyle="rgba(255,255,255,.18)";circ(c,x-belly*.35,y+r*.05,belly*.28);
+  const hr=r*.62,hy=y-r*.72;
+  c.fillStyle=COL.skin;circ(c,x,hy,hr);
+  c.save();c.beginPath();c.arc(x,hy,hr,0,Math.PI*2);c.clip();
+  c.fillStyle=COL.yellow;c.fillRect(x-hr,hy-hr*.62,hr*2,hr*.32);c.restore();
+  c.fillStyle="#1a1410";circ(c,x-hr*.36,hy-hr*.02,hr*.11);circ(c,x+hr*.36,hy-hr*.02,hr*.11);
+  c.beginPath();c.ellipse(x,hy+hr*.42,hr*.34,hr*(.07+.3*mouth),0,0,Math.PI*2);c.fill();
+}
+function drawPortrait(){
+  const cv=$("#portrait"),c=cv.getContext("2d");
+  c.clearRect(0,0,cv.width,cv.height);
+  c.fillStyle="#252940";circ(c,140,150,118);
+  // barbell behind
+  c.fillStyle="#8a90a8";c.fillRect(14,196,252,10);
+  [[COL.red,26,44],[COL.blue,46,36]].forEach(([col,x,h])=>{c.fillStyle=col;c.fillRect(x-8,201-h,16,h*2);c.fillRect(280-x-8,201-h,16,h*2);});
+  drawLifter(c,140,160,52,{fill:.15,bulk:bulk(),mouth:.15});
+}
+
+/* ---------- GYM UI ---------- */
+let toastT;
+function toast(msg){let t=$(".toast");if(!t){t=document.createElement("div");t.className="toast";$("#app").appendChild(t);}t.textContent=msg;t.hidden=false;clearTimeout(toastT);toastT=setTimeout(()=>t.hidden=true,1600);}
+
+function renderGym(){
+  $("#bankKcal").textContent=fmt(S.kcal);
+  $("#stBench").textContent=bench()+" kg";
+  $("#stBest").textContent=fmt(S.best);
+  $("#stRuns").textContent=S.runs;
+  $("#muteBtn").textContent="Sound: "+(S.muted?"off":"on");
+  const zEl=$("#zones");zEl.innerHTML="";
+  ZONES.forEach(z=>{
+    const owned=S.zones.includes(z.id);
+    const b=document.createElement("button");
+    b.className="zone"+(owned?"":" locked")+(!owned&&S.kcal>=z.cost?" afford":"");
+    b.setAttribute("aria-pressed",String(S.zone===z.id));
+    b.textContent=owned?z.name:`🔒 ${z.name} · ${fmt(z.cost)}`;
+    b.onclick=()=>{
+      if(owned){S.zone=z.id;save();renderGym();return;}
+      if(S.kcal<z.cost){toast(`Need ${fmt(z.cost-S.kcal)} more kcal`);return;}
+      S.kcal-=z.cost;S.zones.push(z.id);S.zone=z.id;save();blip(660,.15,"triangle",.08);toast(`${z.name} unlocked`);renderGym();
+    };
+    zEl.appendChild(b);
+  });
+  const zone=ZONES.find(z=>z.id===S.zone);
+  $("#goBtn").textContent=zone.boss&&!S.won?"Take on the buffet":"Hit "+zone.name;
+  const u=$("#ups");u.innerHTML="";
+  GROUPS.forEach(g=>{
+    const sec=document.createElement("div");sec.className="group";sec.style.setProperty("--c",COL[g.c]);
+    sec.innerHTML=`<div class="ghead"><div class="plate"></div><div><h2>${g.kg}kg · ${g.name}</h2><small>${g.sub}</small></div></div>`;
+    UPS.filter(x=>x.g===g.c).forEach(up=>{
+      const L=lv(up.id),maxed=L>=up.max,c=cost(up),ok=!maxed&&S.kcal>=c;
+      const row=document.createElement("div");row.className="up";
+      const now=up.f(up.v(L)),next=maxed?"":` → <em>${up.f(up.v(L+1))}</em>`;
+      row.innerHTML=`<div><h3>${up.name}</h3><p>${now}${next}</p><div class="pips">${Array.from({length:up.max},(_,i)=>`<i class="${i<L?"on":""}"></i>`).join("")}</div></div>`;
+      const b=document.createElement("button");b.className="buy"+(ok?" ok":"");
+      b.textContent=maxed?"Maxed":fmt(c)+" kcal";b.disabled=maxed;
+      b.setAttribute("aria-label",maxed?`${up.name} maxed`:`Buy ${up.name} for ${c} kcal`);
+      b.onclick=()=>{
+        if(S.kcal<c){toast(`Need ${fmt(c-S.kcal)} more kcal`);return;}
+        S.kcal-=c;S.lv[up.id]=L+1;save();blip(520+L*30,.1,"triangle",.07);renderGym();
+      };
+      row.appendChild(b);sec.appendChild(row);
+    });
+    u.appendChild(sec);
+  });
+  drawPortrait();
+}
+
+let resetArm=0;
+$("#resetBtn").onclick=e=>{
+  if(Date.now()-resetArm<3000){S=fresh();save();renderGym();e.target.textContent="Reset progress";toast("Progress reset");return;}
+  resetArm=Date.now();e.target.textContent="Tap again to reset";setTimeout(()=>e.target.textContent="Reset progress",3000);
+};
+$("#muteBtn").onclick=()=>{S.muted=!S.muted;save();renderGym();};
+
+/* ---------- RUN ---------- */
+const cv=$("#cv"),ctx=cv.getContext("2d");
+let W=0,H=0,DPR=1,SC=1,TOP=110;
+function resize(){
+  DPR=Math.min(2,window.devicePixelRatio||1);
+  W=cv.clientWidth;H=cv.clientHeight;
+  cv.width=Math.round(W*DPR);cv.height=Math.round(H*DPR);
+  ctx.setTransform(DPR,0,0,DPR,0,0);
+  SC=Math.max(.8,Math.min(1.5,Math.min(W,H)/420));
+  TOP=($("#hud").offsetHeight||100)+30*SC;
+}
+addEventListener("resize",()=>{if(R)resize();});
+
+let R=null; // run state
+function startRun(){
+  const zone=ZONES.find(z=>z.id===S.zone);
+  $("#gym").hidden=true;$("#run").hidden=false;$("#results").hidden=true;
+  resize();
+  R={zone,t:stat("appetite"),T:stat("appetite"),cap:stat("stomach"),dig:stat("digest"),met:stat("metab"),
+     cd:stat("chew"),jaw:stat("jaw"),spd:stat("speed"),reach:stat("reach"),max:stat("crowd"),gold:stat("lucky"),
+     fill:0,kcal:0,chew:0,mouth:0,boost:0,spawn:0,shake:0,fullMsg:0,
+     x:W/2,y:(TOP+H)/2+40*SC,tx:null,ty:null,keys:{},foods:[],fx:[],txt:[],ate:{},golds:0,roastBites:0,done:false};
+  for(let i=0;i<Math.ceil(R.max*.7);i++)spawnFood(true);
+  if(zone.boss&&!S.won&&S.roast>0){
+    R.foods.push({def:ROAST,boss:true,x:W/2,y:TOP+70*SC,r:52*SC,left:S.roast,gold:false,pop:0,vx:0,vy:0});
+  }
+  $("#hZone").textContent=zone.name;
+  $("#hint").style.opacity=1;setTimeout(()=>$("#hint").style.opacity=0,3500);
+  last=performance.now();requestAnimationFrame(loop);
+}
+function pickDef(z){const tot=z.foods.reduce((a,f)=>a+f.w,0);let r=Math.random()*tot;for(const f of z.foods){if((r-=f.w)<=0)return f;}return z.foods[0];}
+function spawnFood(initial){
+  const def=pickDef(R.zone),r=17*SC*def.size,m=r+12;
+  let x,y,tries=0;
+  do{x=m+Math.random()*(W-2*m);y=TOP+m+Math.random()*(H-TOP-2*m);tries++;}
+  while(tries<20&&Math.hypot(x-R.x,y-R.y)<90*SC);
+  R.foods.push({def,x,y,r,left:def.bites,gold:Math.random()<R.gold,pop:initial?1:0,vx:0,vy:0,wob:Math.random()*6});
+}
+function floatText(x,y,s,col,big){R.txt.push({x,y,s,col,life:1,big});}
+function burst(x,y,col,n=8){if(RM)n=3;for(let i=0;i<n;i++){const a=Math.random()*Math.PI*2,v=(60+Math.random()*120)*SC;R.fx.push({x,y,vx:Math.cos(a)*v,vy:Math.sin(a)*v,life:.5+Math.random()*.3,col});}}
+
+// Input
+function pt(e){const b=cv.getBoundingClientRect();return [e.clientX-b.left,e.clientY-b.top];}
+cv.addEventListener("pointerdown",e=>{if(!R)return;cv.setPointerCapture(e.pointerId);[R.tx,R.ty]=pt(e);if(AC&&AC.state==="suspended")AC.resume();});
+cv.addEventListener("pointermove",e=>{if(R&&R.tx!==null)[R.tx,R.ty]=pt(e);});
+const up=()=>{if(R){R.tx=R.ty=null;}};
+cv.addEventListener("pointerup",up);cv.addEventListener("pointercancel",up);
+addEventListener("keydown",e=>{if(R&&!R.done){R.keys[e.key.toLowerCase()]=1;if(e.key.startsWith("Arrow"))e.preventDefault();}});
+addEventListener("keyup",e=>{if(R)R.keys[e.key.toLowerCase()]=0;});
+
+let last=0;
+function loop(now){
+  if(!R||R.done)return;
+  const dt=Math.min(.05,(now-last)/1000);last=now;
+  update(dt);draw();
+  requestAnimationFrame(loop);
+}
+document.addEventListener("visibilitychange",()=>{if(!document.hidden)last=performance.now();});
+
+function update(dt){
+  // timer & digestion
+  R.t-=dt;R.fill=Math.max(0,R.fill-R.dig*dt);
+  R.chew-=dt;R.mouth=Math.max(0,R.mouth-dt*5);R.boost-=dt;R.shake=Math.max(0,R.shake-dt*3);R.fullMsg-=dt;
+  // movement
+  const sp=170*SC*R.spd*(R.boost>0?1.6:1);
+  let mx=0,my=0;const k=R.keys;
+  if(k.arrowleft||k.a)mx--;if(k.arrowright||k.d)mx++;if(k.arrowup||k.w)my--;if(k.arrowdown||k.s)my++;
+  if(mx||my){const l=Math.hypot(mx,my);R.x+=mx/l*sp*dt;R.y+=my/l*sp*dt;}
+  else if(R.tx!==null){const dx=R.tx-R.x,dy=R.ty-R.y,d=Math.hypot(dx,dy);if(d>4){const s=Math.min(d,sp*dt);R.x+=dx/d*s;R.y+=dy/d*s;}}
+  const pr=22*SC;
+  R.x=Math.max(pr,Math.min(W-pr,R.x));R.y=Math.max(TOP+pr*.5,Math.min(H-pr*1.4,R.y));
+  // foods
+  for(const f of R.foods){
+    f.pop=Math.min(1,f.pop+dt*4);
+    if(f.def.flee){
+      const dx=f.x-R.x,dy=f.y-R.y,d=Math.hypot(dx,dy)||1;
+      if(d<130*SC){f.vx+=dx/d*260*SC*dt;f.vy+=dy/d*260*SC*dt;}
+      f.vx*=.92;f.vy*=.92;f.x+=f.vx*dt;f.y+=f.vy*dt;
+      f.x=Math.max(f.r,Math.min(W-f.r,f.x));f.y=Math.max(TOP+f.r*.5,Math.min(H-f.r,f.y));
+    }
+  }
+  // eating
+  if(R.chew<=0){
+    let best=null,bd=1e9;
+    for(const f of R.foods){const d=Math.hypot(f.x-R.x,f.y-R.y)-f.r-pr-R.reach*SC;if(d<0&&d<bd){bd=d;best=f;}}
+    if(best)chomp(best);
+  }
+  // spawning
+  R.spawn-=dt;
+  const n=R.foods.filter(f=>!f.boss).length;
+  if(n<R.max&&R.spawn<=0){spawnFood(false);R.spawn=.5*Math.pow(.92,lv("crowd"));}
+  // fx
+  for(const p of R.fx){p.x+=p.vx*dt;p.y+=p.vy*dt;p.vx*=.9;p.vy*=.9;p.life-=dt;}
+  R.fx=R.fx.filter(p=>p.life>0);
+  for(const t of R.txt){t.y-=40*SC*dt;t.life-=dt*.9;}
+  R.txt=R.txt.filter(t=>t.life>0);
+  if(R.t<=0)endRun();
+}
+
+function chomp(f){
+  const def=f.def,fpb=def.fill/def.bites;
+  const room=Math.floor((R.cap-R.fill)/fpb+1e-9);
+  const b=Math.min(R.jaw,f.left,room);
+  if(b<=0){
+    if(R.fullMsg<=0){floatText(R.x,R.y-40*SC,"Too full!",COL.red);R.fullMsg=.9;blip(140,.12,"sawtooth",.04);}
+    R.chew=.15;return;
+  }
+  const kc=def.kcal/def.bites*b*R.met*(f.gold?5:1);
+  R.fill+=fpb*b;R.kcal+=kc;f.left-=b;R.chew=R.cd;R.mouth=1;
+  burst(f.x,f.y,f.gold?COL.yellow:COL.white,f.boss?5:7);
+  floatText(f.x,f.y-f.r,"+"+fmt(kc),f.gold?COL.yellow:COL.ink,f.gold||f.boss);
+  blip(f.gold?880:300+Math.random()*120,.06,"square",.05);
+  if(f.boss){S.roast=f.left;R.roastBites+=b;if(!RM)R.shake=Math.max(R.shake,.35);}
+  if(f.left<=0){
+    R.foods.splice(R.foods.indexOf(f),1);
+    R.ate[def.name]=(R.ate[def.name]||0)+1;
+    if(f.gold){R.golds++;if(!RM)R.shake=.5;}
+    if(def.spicy){R.boost=3;floatText(R.x,R.y-60*SC,"Spicy! Speed up",COL.red,true);}
+    if(f.boss){S.won=true;R.wonNow=true;floatText(W/2,H/2,"ROAST DEMOLISHED",COL.yellow,true);burst(f.x,f.y,COL.yellow,30);R.t=Math.min(R.t,1.2);}
+  }
+}
+
+function drawFloor(){
+  const z=R.zone,s=48*SC;
+  ctx.fillStyle=z.tiles[0];ctx.fillRect(0,0,W,H);
+  ctx.fillStyle=z.tiles[1];
+  for(let y=0,j=0;y<H;y+=s,j++)for(let x=(j%2)*s;x<W;x+=s*2)ctx.fillRect(x,y,s,s);
+  // awning along the top edge of the market
+  const ay=TOP-26*SC,stripe=28*SC;
+  for(let x=0,i=0;x<W;x+=stripe,i++){ctx.fillStyle=z.awn[i%2];ctx.beginPath();ctx.moveTo(x,ay);ctx.lineTo(x+stripe,ay);ctx.lineTo(x+stripe,ay+14*SC);ctx.arc(x+stripe/2,ay+14*SC,stripe/2,0,Math.PI);ctx.closePath();ctx.fill();}
+}
+function draw(){
+  ctx.save();
+  if(R.shake>0){ctx.translate((Math.random()-.5)*10*R.shake,(Math.random()-.5)*10*R.shake);}
+  drawFloor();
+  const tm=performance.now()/1000;
+  ctx.textAlign="center";ctx.textBaseline="middle";
+  for(const f of R.foods){
+    const sc=f.pop<1?f.pop*(1.25-.25*f.pop):1;
+    const bob=f.boss?0:Math.sin(tm*2+f.wob)*2*SC;
+    // shadow
+    ctx.fillStyle="rgba(0,0,0,.28)";ctx.beginPath();ctx.ellipse(f.x,f.y+f.r*.8,f.r*.75*sc,f.r*.25*sc,0,0,Math.PI*2);ctx.fill();
+    if(f.gold){ctx.fillStyle="rgba(242,194,48,.28)";circ(ctx,f.x,f.y+bob,f.r*1.35*sc*(1+.08*Math.sin(tm*6)));}
+    const partial=f.left<f.def.bites&&!f.boss?.82:1;
+    ctx.font=`${Math.round(f.r*1.9*sc*partial)}px ${EMOJI}`;
+    ctx.fillText(f.def.e,f.x,f.y+bob);
+    if(f.boss){
+      const bw=f.r*2.4,bx=f.x-bw/2,by=f.y-f.r-18*SC;
+      ctx.fillStyle="#000a";ctx.fillRect(bx,by,bw,8*SC);
+      ctx.fillStyle=COL.yellow;ctx.fillRect(bx,by,bw*f.left/f.def.bites,8*SC);
+      ctx.fillStyle=COL.ink;ctx.font=`700 ${Math.round(12*SC)}px ${C("body")}`;
+      ctx.fillText(`${f.def.name} · ${f.left} bites left`,f.x,by-10*SC);
+    }
+  }
+  // lifter
+  ctx.fillStyle="rgba(0,0,0,.3)";ctx.beginPath();ctx.ellipse(R.x,R.y+30*SC,26*SC,8*SC,0,0,Math.PI*2);ctx.fill();
+  if(R.boost>0){ctx.fillStyle="rgba(229,56,59,.25)";circ(ctx,R.x,R.y,40*SC);}
+  drawLifter(ctx,R.x,R.y,18*SC,{fill:R.fill/R.cap,bulk:bulk(),mouth:R.mouth});
+  // particles
+  for(const p of R.fx){ctx.globalAlpha=Math.max(0,p.life*2);ctx.fillStyle=p.col;circ(ctx,p.x,p.y,3*SC);}
+  ctx.globalAlpha=1;
+  for(const t of R.txt){
+    ctx.globalAlpha=Math.min(1,t.life*1.6);
+    ctx.font=`700 ${Math.round((t.big?22:16)*SC)}px ${C("body")}`;
+    ctx.lineWidth=4;ctx.strokeStyle="#0009";ctx.strokeText(t.s,t.x,t.y);
+    ctx.fillStyle=t.col;ctx.fillText(t.s,t.x,t.y);
+  }
+  ctx.globalAlpha=1;ctx.restore();
+  // HUD
+  $("#hKcal").textContent=fmt(R.kcal)+" kcal";
+  $("#hTime").style.width=Math.max(0,R.t/R.T*100)+"%";
+  $("#hTimeTxt").textContent=Math.max(0,R.t).toFixed(1)+"s";
+  $("#hStom").style.width=(R.fill/R.cap*100)+"%";
+  $("#hStomTxt").textContent=Math.round(R.fill)+" / "+Math.round(R.cap);
+  $("#stomBar").classList.toggle("full",R.fill/R.cap>.9);
+}
+
+function endRun(){
+  R.done=true;
+  const kc=Math.floor(R.kcal);
+  S.kcal+=kc;S.total+=kc;S.runs++;if(kc>S.best)S.best=kc;save();
+  $("#rTitle").textContent=R.wonNow?"Champion of Bulk Season":(R.fill/R.cap>.85?"Stuffed!":"Time's up");
+  $("#rKcal").textContent=fmt(kc)+" kcal";
+  const list=Object.entries(R.ate).sort((a,b)=>b[1]-a[1]);
+  $("#rAte").innerHTML=list.length?list.map(([n,c])=>`<span><b>${c}×</b> ${n}</span>`).join(""):"<span>Nothing. Get moving!</span>";
+  const extra=[];
+  if(R.golds)extra.push(`${R.golds} golden ${R.golds>1?"dishes":"dish"}`);
+  if(R.roastBites&&!R.wonNow)extra.push(`Roast: ${S.roast} bites left`);
+  if(R.wonNow)extra.push("You ate the whole Sunday Roast. Keep bulking.");
+  if(kc>=S.best&&S.runs>1&&kc>0)extra.push("New best run");
+  $("#rExtra").textContent=extra.join(" · ");
+  $("#results").hidden=false;
+  blip(R.wonNow?990:440,.2,"triangle",.07);
+  $("#backBtn").focus();
+}
+$("#backBtn").onclick=()=>{R=null;$("#results").hidden=true;$("#run").hidden=true;$("#gym").hidden=false;renderGym();};
+$("#goBtn").onclick=startRun;
+
+renderGym();
+if(document.fonts&&document.fonts.ready)document.fonts.ready.then(drawPortrait);
+})();
+</script>
+</html>
