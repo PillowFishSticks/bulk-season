@@ -44,7 +44,7 @@ An active incremental web game modelled on **Chef Knight** (Steam). The loop is:
 
 ## Controls
 - Keyboard: WASD or arrows to move, Space/Shift Dash, Q Inhale, E Plate Toss, R Cheat Meal, Esc/P pause, F fullscreen. Arrows and Enter navigate menus.
-- Xbox pad: left stick or d-pad to move, A/RB Dash, B/LB Inhale, X Toss (aim with the right stick), Y Cheat, Start to pause. Rumble (`rumble()`) fires on knocks, golden food and bosses. In menus, d-pad/stick do spatial navigation (`navMove`), A presses, B backs out, LB/RB switch market, and Start begins a run. A toast confirms when a controller connects. Browsers only expose a pad after one button press, and a pad press doesn't count as a user gesture for fullscreen, so use F or a click for that.
+- Xbox pad: left stick or d-pad to move, A/RB Dash, B/LB Inhale, X Toss (aim with the right stick), Y Cheat, Start to pause. Rumble (`rumble()`) fires on knocks, golden food and bosses. In menus, d-pad/stick do spatial navigation (`navMove`), A presses, B backs out, LB/RB switch market, LT/RT (Q/E on keyboard) jump between the markets and the tree/gym lists (`jumpPanel`), and Start begins a run. In the tree the d-pad follows branches (`treeMove`), and holding A keeps buying the focused upgrade. A toast confirms when a controller connects. Browsers only expose a pad after one button press, and a pad press doesn't count as a user gesture for fullscreen, so use F or a click for that.
 - On keyboard, Plate Toss aims at the mouse cursor if the mouse has moved recently. Otherwise it throws the way you're facing. Glyph hints switch with the last input device (`body.pad` / `body.touch`).
 
 ## Balance

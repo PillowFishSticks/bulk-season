@@ -398,13 +398,13 @@ body.touch .hnote .kbt{display:none} body.touch .hnote .tct{display:inline}
         </div>
         <button class="btn gold go" id="goBtn">Hit the market</button>
         <div class="card">
-          <div class="lbl">Where to eat <span class="glyph pd pS">LB</span><span class="glyph pd pS">RB</span></div>
+          <div class="lbl">Where to eat <span class="glyph kb">Q</span><span class="glyph pd pS">LT</span> <span class="glyph pd pS">LB</span><span class="glyph pd pS">RB</span></div>
           <div class="zones" id="zones"></div>
           <div class="secInfo" id="secInfo"></div>
         </div>
       </aside>
       <section class="parch treeWrap">
-        <div class="tabs" role="tablist"><button class="tab" id="tabTree" role="tab">🌳 Skill Tree</button><button class="tab" id="tabGym" role="tab">🏋️ Your Gym</button><span class="glyph pd pY">Y</span></div>
+        <div class="tabs" role="tablist"><button class="tab" id="tabTree" role="tab">🌳 Skill Tree</button><button class="tab" id="tabGym" role="tab">🏋️ Your Gym</button><span class="glyph kb">E</span><span class="glyph pd pS">RT</span><span class="glyph pd pY">Y</span></div>
         <div class="pane" id="paneTree">
         <div class="treeBody">
           <div class="notes">
@@ -475,7 +475,7 @@ body.touch .hnote .kbt{display:none} body.touch .hnote .tct{display:inline}
       <div><div class="lbl" style="color:#6b4f2c">Eaten this run</div><div class="big" id="rKcal">0 kcal</div></div>
       <div class="ate" id="rAte"></div>
       <div class="extra" id="rExtra"></div>
-      <div class="mbtns"><button class="btn" id="againBtn">Run it back</button><button class="btn gold" id="backBtn">To the gym</button></div>
+      <div class="mbtns"><button class="btn" id="againBtn">Run it back</button><button class="btn gold" id="backBtn">Upgrade</button></div>
     </div>
   </div>
   <div class="modal" id="pause" hidden>
@@ -1620,6 +1620,7 @@ addEventListener("keydown",e=>{
   }
   // menus: arrows do spatial navigation, Enter on hub starts a run
   if(k.startsWith("arrow")&&!e.altKey){const d={arrowup:[0,-1],arrowdown:[0,1],arrowleft:[-1,0],arrowright:[1,0]}[k];if(navMove(d))e.preventDefault();}
+  if((k==="q"||k==="e")&&!R&&navLayer()===$("#gym"))jumpPanel(k==="e"?"tree":"markets");
   if(k==="escape")navBack();
 });
 addEventListener("keyup",e=>{KEYS[e.key.toLowerCase()]=0;});
@@ -1644,7 +1645,7 @@ function pollPad(dt){
   const any=gp.buttons.some(b=>b.pressed)||Math.abs(ax)>.5||Math.abs(ay)>.5;
   if(any)setMode("pad");
   let rx=gp.axes[2]||0,ry=gp.axes[3]||0;if(Math.hypot(rx,ry)<.4){rx=0;ry=0;}
-  const st={ax,ay,rx,ry,A:pressed(0),B:pressed(1),X:pressed(2),Y:pressed(3),LB:pressed(4),RB:pressed(5),Start:pressed(9),Back:pressed(8)};
+  const st={ax,ay,rx,ry,Ah:btn(0),LT:pressed(6),RT:pressed(7),A:pressed(0),B:pressed(1),X:pressed(2),Y:pressed(3),LB:pressed(4),RB:pressed(5),Start:pressed(9),Back:pressed(8)};
   if(!$("#title").hidden){if(st.A||st.B||st.X||st.Y||st.Start)leaveTitle(false);return st;}
   if(R&&!R.done){
     if(st.Start){togglePause();}
@@ -1659,11 +1660,32 @@ function padMenu(st,dt){
   const key=dir?dir.join():null;
   if(key!==padRep.dir){padRep={dir:key,t:.38};if(dir)navMove(dir);}
   else if(dir){padRep.t-=dt;if(padRep.t<=0){padRep.t=.11;navMove(dir);}}
-  if(st.A){const a=document.activeElement;if(a&&a!==document.body&&a.click){a.click();}else navMove([0,1]);}
+  if(st.A){const a=document.activeElement;if(a&&a!==document.body&&a.click){a.click();}else navMove([0,1]);padHold=0;}
+  // hold A on an upgrade to keep buying it
+  {const a=document.activeElement;if(st.Ah&&a&&(a.classList.contains("node")||a.classList.contains("gitem"))){padHold+=dt;if(padHold>.45){padHoldRep-=dt;if(padHoldRep<=0){padHoldRep=.14;a.click();}}}else{padHold=0;padHoldRep=0;}}
+  if((st.LT||st.RT)&&!R&&navLayer()===$("#gym"))jumpPanel(st.RT?"tree":"markets");
   if(st.B)navBack();
   if(st.Y&&!R&&navLayer()===$("#gym")){setTab(TAB==="tree"?"gym":"tree");SFX.buy(0);(TAB==="tree"?$("#tabTree"):$("#tabGym")).focus();}
   if(st.Start&&!R&&!$("#gym").hidden&&$("#seasonModal").hidden)startRun();
   if((st.LB||st.RB)&&!R&&navLayer()===$("#gym")){const all=[];ZONES.forEach(z=>z.secs.forEach((_,i)=>{if(secOpen(z,i))all.push([z.id,i]);}));const k=all.findIndex(([id,i])=>id===S.zone&&i===selSec());const [nz,ni]=all[(k+(st.RB?1:-1)+all.length)%all.length];S.zone=nz;S.si=ni;save();renderGym();SFX.buy(ni);secEls[nz][ni].focus();}
+}
+let padHold=0,padHoldRep=0;
+// LT/RT (Q/E on keyboard): jump between the markets and the skill tree / gym lists
+function jumpPanel(to){
+  if(to==="markets"){const b=secEls[S.zone]&&secEls[S.zone][selSec()];(b||$("#goBtn")).focus();}
+  else if(TAB==="gym"){const it=[...document.querySelectorAll("#paneGym .gitem")];(it.find(b=>b.classList.contains("can"))||it[0]).focus();}
+  else{const can=NODES.filter(n=>nodeEls[n.id].classList.contains("can")).sort((a,b)=>Math.hypot(a.x-50,a.y-32)-Math.hypot(b.x-50,b.y-32))[0];nodeEls[(can||NI.start).id].focus();}
+  SFX.buy(0);
+}
+// d-pad around the skill tree follows its branches
+function treeMove(cur,d){
+  const id=Object.keys(nodeEls).find(k=>nodeEls[k]===cur);if(!id)return null;const n=NI[id];
+  const pos=m=>[m.x,m.y*1.25];const [cx,cy]=pos(n);
+  const score=(m,cone)=>{const [mx,my]=pos(m),dx=mx-cx,dy=my-cy,dist=Math.hypot(dx,dy)||1;const ang=Math.acos(clamp((dx*d[0]+dy*d[1])/dist,-1,1));return ang<cone?dist*(1+ang*1.5):1e9;};
+  const nb=NODES.filter(m=>m.id===n.p||m.p===n.id);
+  let best=null,bs=1e9;for(const m of nb){const v=score(m,1.2);if(v<bs){bs=v;best=m;}}
+  if(!best)for(const m of NODES){if(m===n)continue;const v=score(m,.8);if(v<bs){bs=v;best=m;}}
+  return best?nodeEls[best.id]:null;
 }
 function navLayer(){for(const id of["helpModal","saveModal","seasonModal","credits","results","pause"])if(!$("#"+id).hidden)return $("#"+id);return R?null:$("#gym");}
 function navMove(d){
@@ -1672,6 +1694,7 @@ function navMove(d){
   if(!els.length)return false;
   const cur=document.activeElement;
   if(!cur||!layer.contains(cur)||cur===document.body){(layer.querySelector(".go,.btn.gold")||els[0]).focus();return true;}
+  if(cur.classList.contains("node")){const t=treeMove(cur,d);if(t){t.focus();return true;}if(d[0]<0){jumpPanel("markets");return true;}}
   const a=cur.getBoundingClientRect(),ax=a.left+a.width/2,ay=a.top+a.height/2;
   let best=null,bs=1e9;
   for(const el of els){if(el===cur)continue;const b=el.getBoundingClientRect(),bx=b.left+b.width/2,by=b.top+b.height/2;
@@ -2277,7 +2300,7 @@ function endRun(){
   setTimeout(()=>{for(const b of[$("#backBtn"),$("#againBtn")])b.disabled=false;$("#backBtn").focus();},700);
 }
 function toGym(){setSong("hub");R=null;paused=false;$("#results").hidden=true;$("#run").hidden=true;$("#gym").hidden=false;renderGym();$("#goBtn").focus();}
-$("#backBtn").onclick=()=>{if(R&&R.wonNow)return showCredits();toGym();};
+$("#backBtn").onclick=()=>{if(R&&R.wonNow)return showCredits();toGym();setTab("tree");jumpPanel("tree");};
 $("#againBtn").onclick=()=>{if(R&&R.wonNow)return showCredits();R=null;startRun();};
 // Closing credits after beating The Sunday Roast
 function showCredits(){
