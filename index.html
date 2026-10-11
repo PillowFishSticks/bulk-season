@@ -65,23 +65,23 @@ body.touch .glyph{display:none!important}
 .tools{display:flex;gap:8px;flex-wrap:wrap}
 .hub{position:relative;display:grid;grid-template-columns:minmax(300px,380px) minmax(0,1fr);gap:20px;padding:10px 20px 28px;max-width:1500px;margin:0 auto;align-items:start}
 .side{display:grid;gap:14px;min-width:0}
-.card{background:linear-gradient(#5e3b21,#46291a);border:3px solid var(--out);border-radius:14px;padding:12px;box-shadow:inset 0 2px 0 rgba(255,255,255,.12),0 6px 0 rgba(0,0,0,.45)}
+.card{background:linear-gradient(#2a2f3a,#20242d);border:3px solid var(--out);border-radius:14px;padding:12px;box-shadow:inset 0 2px 0 rgba(255,255,255,.12),0 6px 0 rgba(0,0,0,.45)}
 .lifterCard canvas{display:block;width:100%;height:auto;border-radius:9px;border:2px solid var(--out);background:#1c1311}
 .stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-top:10px}
-.stat{background:rgba(0,0,0,.25);border-radius:8px;padding:6px 8px;min-width:0}
+.stat{background:#181b22;border-radius:8px;padding:6px 8px;min-width:0}
 .stat b{display:block;font:800 18px/1.15 var(--disp);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-variant-numeric:tabular-nums}
 .stat small{display:block;color:var(--muted);font-size:12px;line-height:1.2}
 .zones{display:grid;gap:7px;margin-top:8px}
-.mkt{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:8px;padding:5px 6px 5px 10px;border:3px solid var(--out);border-radius:11px;background:#3a2516;box-shadow:0 3px 0 rgba(0,0,0,.4)}
-.mkt.cur{background:linear-gradient(#6a4423,#4e301b);border-color:#c99a2e}
+.mkt{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:8px;padding:5px 6px 5px 10px;border:3px solid #12141a;border-radius:11px;background:#343a47;box-shadow:0 3px 0 rgba(0,0,0,.4)}
+.mkt.cur{background:#3f4757;border-color:#fbf0d6}
 .mkt.locked{opacity:.5}
 .mname{display:flex;align-items:center;gap:9px;min-width:0}
 .mname .ze{font-size:26px;line-height:1;filter:drop-shadow(0 2px 0 var(--out))}
 .mname b{display:block;font:800 17px/1.1 var(--disp);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .mname small{display:block;font-size:12px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .secs{display:flex;gap:6px}
-.sec{position:relative;width:50px;height:44px;padding:0;border:3px solid var(--out);border-radius:10px;background:#24170f;display:grid;place-items:center;font-size:22px;line-height:1;box-shadow:0 3px 0 rgba(0,0,0,.45)}
-.sec.open{background:linear-gradient(#6d4a2c,#4a2e19);border-color:#e9bf2f}
+.sec{position:relative;width:50px;height:44px;padding:0;border:3px solid #12141a;border-radius:10px;background:#1b1e26;display:grid;place-items:center;font-size:22px;line-height:1;box-shadow:0 3px 0 rgba(0,0,0,.45)}
+.sec.open{background:linear-gradient(#3e6aa0,#2a4a75);border-color:#9fd3ff}
 .sec.done{background:linear-gradient(#2f5a34,#1f3d24);border-color:#7fd06b}
 .sec.lock{filter:grayscale(1);opacity:.55}
 .sec.sel{box-shadow:0 0 0 3px #fff7d6,0 3px 0 rgba(0,0,0,.45)}
@@ -90,8 +90,8 @@ body.touch .glyph{display:none!important}
 .sec .ck{position:absolute;right:-7px;top:-8px;font-size:14px}
 .sec .sb{position:absolute;left:5px;right:5px;bottom:3px;height:5px;border-radius:3px;background:rgba(0,0,0,.55);overflow:hidden}
 .sec .sb i{display:block;height:100%;background:#e5383b}
-.secInfo{margin-top:9px;padding:9px 11px;border-radius:9px;background:rgba(0,0,0,.3);font:600 14px/1.35 var(--ui);color:var(--cream);min-height:64px}
-.secInfo b{font:800 17px/1.2 var(--disp);color:var(--gold)}
+.secInfo{margin-top:9px;padding:9px 11px;border-radius:9px;background:#181b22;font:600 14px/1.35 var(--ui);color:var(--cream);min-height:64px}
+.secInfo b{font:800 17px/1.2 var(--disp);color:#fff7e3}
 .secInfo .threat{color:#ffb4a8}
 .zone{display:grid;grid-template-columns:40px 1fr auto;align-items:center;gap:10px;text-align:left;border:3px solid var(--out);border-radius:10px;padding:6px 10px;background:#3a2516;box-shadow:0 3px 0 rgba(0,0,0,.4)}
 .zone .ze{font-size:28px;line-height:1;filter:drop-shadow(0 2px 0 var(--out))}
@@ -141,10 +141,11 @@ body.touch .glyph{display:none!important}
 .treeScroll{overflow-x:auto;overflow-y:hidden;margin:6px -6px 0;padding:6px}
 .tree{position:relative;width:100%;min-width:640px;aspect-ratio:100/64}
 .tree svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
-.node{position:absolute;transform:translate(-50%,-50%);width:5.6%;aspect-ratio:1;border-radius:50%;border:3px solid var(--out);padding:0;background:#b9a57c;display:grid;place-items:center;font-size:clamp(14px,1.7vw,26px);line-height:1;box-shadow:0 3px 0 rgba(60,35,10,.45);transition:transform .12s}
+.tlab{position:absolute;transform:translate(-50%,-50%);font:900 15px/1 var(--disp);letter-spacing:.12em;color:rgba(59,42,28,.55);white-space:nowrap;pointer-events:none}
+.node{position:absolute;transform:translate(-50%,-50%);width:5%;aspect-ratio:1;border-radius:50%;border:3px solid var(--out);padding:0;background:#b9a57c;display:grid;place-items:center;font-size:clamp(14px,1.7vw,26px);line-height:1;box-shadow:0 3px 0 rgba(60,35,10,.45);transition:transform .12s}
 @media (hover:hover){.node:hover{transform:translate(-50%,-50%) scale(1.1)}}
-.node.skill{width:7.6%;border-width:4px;font-size:clamp(18px,2.3vw,34px)}
-.node.root{width:8%}
+.node.skill{width:6.4%;border-width:4px;font-size:clamp(18px,2.3vw,34px)}
+.node.root{width:7%}
 .node.own{background:#fff7e3;box-shadow:inset 0 0 0 4px #e3a91f,0 3px 0 rgba(60,35,10,.45)}
 .node.max{background:#fffdf5;box-shadow:inset 0 0 0 5px #f2c230,0 0 0 3px #fff4c9,0 0 14px rgba(242,194,48,.7)}
 .node.can{background:#f1fae6;box-shadow:inset 0 0 0 4px #4f9a2c,0 3px 0 rgba(60,35,10,.45);animation:pulse 1.4s ease-in-out infinite}
@@ -221,10 +222,10 @@ body.staged .info{margin-top:6px}
 .hud{position:absolute;left:0;right:0;top:0;display:flex;justify-content:space-between;align-items:flex-start;gap:14px;padding:10px 14px 0;pointer-events:none}
 .hl,.hr{display:flex;gap:10px;align-items:center;min-width:0}
 .hr{flex-direction:row-reverse}
-.port{width:60px;height:60px;flex:none;border:3px solid var(--out);border-radius:10px;background:linear-gradient(var(--wood-l),var(--wood-d));box-shadow:0 3px 0 rgba(0,0,0,.5);overflow:hidden}
+.port{width:60px;height:60px;flex:none;border:3px solid #0b0c10;border-radius:10px;background:linear-gradient(#3a4150,#262b35);box-shadow:0 3px 0 rgba(0,0,0,.5);overflow:hidden}
 .port canvas{position:static!important;width:100%!important;height:100%!important}
 .bars{display:grid;gap:5px;width:clamp(150px,30vw,420px)}
-.hbar{position:relative;height:22px;border-radius:12px;background:#24170f;border:3px solid var(--out);box-shadow:inset 0 0 0 2px #6b4426,0 3px 0 rgba(0,0,0,.45);overflow:hidden}
+.hbar{position:relative;height:22px;border-radius:12px;background:#15171d;border:3px solid #0b0c10;box-shadow:inset 0 0 0 2px #3a4150,0 3px 0 rgba(0,0,0,.45);overflow:hidden}
 .hbar i{position:absolute;inset:2px auto 2px 2px;border-radius:8px;background:var(--c);box-shadow:inset 0 3px 0 rgba(255,255,255,.25),inset 0 -3px 0 rgba(0,0,0,.2)}
 .hbar span{position:absolute;inset:0;padding:0 10px;display:flex;justify-content:space-between;align-items:center;font:800 13px/1 var(--ui);letter-spacing:.05em;color:#fff;text-shadow:1px 1px 0 #000,-1px 1px 0 #000,1px -1px 0 #000,-1px -1px 0 #000,0 0 4px #000}
 .hbar.full i{animation:flash .35s infinite alternate}
@@ -236,10 +237,10 @@ body.staged .info{margin-top:6px}
 .combo.pop{animation:pop .18s}
 @keyframes pop{50%{transform:scale(1.3)}}
 .zname{font:900 18px/1 var(--disp);color:var(--cream);text-shadow:0 2px 0 var(--out);white-space:nowrap}
-.bossIco{width:42px;height:42px;flex:none;border-radius:10px;border:3px solid var(--out);background:linear-gradient(#ffe48a,#c98f17);display:grid;place-items:center;font-size:22px;box-shadow:0 3px 0 rgba(0,0,0,.5)}
+.bossIco{width:42px;height:42px;flex:none;border-radius:10px;border:3px solid #0b0c10;background:linear-gradient(#3a4150,#262b35);display:grid;place-items:center;font-size:22px;box-shadow:0 3px 0 rgba(0,0,0,.5)}
 .skillbar{position:absolute;left:50%;bottom:calc(8px + env(safe-area-inset-bottom,0px));transform:translateX(-50%) scale(var(--hk,1));transform-origin:50% 100%;display:flex;gap:12px;align-items:flex-end}
-.sk{position:relative;width:64px;height:64px;border-radius:12px;border:3px solid var(--out);background:linear-gradient(#8a5a33,#5c3820);box-shadow:inset 0 2px 0 rgba(255,255,255,.18),0 4px 0 rgba(0,0,0,.5);display:grid;place-items:center;font-size:30px;padding:0;overflow:hidden;touch-action:none}
-.sk.ready{border-color:#f2c230;box-shadow:0 0 0 2px var(--out),0 0 14px rgba(242,194,48,.55),0 4px 0 rgba(0,0,0,.5)}
+.sk{position:relative;width:64px;height:64px;border-radius:12px;border:3px solid #0b0c10;background:linear-gradient(#3a4150,#262b35);box-shadow:inset 0 2px 0 rgba(255,255,255,.18),0 4px 0 rgba(0,0,0,.5);display:grid;place-items:center;font-size:30px;padding:0;overflow:hidden;touch-action:none}
+.sk.ready{border-color:#9fd3ff;box-shadow:0 0 0 2px #0b0c10,0 0 14px rgba(159,211,255,.55),0 4px 0 rgba(0,0,0,.5)}
 .sk .cd{position:absolute;inset:0;background:conic-gradient(rgba(10,6,4,.72) var(--p,0%),transparent 0);pointer-events:none}
 .sk .glyph{position:absolute;right:2px;bottom:2px;transform:scale(.85);transform-origin:100% 100%}
 .sk.off{filter:grayscale(1);opacity:.35}
@@ -468,7 +469,7 @@ body.touch .hnote .kbt{display:none} body.touch .hnote .tct{display:inline}
       <h2>How to play</h2>
       <div class="hsteps">
         <div class="hstep"><span class="hi">🍔</span><b>Eat</b><p>Walk into food before your appetite runs out. Keep chomping without a break to build a combo for bonus kcal.</p></div>
-        <div class="hstep"><span class="hi">👑</span><b>Beat the boss</b><p>Every market has 3 sections, each with a boss that fights back. Dodge its attacks. Beat it to open the next section.</p></div>
+        <div class="hstep"><span class="hi">👑</span><b>Beat the boss</b><p>Every market has 3 sections. Eat your way past the food goblins until the boss turns up, then beat it before your appetite runs out. Getting hit costs you time.</p></div>
         <div class="hstep"><span class="hi">🏋️</span><b>Get stronger</b><p>Spend kcal on the Skill Tree. Run Your Gym too: equipment brings members, members pay £, and £ buys supplements.</p></div>
       </div>
       <div class="ctrls">
@@ -514,7 +515,7 @@ const rnd=(a,b)=>a+Math.random()*(b-a);
 const F=(e,name,fill,kcal,o={})=>({e,name,fill,kcal,w:o.w??1,bites:o.bites??1,flee:!!o.flee,spicy:!!o.spicy,size:o.size??1});
 // Each market: foods, a boss (hp = bites, kc = kcal per bite), hazards and tasks. `at` = foods eaten in a run before the boss turns up.
 const ZONES=[
- {id:"shop",name:"Corner Shop",e:"🏪",cost:0,at:18,
+ {id:"shop",name:"Corner Shop",e:"🏪",cost:0,at:26,
   th:{glow:"220,235,255"},
   foods:[F("🍌","Banana",6,12,{w:3}),F("🍪","Cookie",5,18,{w:3}),F("🍫","Choc bar",8,32,{w:2}),F("🥪","Meal deal",14,60,{w:1.4,bites:2,size:1.15}),F("🥧","Pork pie",12,100,{w:.5})],
   bb:{hp:90,kcb:6,reward:600},
@@ -522,7 +523,7 @@ const ZONES=[
   bosses:[{e:"🥤",name:"Fizzy Pop",mv:"dart",spd:200,mi:6,atk:[{k:"spread",e:"💦",n:3,every:2.6,spd:290}]},{e:"🍞",name:"The Loaf",mv:"wander",spd:80,mi:5,atk:[{k:"ring",e:"🍞",n:8,every:3.4,spd:230}]},{e:"🧀",name:"The Big Cheese",mv:"wander",spd:70,mi:4,atk:[{k:"slam",every:3.4,r:110},{k:"spread",e:"🧀",n:5,every:4.2,spd:280}]}],
   hz:{puddle:3},
   tasks:[{k:"eat",f:"Cookie",pl:"Cookies",n:20,r:150},{k:"run",n:600,r:300},{k:"combo",n:12,r:500}]},
- {id:"chippy",name:"The Chippy",e:"🍟",cost:0,at:24,
+ {id:"chippy",name:"The Chippy",e:"🍟",cost:0,at:30,
   th:{glow:"255,236,190"},
   foods:[F("🍟","Chips",10,64,{w:3}),F("🥚","Pickled egg",5,36,{w:2}),F("🌭","Saveloy",9,74,{w:2}),F("🐟","Battered cod",16,180,{w:1,flee:1,size:1.2}),F("🍔","Chip butty",18,230,{w:.6,bites:2,size:1.2})],
   bb:{hp:900,kcb:25,reward:10000},
@@ -530,26 +531,26 @@ const ZONES=[
   bosses:[{e:"🥫",name:"Mushy Peas",mv:"wander",spd:60,mi:5,atk:[{k:"spread",e:"🟢",n:5,every:2.4,spd:310}]},{e:"🌭",name:"Big Saveloy",mv:"dart",spd:220,mi:4,atk:[{k:"charge",every:3.6},{k:"spread",e:"🌭",n:3,every:3,spd:300}]},{e:"🐟",name:"Moby Cod",mv:"flee",spd:150,mi:4,atk:[{k:"ring",e:"💧",n:10,every:3,spd:260},{k:"spin",e:"💧",every:6,spd:280}]}],
   hz:{grease:2,gull:2},
   tasks:[{k:"eat",f:"Chips",pl:"portions of Chips",n:40,r:5000},{k:"shoo",n:6,r:10000},{k:"run",n:40000,r:20000}]},
- {id:"curry",name:"Curry House",e:"🍛",cost:0,at:28,
+ {id:"curry",name:"Curry House",e:"🍛",cost:0,at:34,
   th:{glow:"255,170,90"},
   foods:[F("🍚","Pilau rice",10,170,{w:3}),F("🥟","Samosa",8,190,{w:2.5}),F("🍛","Tikka masala",18,540,{w:1.2,bites:2,size:1.2}),F("🌶️","Vindaloo chilli",6,250,{w:.8,spicy:1}),F("🍢","Seekh kebab",10,340,{w:1,flee:1})],
-  bb:{hp:6000,kcb:100,reward:160000},
+  bb:{hp:8000,kcb:100,reward:160000},
   secs:[{n:"Dining Room",floor:"curry",wall:"curry"},{n:"The Kitchen",floor:"kitchen",wall:"curryKitchen"},{n:"The Tandoor",floor:"terracotta",wall:"curryTandoor"}],
   bosses:[{e:"🥘",name:"The Balti Bowl",mv:"wander",spd:70,mi:4,atk:[{k:"ring",e:"🔥",n:8,every:3,spd:240}],fire:1},{e:"🍢",name:"Kebab King",mv:"dart",spd:230,mi:4,atk:[{k:"spread",e:"🍢",n:3,every:1.8,spd:420},{k:"charge",every:4.5}]},{e:"🍲",name:"The Phaal Pot",mv:"wander",spd:60,mi:3.5,atk:[{k:"slam",every:2.8,r:130},{k:"ring",e:"🌶️",n:12,every:3.6,spd:260}],fire:1}],
   hz:{fire:5},
   tasks:[{k:"eat",f:"Samosa",pl:"Samosas",n:40,r:100000},{k:"combo",n:30,r:200000},{k:"gold",n:3,r:400000}]},
- {id:"street",name:"Street Food",e:"🌮",cost:0,at:32,
+ {id:"street",name:"Street Food",e:"🌮",cost:0,at:38,
   th:{glow:"255,200,140"},
   foods:[F("🌮","Taco",8,600,{w:3}),F("🍡","Dango",6,500,{w:2.5}),F("🍜","Ramen",16,1550,{w:1.5,bites:2,size:1.2}),F("🌯","Burrito",22,2250,{w:1,bites:3,size:1.25}),F("🍩","Doughnut",8,1100,{w:1,flee:1})],
-  bb:{hp:30000,kcb:450,reward:2400000},
+  bb:{hp:28000,kcb:450,reward:2400000},
   secs:[{n:"Night Market",floor:"street",wall:"street"},{n:"Food Trucks",floor:"asphalt",wall:"streetTrucks"},{n:"Neon Alley",floor:"neon",wall:"streetNeon"}],
   bosses:[{e:"🍙",name:"Onigiri Ollie",mv:"dart",spd:240,mi:4,atk:[{k:"spread",e:"🍙",n:5,every:2,spd:380},{k:"charge",every:4}]},{e:"🌯",name:"Mega Burrito",mv:"flee",spd:160,mi:3.5,atk:[{k:"ring",e:"🌶️",n:12,every:2.6,spd:300},{k:"spin",e:"🌽",every:5.5,spd:300}]},{e:"🥙",name:"Doner Mountain",mv:"dart",spd:230,mi:3,atk:[{k:"spin",e:"🥩",every:4.5,spd:320},{k:"slam",every:3.2,r:120},{k:"charge",every:5}]}],
   hz:{scooter:1,puddle:2},
   tasks:[{k:"eat",f:"Taco",pl:"Tacos",n:60,r:5000000},{k:"run",n:20000000,r:10000000},{k:"combo",n:50,r:20000000}]},
- {id:"buffet",name:"The Buffet",e:"🍽️",cost:0,at:36,
+ {id:"buffet",name:"The Buffet",e:"🍽️",cost:0,at:42,
   th:{glow:"255,215,150"},
   foods:[F("🍕","Pizza slice",10,3200,{w:3}),F("🍗","Chicken leg",12,4200,{w:2}),F("🍤","Prawn",5,2400,{w:2,flee:1}),F("🍰","Gateau",18,7600,{w:1,bites:2,size:1.2}),F("🍖","Rib",16,6800,{w:1})],
-  bb:{hp:55000,kcb:2000,reward:48000000},
+  bb:{hp:35000,kcb:2000,reward:48000000},
   secs:[{n:"Dessert Table",floor:"buffet",wall:"buffetDessert"},{n:"Wedding Party",floor:"parquet",wall:"buffetWedding"},{n:"The Carvery",floor:"buffet",wall:"buffet"}],
   bosses:[{e:"🍮",name:"The Trifle",mv:"wander",spd:70,mi:3,atk:[{k:"ring",e:"🍒",n:12,every:2.6,spd:270},{k:"spread",e:"🍓",n:5,every:3.2,spd:330}]},{e:"🎂",name:"Wedding Cake",mv:"still",spd:0,mi:2,atk:[{k:"slam",every:2.2,r:140},{k:"spin",e:"🍰",every:5,spd:300}]},{e:"🦃",name:"The Sunday Roast",mv:"still",spd:0,mi:2.5,atk:[{k:"spread",e:"🥕",n:7,every:1.8,spd:380},{k:"slam",every:3,r:130},{k:"ring",e:"🥔",n:14,every:3.4,spd:280}]}],
   hz:{waiter:1,rival:1},
@@ -558,48 +559,69 @@ const ZONES=[
 const ZI=Object.fromEntries(ZONES.map((z,i)=>[z.id,i]));
 // Each market has 3 sections with one boss each. Beat a section's boss to open the next section; beat the third to open the next market.
 // Later sections pay more (SECK) and have more hazards. Boss HP/reward are shares of the market's base (bb).
-const SECK=[1,1.35,1.8],BHP=[1,1.8,3],BREW=[.25,.5,1];
+const SECK=[1,1.35,1.8],BHP=[1,1.4,1.9],BREW=[.25,.5,1];
 for(const z of ZONES){z.bosses=z.bosses.map((b,i)=>({...b,n:i,final:i===2,hp:Math.round(z.bb.hp*BHP[i]),kc:z.bb.kcb*SECK[i],reward:Math.round(z.bb.reward*BREW[i])}));z.boss=z.bosses[2];}
 const secKey=(z,i)=>z.id+":"+i;
-// Foods get chewier in each market so Jaw strength keeps mattering (same kcal and fill per bite, just more bites)
+// Foods get chewier in each market so Jaw strength keeps mattering (more bites; kcal rises more gently)
 const CHEWY=[1,2,3,5,8];
-ZONES.forEach((z,zi)=>z.foods.forEach(f=>{const m=CHEWY[zi];f.bites=Math.round(f.bites*m);f.kcal*=m;f.fill*=m;}));
+ZONES.forEach((z,zi)=>z.foods.forEach(f=>{const m=CHEWY[zi];f.bites=Math.round(f.bites*m);f.kcal*=Math.sqrt(m);}));
+const CLOCK=F("⏰","Time drop",0,0,{bites:1,size:.9});
+const MINI={shop:["🍬","🍬"],chippy:["🧂","🧂"],curry:["🧄","🌶️"],street:["🍥","🍥"],buffet:["🧁","🍒"]};
+ZONES.forEach((z,zi)=>{const avg=z.foods.reduce((a,f)=>a+f.kcal,0)/z.foods.length,ab=z.foods.reduce((a,f)=>a+f.bites,0)/z.foods.length;
+  z.mini=F(MINI[z.id][0],"Food goblin",0,avg*2,{bites:Math.max(2,Math.round(ab*1.5)),size:.9});z.mini.mini=1;z.miniShot=MINI[z.id][1];});
 
 // Skill tree. p = parent node (needs 1 level). x,y in a 100×64 grid. Cost = base·k^level. v(level) → value, f(value) → label.
+// Skill tree: 4 directions. Up = TIME, right = DAMAGE, left = GAINS, down = ABILITIES (skills + events).
+// Nodes have a few levels each; getting a node to level 3 (or maxing a 1-2 level node) opens the next ones.
+const pct=v=>Math.round(v*100)+"%";
 const NODES=[
- {id:"start",g:"gold",x:50,y:33,e:"🏋️",name:"Rookie Lifter",max:1,base:0,k:1,v:L=>L,f:()=>"Every bulk starts somewhere",d:"The root of the tree. Everything grows from here."},
- // red · belly
- {id:"stomach",p:"start",g:"red",x:40,y:33,e:"🍽️",name:"Iron Stomach",max:25,base:25,k:2,v:L=>1+.06*L,f:v=>`×${v.toFixed(2)} kcal`,d:"A belly built for bulking. Every kcal you eat is worth more."},
- {id:"digest",p:"stomach",g:"red",x:31,y:25,e:"🌀",name:"Second Helpings",max:25,base:40,k:2,v:L=>.04*L,f:v=>`+${v.toFixed(2)}s per food eaten`,d:"Every food you finish tops up your appetite timer, up to 15 extra seconds a run."},
- {id:"pad",p:"digest",g:"red",x:22,y:17,e:"🛡️",name:"Padding",max:5,base:1500,k:2.8,v:L=>1-.15*L,f:v=>`${Math.round(v*100)}% knock time`,d:"Hazards knock you about for less time."},
- {id:"cheat",p:"stomach",g:"red",x:31,y:43,e:"🍰",name:"Cheat Meal",skill:1,max:1,base:120000,k:1,v:L=>L,f:()=>"Skill: food worth ×3",d:"For a few seconds every food is worth three times as much and you chew faster. 22s cooldown."},
- {id:"cheatT",p:"cheat",g:"red",x:21,y:50,e:"⏳",name:"Long Weekend",max:8,base:200000,k:2.2,v:L=>4+.75*L,f:v=>`${v.toFixed(1)}s cheat meal`,d:"Cheat Meal lasts longer."},
- // blue · engine
- {id:"appetite",p:"start",g:"blue",x:50,y:21,e:"⏱️",name:"Appetite",max:15,base:80,k:2.4,v:L=>25+3*L,f:v=>`${v}s per run`,d:"How long each run lasts."},
- // purple · events: things that happen on their own
- {id:"drop",p:"appetite",g:"purple",x:50,y:6,e:"⬇️",name:"Plate Drop",max:10,base:2000,k:2.1,v:L=>L?8*Math.pow(.88,L-1):0,f:v=>v?`a plate falls every ${v.toFixed(1)}s`:"locked",d:"Every few seconds a bumper plate crashes down on a cluster of food and smashes it all into kcal. Hits bosses too."},
- {id:"buddy",p:"pad",g:"purple",x:11,y:33,e:"🤝",name:"Gym Buddy",max:6,base:3000,k:2.4,v:L=>L,f:v=>v?`${Math.ceil(v/2)} buddy · speed ${(1+.15*v).toFixed(2)}×`:"locked",d:"A friendly lifter joins your runs and eats food for you. More levels add buddies and make them faster."},
- {id:"chain",p:"jaw",g:"purple",x:92,y:33,e:"⚡",name:"Gains Train",max:10,base:4000,k:2.2,v:L=>.05*L,f:v=>`${Math.round(v*100)}% chance to chain`,d:"Any chomp might zap onwards and take a bite out of up to 3 nearby foods."},
- {id:"metab",p:"appetite",g:"blue",x:42,y:11,e:"🔥",name:"Metabolism",max:30,base:150,k:2.3,v:L=>1+.25*L,f:v=>`×${v.toFixed(2)} kcal`,d:"Multiplies every kcal you eat."},
- {id:"wind",p:"appetite",g:"blue",x:58,y:11,e:"💨",name:"Second Wind",max:5,base:3000,k:2.8,v:L=>.6*L,f:v=>`+${v.toFixed(1)}s per golden food`,d:"Golden food tops up your appetite timer, up to 8 extra seconds a run."},
- // yellow · jaw
- {id:"chew",p:"start",g:"yellow",x:60,y:33,e:"🦷",name:"Chew speed",max:12,base:80,k:2.2,v:L=>.36*Math.pow(.87,L),f:v=>`${(1/v).toFixed(1)} chomps / sec`,d:"How often you can take a bite."},
- {id:"jaw",p:"chew",g:"yellow",x:69,y:25,e:"👄",name:"Jaw strength",max:10,base:500,k:3,v:L=>1+L,f:v=>`${v} bite${v>1?"s":""} per chomp`,d:"Big foods and bosses go down quicker."},
- {id:"toss",p:"jaw",g:"yellow",x:78,y:17,e:"🥏",name:"Plate Toss",skill:1,max:1,base:15000,k:1,v:L=>L,f:()=>"Skill: throw a bumper plate",d:"Throw a spinning plate that bounces around and smashes food into kcal. It doesn't fill you. 7s cooldown."},
- {id:"tossN",p:"toss",g:"yellow",x:87,y:10,e:"🎯",name:"Heavier Plates",max:6,base:25000,k:2.4,v:L=>4+2*L,f:v=>`${v} hits per plate`,d:"Each plate hits more food before it stops."},
- {id:"combo",p:"chew",g:"yellow",x:69,y:41,e:"🎵",name:"Rhythm",max:10,base:300,k:2.4,v:L=>10+5*L,f:v=>`combo up to ×${(1+.02*v).toFixed(1)}`,d:"Keep eating without a break to build a combo. Each chomp adds 2% kcal, up to a cap."},
- {id:"inhale",p:"combo",g:"yellow",x:78,y:49,e:"🌪️",name:"Big Inhale",skill:1,max:1,base:2500,k:1,v:L=>L,f:()=>"Skill: suck nearby food in",d:"Hoover up the food around you and chew twice as fast while you do. 9s cooldown."},
- {id:"inhaleR",p:"inhale",g:"yellow",x:87,y:56,e:"🧲",name:"Big Lungs",max:8,base:4000,k:2.2,v:L=>230*(1+.12*L),f:v=>`${Math.round(v)} inhale range`,d:"Big Inhale reaches further."},
- // green · footwork
- {id:"speed",p:"start",g:"green",x:57,y:46,e:"👟",name:"Footwork",max:12,base:40,k:2.1,v:L=>1+.1*L,f:v=>`×${v.toFixed(1)} speed`,d:"Walk faster."},
- {id:"dash",p:"speed",g:"green",x:62,y:57,e:"⚡",name:"Dash",skill:1,max:1,base:150,k:1,v:L=>L,f:()=>"Skill: burst forward",d:"Dash forward, chomping everything you touch. You can't be knocked during a dash."},
- {id:"dashCD",p:"dash",g:"green",x:71,y:61,e:"🔋",name:"Quick Feet",max:8,base:600,k:2.2,v:L=>4.5*Math.pow(.88,L),f:v=>`${v.toFixed(1)}s dash cooldown`,d:"Dash comes back sooner."},
- {id:"reach",p:"speed",g:"green",x:52,y:58,e:"🤲",name:"Long arms",max:12,base:60,k:2,v:L=>6+6*L,f:v=>`+${v} reach`,d:"Grab food from further away."},
- // white · market
- {id:"crowd",p:"start",g:"white",x:43,y:46,e:"🛒",name:"Busy stalls",max:10,base:100,k:2.2,v:L=>8+2*L,f:v=>`${v} foods out at once`,d:"More food on the floor."},
- {id:"lucky",p:"crowd",g:"white",x:36,y:56,e:"⭐",name:"Chef's favourite",max:10,base:300,k:2.4,v:L=>.02+.015*L,f:v=>`${(v*100).toFixed(1)}% golden food (×5)`,d:"Chance for food to be golden and worth five times as much."},
- {id:"feast",p:"lucky",g:"white",x:27,y:61,e:"🎉",name:"Feast Bell",max:5,base:6000,k:2.8,v:L=>6+2*L,f:v=>`${v} golden foods per feast`,d:"Every boss you beat drops a feast of golden food."},
+ {id:"start",g:"gold",x:50,y:32,e:"🏋️",name:"Rookie Lifter",max:1,base:0,k:1,v:L=>L,f:()=>"Every bulk starts somewhere",d:"The root of the tree. Up is time, right is damage, left is kcal gains, down is abilities."},
+ // ⬆ TIME (blue)
+ {id:"appetite",p:"start",g:"blue",x:50,y:24,e:"⏱️",name:"Appetite",max:5,base:40,k:2.3,v:L=>25+3*L,f:v=>`${v}s per run`,d:"How long each run lasts."},
+ {id:"digest",p:"appetite",g:"blue",x:42,y:20,e:"🍽️",name:"Second Helpings",max:5,base:400,k:2.3,v:L=>.04*L,f:v=>`+${v.toFixed(2)}s per food`,d:"Every food you finish tops up your appetite, up to 15 extra seconds a run."},
+ {id:"clock",p:"appetite",g:"blue",x:58,y:20,e:"⏰",name:"Time Drops",max:5,base:600,k:2.3,v:L=>L?15-1.6*L:0,f:v=>v?`a clock every ${v.toFixed(1)}s`:"locked",d:"Alarm clocks turn up on the floor. Grab one for extra appetite time."},
+ {id:"appetite2",p:"appetite",g:"blue",x:50,y:15,e:"⌛",name:"Bottomless",max:5,base:15000,k:2.3,v:L=>4*L,f:v=>`+${v}s per run`,d:"Even longer runs."},
+ {id:"clockV",p:"clock",g:"blue",x:65,y:13,e:"🕰️",name:"Big Clocks",max:4,base:300000,k:2.3,v:L=>1.5+.6*L,f:v=>`+${v.toFixed(1)}s per clock`,d:"Each time drop gives more time."},
+ {id:"wind",p:"clock",g:"blue",x:58,y:9,e:"💨",name:"Second Wind",max:3,base:20000000,k:2.3,v:L=>.6*L,f:v=>`+${v.toFixed(1)}s per golden food`,d:"Golden food tops up your appetite too, up to 8 extra seconds a run."},
+ {id:"pad",p:"digest",g:"blue",x:36,y:12,e:"🛡️",name:"Padding",max:3,base:200000,k:2.3,v:L=>1-.15*L,f:v=>`${pct(v)} stun time`,d:"Hits and hazards stun you for less time."},
+ {id:"armor",p:"pad",g:"blue",x:29,y:5,e:"🦺",name:"Thick Skin",max:5,base:30000000,k:2.3,v:L=>1-.09*L,f:v=>`${pct(v)} time lost to hits`,d:"Boss hits and hazards cost you less appetite time."},
+ {id:"appetite3",p:"appetite2",g:"blue",x:46,y:6,e:"♾️",name:"Endless Hunger",max:5,base:60000000,k:2.3,v:L=>5*L,f:v=>`+${v}s per run`,d:"The longest runs of all."},
+ // ➡ DAMAGE (yellow)
+ {id:"chew",p:"start",g:"yellow",x:60,y:32,e:"🦷",name:"Chew speed",max:5,base:50,k:2.3,v:L=>.36*Math.pow(.86,L),f:v=>`${(1/v).toFixed(1)} chomps / sec`,d:"How often you take a bite."},
+ {id:"jaw",p:"chew",g:"yellow",x:67,y:25,e:"👄",name:"Jaw strength",max:5,base:300,k:2.3,v:L=>1+L,f:v=>`${v} bites per chomp`,d:"Chewy foods and bosses go down quicker."},
+ {id:"chew2",p:"chew",g:"yellow",x:69,y:32,e:"⚙️",name:"Fast Jaws",max:5,base:5000,k:2.3,v:L=>Math.pow(.88,L),f:v=>`chew ${pct(1/v-1)} faster`,d:"Chew even faster."},
+ {id:"combo",p:"chew",g:"yellow",x:67,y:39,e:"🎵",name:"Rhythm",max:5,base:500,k:2.3,v:L=>10+8*L,f:v=>`combo up to ×${(1+.02*v).toFixed(1)}`,d:"Keep chomping without a break. Each chomp adds 2% kcal, up to a cap."},
+ {id:"jaw2",p:"jaw",g:"yellow",x:75,y:20,e:"🦈",name:"Mega Jaw",max:5,base:600000,k:2.3,v:L=>L,f:v=>`+${v} bites per chomp`,d:"Even bigger bites."},
+ {id:"power",p:"chew2",g:"yellow",x:78,y:32,e:"💪",name:"Power Bites",max:5,base:20000,k:2.3,v:L=>1+.2*L,f:v=>`×${v.toFixed(1)} boss damage`,d:"Hit bosses harder."},
+ {id:"combo2",p:"combo",g:"yellow",x:75,y:44,e:"🎶",name:"In the Zone",max:3,base:400000,k:2.3,v:L=>1.6+.35*L,f:v=>`${v.toFixed(2)}s combo window`,d:"Your combo lasts longer between chomps."},
+ {id:"crit",p:"jaw2",g:"yellow",x:84,y:15,e:"💥",name:"Big Bite",max:5,base:40000000,k:2.3,v:L=>.05*L,f:v=>`${pct(v)} chance of a ×3 chomp`,d:"Some chomps land three times as hard, on food and bosses."},
+ {id:"power2",p:"power",g:"yellow",x:87,y:32,e:"🔨",name:"Crushing Bites",max:5,base:1000000000,k:2.3,v:L=>1+.25*L,f:v=>`×${v.toFixed(2)} boss damage`,d:"Bosses crumble."},
+ // ⬅ GAINS (red)
+ {id:"stomach",p:"start",g:"red",x:40,y:32,e:"🍔",name:"Iron Stomach",max:5,base:40,k:2.3,v:L=>1+.06*L,f:v=>`×${v.toFixed(2)} kcal`,d:"Every kcal you eat is worth more."},
+ {id:"metab",p:"stomach",g:"red",x:31,y:32,e:"🔥",name:"Metabolism",max:5,base:8000,k:2.3,v:L=>1+.2*L,f:v=>`×${v.toFixed(2)} kcal`,d:"Multiplies every kcal you eat."},
+ {id:"lucky",p:"stomach",g:"red",x:34,y:25,e:"⭐",name:"Chef's favourite",max:5,base:6000,k:2.3,v:L=>.02+.02*L,f:v=>`${pct(v)} golden food`,d:"Chance for food to be golden and worth much more."},
+ {id:"crowd",p:"stomach",g:"red",x:34,y:39,e:"🛒",name:"Busy stalls",max:5,base:300,k:2.3,v:L=>8+2*L,f:v=>`${v} foods out at once`,d:"More food on the floor."},
+ {id:"metab2",p:"metab",g:"red",x:22,y:32,e:"🌋",name:"Furnace",max:5,base:1000000,k:2.3,v:L=>1+.2*L,f:v=>`×${v.toFixed(2)} kcal`,d:"Your metabolism runs red hot."},
+ {id:"gold2",p:"lucky",g:"red",x:26,y:20,e:"👑",name:"Midas Mouth",max:5,base:500000,k:2.3,v:L=>5+L,f:v=>`golden food ×${v}`,d:"Golden food is worth even more."},
+ {id:"feast",p:"gold2",g:"red",x:17,y:15,e:"🎉",name:"Feast Bell",max:4,base:30000000,k:2.3,v:L=>6+3*L,f:v=>`${v} golden foods per feast`,d:"Every boss you beat drops a feast of golden food."},
+ {id:"crowd2",p:"crowd",g:"red",x:26,y:44,e:"🏪",name:"Rush Hour",max:5,base:400000,k:2.3,v:L=>3*L,f:v=>`+${v} foods out at once`,d:"The market is heaving."},
+ {id:"metab3",p:"metab2",g:"red",x:13,y:32,e:"☄️",name:"Meteor Metabolism",max:5,base:2000000000,k:2.3,v:L=>1+.25*L,f:v=>`×${v.toFixed(2)} kcal`,d:"The final word in burning calories."},
+ // ⬇ ABILITIES (green skills, purple events)
+ {id:"speed",p:"start",g:"green",x:50,y:41,e:"👟",name:"Footwork",max:5,base:40,k:2.3,v:L=>1+.12*L,f:v=>`×${v.toFixed(2)} speed`,d:"Walk faster."},
+ {id:"dash",p:"speed",g:"green",x:57,y:47,e:"⚡",name:"Dash",skill:1,max:1,base:300,k:1,v:L=>L,f:()=>"Skill: burst forward",d:"Dash forward, chomping everything you touch. You can't be hit during a dash."},
+ {id:"reach",p:"speed",g:"green",x:43,y:47,e:"🤲",name:"Long arms",max:5,base:200,k:2.3,v:L=>6+8*L,f:v=>`+${v} reach`,d:"Grab food from further away."},
+ {id:"dashCD",p:"dash",g:"green",x:55,y:56,e:"🔋",name:"Quick Feet",max:4,base:10000,k:2.3,v:L=>4.5*Math.pow(.84,L),f:v=>`${v.toFixed(1)}s dash cooldown`,d:"Dash comes back sooner."},
+ {id:"inhale",p:"dash",g:"green",x:65,y:51,e:"🌪️",name:"Big Inhale",skill:1,max:1,base:25000,k:1,v:L=>L,f:()=>"Skill: suck nearby food in",d:"Hoover up the food around you and chew twice as fast while you do. 9s cooldown."},
+ {id:"inhaleR",p:"inhale",g:"green",x:64,y:60,e:"🧲",name:"Big Lungs",max:4,base:800000,k:2.3,v:L=>230*(1+.15*L),f:v=>`${Math.round(v)} inhale range`,d:"Big Inhale reaches further."},
+ {id:"toss",p:"inhale",g:"green",x:74,y:54,e:"🥏",name:"Plate Toss",skill:1,max:1,base:1000000,k:1,v:L=>L,f:()=>"Skill: throw a bumper plate",d:"Throw a spinning plate that bounces around smashing food into kcal. 7s cooldown."},
+ {id:"tossN",p:"toss",g:"green",x:73,y:62,e:"🎯",name:"Heavier Plates",max:4,base:40000000,k:2.3,v:L=>4+3*L,f:v=>`${v} hits per plate`,d:"Each plate hits more food before it stops."},
+ {id:"cheat",p:"toss",g:"green",x:83,y:56,e:"🍰",name:"Cheat Meal",skill:1,max:1,base:1500000000,k:1,v:L=>L,f:()=>"Skill: food worth ×3",d:"For a few seconds every food is worth three times as much and you chew faster. 22s cooldown."},
+ {id:"cheatT",p:"cheat",g:"green",x:90,y:62,e:"📅",name:"Long Weekend",max:4,base:3000000000,k:2.3,v:L=>4+L,f:v=>`${v}s cheat meal`,d:"Cheat Meal lasts longer."},
+ {id:"drop",p:"reach",g:"purple",x:36,y:53,e:"⬇️",name:"Plate Drop",max:5,base:15000,k:2.3,v:L=>L?8*Math.pow(.85,L-1):0,f:v=>v?`a plate falls every ${v.toFixed(1)}s`:"locked",d:"Every few seconds a bumper plate crashes down on a cluster of food and smashes it into kcal. Hits bosses too."},
+ {id:"buddy",p:"reach",g:"purple",x:45,y:57,e:"🤝",name:"Gym Buddy",max:5,base:500000,k:2.3,v:L=>L,f:v=>v?`${Math.ceil(v/2)} buddy · speed ${(1+.15*v).toFixed(2)}×`:"locked",d:"Friendly lifters join your runs and eat food for you. More levels add buddies and make them faster."},
+ {id:"chain",p:"drop",g:"purple",x:28,y:58,e:"🌩️",name:"Gains Train",max:5,base:25000000,k:2.3,v:L=>.06*L,f:v=>`${pct(v)} chance to chain`,d:"Any chomp might zap onwards and take a bite out of up to 3 nearby foods."},
 ];
+const need=p=>Math.min(3,NI[p].max);   // parent level needed to open a node
 const NI=Object.fromEntries(NODES.map(n=>[n.id,n]));
 const SKILLS=[
  {id:"dash",name:"Dash",e:"⚡",kb:"Space",pd:"A",pc:"pA",cd:()=>stat("dashCD")},
@@ -621,6 +643,7 @@ function migrate(x){
     delete x.bi;}
   for(let i=1;i<ZONES.length;i++)if(x.beaten[ZONES[i-1].id]&&!x.zones.includes(ZONES[i].id)){x.zones.push(ZONES[i].id);x.sec[ZONES[i].id]=1;}
   for(const id of x.zones)x.sec[id]=x.sec[id]||1;
+  for(const id in x.lv){const n=NODES.find(q=>q.id===id);if(!n)delete x.lv[id];else x.lv[id]=Math.min(x.lv[id],n.max);}
   x.si=Math.min(x.si||0,(x.sec[x.zone]||1)-1);
   return x;
 }
@@ -634,7 +657,7 @@ const bench=()=>20+2.5*levels();
 const dmgMult=()=>1+(bench()-20)/200;
 const bulk=()=>Math.min(1.7,1+levels()*.006);
 const trophies=()=>ZONES.filter(z=>S.beaten[z.id]).length;
-const kcalMult=()=>stat("metab")*stat("stomach")*(1+.1*trophies())*(1+.15*S.medals)*(1+.1*sl("shake"));
+const kcalMult=()=>stat("metab")*stat("metab2")*stat("metab3")*stat("stomach")*(1+.1*trophies())*(1+.15*S.medals)*(1+.1*sl("shake"));
 /* ---------- YOUR GYM: equipment brings members, members pay £, £ buys equipment and supplements ---------- */
 const EQUIP=[
  {id:"weights",e:"💪",name:"Free weights",max:10,base:15,k:1.55,add:3},
@@ -667,7 +690,7 @@ const bossHp=b=>Math.round(b.hp*Math.pow(1.6,S.season-1));
 const secOpen=(z,i)=>S.zones.includes(z.id)&&(S.sec[z.id]||0)>i;
 const secDone=(z,i)=>!!S.cleared[secKey(z,i)];
 const selZone=()=>ZONES[ZI[S.zone]],selSec=()=>clamp(S.si||0,0,2);
-const avail=n=>!n.p||lv(n.p)>0;
+const avail=n=>!n.p||lv(n.p)>=need(n.p);
 const medalsFor=k=>Math.floor(2*Math.sqrt(k/1e8));
 let SIM=false;
 
@@ -855,6 +878,7 @@ NODES.forEach(n=>{
     l.setAttribute("x1",p.x);l.setAttribute("y1",p.y);l.setAttribute("x2",n.x);l.setAttribute("y2",n.y);
     l.setAttribute("vector-effect","non-scaling-stroke");l.setAttribute("stroke-linecap","round");svg.appendChild(l);lineEls[n.id]=l;}
 });
+for(const [t,x,y] of [["⏱ TIME",72,3],["DAMAGE 💪",94,24],["🔥 GAINS",7,24],["⚡ ABILITIES",50,64]]){const l=document.createElement("div");l.className="tlab";l.textContent=t;l.style.left=x+"%";l.style.top=(y/64*100)+"%";treeEl.appendChild(l);}
 NODES.forEach(n=>{
   const b=document.createElement("button");b.className="node"+(n.skill?" skill":"")+(n.id==="start"?" root":"");
   b.style.left=n.x+"%";b.style.top=(n.y/64*100)+"%";b.style.setProperty("--c",COL[n.g]);
@@ -866,7 +890,7 @@ NODES.forEach(n=>{
 function buyNode(n){
   const L=lv(n.id);
   if(L>=n.max){renderInfo();return;}
-  if(!avail(n)){toast(`Unlock ${NI[n.p].name} first`);SFX.no();renderInfo();return;}
+  if(!avail(n)){toast(`Get ${NI[n.p].name} to level ${need(n.p)} first`);SFX.no();renderInfo();return;}
   const c=cost(n);
   if(S.kcal<c){toast(`Need ${fmt(c-S.kcal)} more kcal`);SFX.no();renderInfo();return;}
   S.kcal-=c;S.lv[n.id]=L+1;save();SFX.buy(L);
@@ -883,7 +907,7 @@ function renderInfo(){
   if(n.skill){$("#iVal").innerHTML=L?"<em>Unlocked</em>":`<em>${n.f(1)}</em>`;}
   else $("#iVal").innerHTML=max?`<em>${n.f(n.v(L))}</em> (maxed)`:`${n.f(n.v(L))} → <em>${n.f(n.v(L+1))}</em>`;
   b.disabled=max;
-  b.innerHTML=(max?(n.skill?"Unlocked":"Maxed"):!avail(n)?`Needs ${NI[n.p].name}`:`Buy · ${fmt(c)} kcal`)+(max||!avail(n)?"":' <span class="glyph pd pA">A</span>');
+  b.innerHTML=(max?(n.skill?"Unlocked":"Maxed"):!avail(n)?`Needs ${NI[n.p].name} ${need(n.p)}`:`Buy · ${fmt(c)} kcal`)+(max||!avail(n)?"":' <span class="glyph pd pA">A</span>');
   b.className="btn"+(!max&&avail(n)&&S.kcal>=c?" gold":"");
 }
 $("#iBuy").onclick=()=>buyNode(NI[infoId]);
@@ -906,11 +930,11 @@ ZONES.forEach((z,zi)=>{
   $("#zones").appendChild(row);zoneEls[z.id]=row;
 });
 function secInfo(z,i){
-  const b=z.bosses[i],sc=z.secs[i],hp=S.bhp[secKey(z,i)],el=$("#secInfo");
+  const b=z.bosses[i],sc=z.secs[i],el=$("#secInfo");
   if(!secOpen(z,i)){const pz=i?z:ZONES[ZI[z.id]-1],pi=i?i-1:2;el.innerHTML=`<b>🔒 ${z.name} · ${sc.n}</b><br>Beat ${pz.bosses[pi].e} ${pz.bosses[pi].name} at ${pz.secs[pi].n} to open this.`;return;}
   const threat=b.atk.map(a=>ATK[a.k]).join(", ");
   el.innerHTML=`<b>${z.name} · ${sc.n}</b><br>`+(secDone(z,i)?`✅ ${b.e} ${b.name} beaten. Fill the bar for an encore. Food ×${SECK[i]}`:
-    `Boss: ${b.e} ${b.name}`+(hp!=null?` · <b style="font-size:14px">${Math.ceil(hp)}/${bossHp(b)}</b> left`:` · ${bossHp(b)} bites`)+` · Food ×${SECK[i]}<br><span class="threat">⚠ It ${threat}.</span>`);
+    `Boss: ${b.e} ${b.name}`+` · ${bossHp(b)} bites`+` · Food ×${SECK[i]}<br><span class="threat">⚠ It ${threat}.</span>`);
 }
 function taskOf(z){const i=S.task[z.id]||0;return z.tasks[i]?{t:z.tasks[i],i}:null;}
 function taskText(t,z){
@@ -969,7 +993,7 @@ function renderGym(){
     row.classList.toggle("cur",S.zone===z.id);row.classList.toggle("locked",!owned);
     const done=[0,1,2].filter(i=>secDone(z,i)).length;
     row.querySelector("small").textContent=!owned?`Clear ${ZONES[zi-1].name} to open`:S.beaten[z.id]?"Cleared 🏆 · encores":`${done}/3 sections cleared`;
-    secEls[z.id].forEach((b,i)=>{const open=secOpen(z,i),dn=secDone(z,i),hp=S.bhp[secKey(z,i)],bs=z.bosses[i];
+    secEls[z.id].forEach((b,i)=>{const open=secOpen(z,i),dn=secDone(z,i),hp=null,bs=z.bosses[i];
       b.className="sec"+(dn?" done":open?" open":" lock")+(S.zone===z.id&&selSec()===i?" sel":"");
       b.querySelector(".se").textContent=open?bs.e:"🔒";b.querySelector(".ck").textContent=dn?"✅":"";
       const bar=b.querySelector(".sb");bar.hidden=!(open&&!dn&&hp!=null);bar.firstChild.style.width=(hp!=null?hp/bossHp(bs)*100:0)+"%";
@@ -991,7 +1015,7 @@ function renderGym(){
     b.setAttribute("aria-label",`${n.name}, level ${L} of ${n.max}`);
     b.dataset.tip=n.id==="start"?n.name:`${n.name}  ·  `+(max?(n.skill?"Unlocked":"MAX"):!ok?"🔒 Locked":`${fmt(cost(n))} kcal`);
     const ln=lineEls[n.id];
-    if(ln){const on=L>0,rd=ok;ln.setAttribute("stroke",on?"#e09a1c":rd?"#7d9a45":"#9a8c70");ln.setAttribute("stroke-width",on?5:3.5);ln.setAttribute("stroke-dasharray",rd?"":"2 8");}
+    if(ln){const on=L>0,rd=ok;ln.setAttribute("stroke",on?"#3b2a1c":rd?"#4f9a2c":"#a8997c");ln.setAttribute("stroke-width",on?5:3.5);ln.setAttribute("stroke-dasharray",rd?"":"2 8");}
   });
   renderInfo();
 }
@@ -1441,8 +1465,8 @@ let R=null,paused=false;
 function startRun(){
   if(!SIM){setSong("run");$("#gym").hidden=true;$("#run").hidden=false;$("#results").hidden=true;$("#pause").hidden=true;paused=false;buildSkillbar();}
   const zone=selZone(),si=selSec();
-  R={zone,si,sk:secKey(zone,si),secK:SECK[si],boss:zone.bosses[si],shots:[],slams:[],t:stat("appetite")+sl("pre"),T:stat("appetite")+sl("pre"),helps:stat("digest"),helpLeft:15,dropT:3,drops:[],zaps:[],buds:[],hitT:1-.08*sl("tea"),mult:kcalMult(),
-     cd:stat("chew"),jaw:stat("jaw"),dmg:dmgMult()*(1+.1*sl("creatine")),spd:stat("speed")*(1+.05*sl("coach")),reach:stat("reach"),max:stat("crowd"),gold:stat("lucky")+.01*sl("socks"),
+  R={zone,si,sk:secKey(zone,si),secK:SECK[si],boss:zone.bosses[si],shots:[],slams:[],t:stat("appetite")+stat("appetite2")+stat("appetite3")+sl("pre"),T:stat("appetite")+stat("appetite2")+stat("appetite3")+sl("pre"),clockT:6,crit:stat("crit"),goldX:stat("gold2"),comboW:stat("combo2"),helps:stat("digest"),helpLeft:15,miniT:4,dropT:3,drops:[],zaps:[],buds:[],hitT:(1-.08*sl("tea"))*stat("armor"),mult:kcalMult(),
+     cd:stat("chew")*stat("chew2"),jaw:stat("jaw")+stat("jaw2"),dmg:dmgMult()*(1+.1*sl("creatine"))*stat("power")*stat("power2"),spd:stat("speed")*(1+.05*sl("coach")),reach:stat("reach"),max:stat("crowd")+stat("crowd2"),gold:stat("lucky")+.01*sl("socks"),
      comboCap:stat("combo"),wind:stat("wind"),windLeft:8,pad:stat("pad"),
      fill:0,kcal:0,chew:0,mouth:0,boost:0,spawn:0,shake:0,fullMsg:0,stun:0,inv:0,
      combo:0,comboT:0,maxCombo:0,prog:0,bossOut:false,encores:0,bossWait:0,
@@ -1459,11 +1483,11 @@ function startRun(){
   for(let i=0;i<Math.ceil(lv("buddy")/2);i++)R.buds.push({x:WW*(.3+.4*i),y:FY1()-60,vx:0,vy:0,tgt:null,chew:0,walk:0,face:1,mouth:0});
   for(let i=0;i<Math.ceil(R.max*.75);i++)spawnFood(true);
   // a boss you've already damaged is waiting at the start of the run
-  if(!secDone(zone,si)&&S.bhp[R.sk]!=null)R.bossWait=1.2;
+  S.bhp={};   // bosses come back at full HP every run
   if(!SIM){
     $("#hZone").textContent=`${zone.name} · ${zone.secs[si].n}`;$("#hBossIco").textContent=secDone(zone,si)?"🏆":R.boss.e;
     const wb=R.bossWait>0?R.boss:null;
-    const tip=!S.seen?`${hintMove()} Walk into food to eat it.`:wb?`${wb.e} ${wb.name} is waiting for you with ${Math.ceil(S.bhp[R.sk])} bites left!`:hzHint(zone)+(R.stage?" It's busier back here!":"");
+    const tip=!S.seen?`${hintMove()} Walk into food to eat it.`:wb?"":hzHint(zone)+(R.stage?" It's busier back here!":"");
     showHint(tip);S.seen=true;
     drawPort();
   }
@@ -1657,6 +1681,11 @@ function update(dt){
     f.pop=Math.min(1,f.pop+dt*4);f.hit=Math.max(0,f.hit-dt*7);f.sq=Math.max(0,f.sq-dt*5);
     f.blink-=dt;if(f.blink<-.12)f.blink=rnd(1.5,5);
     if(f.boss){bossMove(f,dt);continue;}
+    if(f.mini){f.t=(f.t||0)+dt;
+      if(!f.goal||Math.hypot(f.goal.x-f.x,f.goal.y-f.y)<16||f.t>f.gt){f.goal={x:rnd(FX0()+60,FX1()-60),y:rnd(FY0()+60,FY1()-60)};f.gt=f.t+rnd(2,4);}
+      const gx=f.goal.x-f.x,gy=f.goal.y-f.y,gd=Math.hypot(gx,gy)||1;f.x+=gx/gd*60*dt;f.y+=gy/gd*60*dt;f.step+=dt*6;
+      f.shotT=(f.shotT??rnd(1.5,3))-dt;if(f.shotT<=0&&f.pop>=1){f.shotT=rnd(2.6,3.8)/(1+.15*R.si);shoot(f,{e:R.zone.miniShot},Math.atan2(R.y-10-f.y,R.x-f.x),250);}
+      keepIn(f,f.r);continue;}
     const dx=f.x-R.x,dy=f.y-R.y,d=Math.hypot(dx,dy)||1;
     if(R.inhT>0&&d<inhR){const pull=(260+600*(1-d/inhR))*dt;f.x-=dx/d*Math.min(pull,d-10);f.y-=dy/d*Math.min(pull,d-10);f.vx*=.5;f.vy*=.5;}
     else if(f.def.flee&&d<150){f.vx+=dx/d*300*dt;f.vy+=dy/d*300*dt;}
@@ -1685,10 +1714,16 @@ function update(dt){
   // spawning
   R.spawn-=dt;
   const n=R.foods.filter(f=>!f.boss).length;
-  if(n<R.max&&R.spawn<=0){spawnFood(false);R.spawn=.45*Math.pow(.92,lv("crowd"));}
+  if(n<R.max&&R.spawn<=0){spawnFood(false);R.spawn=.45*Math.pow(.92,lv("crowd")+lv("crowd2"));}
   hazards(dt);
   bossAttacks(dt);
   events(dt);
+  if(lv("clock")){R.clockT-=dt;if(R.clockT<=0){R.clockT=stat("clock");const c=spawnFood(false);c.def=CLOCK;c.left=1;c.r=24;c.gold=false;c.clock=1;c.pop=0;c.life=8;}}
+  for(const f of R.foods)if(f.clock){f.life-=dt;if(f.life<=0)f.left=-1;}
+  R.foods=R.foods.filter(f=>!(f.clock&&f.left<0));
+  // goblins keep turning up on the way to the boss (fewer once it's out)
+  R.miniT-=dt;const gob=R.foods.filter(f=>f.mini).length,gmax=R.bossOut?1:1+R.si+(ZI[R.zone.id]>=2?1:0);
+  if(R.miniT<=0&&gob<gmax){R.miniT=rnd(4,6)/(1+.2*R.si);const g=spawnFood(false);g.def=R.zone.mini;g.left=g.def.bites;g.r=26*g.def.size;g.gold=false;g.mini=1;g.pop=0;puff(g.x,g.y,"#fff");}
   // fx
   for(const p of R.parts){p.x+=p.vx*dt;p.y+=p.vy*dt;p.vy+=p.g*dt;p.vx*=Math.pow(.2,dt);p.life-=dt;}
   R.parts=R.parts.filter(p=>p.life>0);
@@ -1729,7 +1764,7 @@ function hazards(dt){
   R.fires=R.fires.filter(f=>f.temp==null||f.temp>0);
   // seagulls
   if(h.gull){R.hzT.gull-=dt;if(R.hzT.gull<=0&&R.gulls.length<h.gull+R.stage){R.hzT.gull=rnd(5,8)/R.hzF;
-      const tgt=R.foods.filter(f=>!f.boss&&!f.taken).sort((a,b)=>b.def.kcal-a.def.kcal)[0];
+      const tgt=R.foods.filter(f=>!f.boss&&!f.mini&&!f.clock&&!f.taken).sort((a,b)=>b.def.kcal-a.def.kcal)[0];
       if(tgt){tgt.taken=1;const side=Math.random()<.5;R.gulls.push({x:side?-60:WW+60,y:rnd(40,WALL),tgt,st:"in",carry:null,flap:0,stun:0});}}
     for(const g of R.gulls){g.flap+=dt*14;
       if(g.st==="in"){if(!R.foods.includes(g.tgt)){g.st="out";}else{const dx=g.tgt.x-g.x,dy=g.tgt.y-30-g.y,d=Math.hypot(dx,dy);const s=300*dt;if(d<s+4){g.st="out";g.carry=g.tgt.def;g.gold=g.tgt.gold;R.foods.splice(R.foods.indexOf(g.tgt),1);floatText(g.x,g.y-30,"Nicked!",COL.red);}else{g.x+=dx/d*s;g.y+=dy/d*s;}}}
@@ -1776,13 +1811,13 @@ function knock(msg,stun,timeLoss,kx,ky){
   R.hits=(R.hits||0)+1;
   rumble(220,.8,.4);
   timeLoss=Math.round(timeLoss*R.hitT*100)/100;R.stun=stun*R.pad;R.inv=R.stun+.8;R.t-=timeLoss;R.vx=kx;R.vy=ky;R.shake=.5;R.combo=0;R.comboT=0;
-  floatText(R.x,R.y-100,msg,COL.red,1);if(timeLoss)floatText(R.x,R.y-70,`-${timeLoss}s`,COL.red);SFX.hit();burst(R.x,R.y,"#fff",6);
+  floatText(R.x,R.y-100,msg,COL.red,1);if(timeLoss)floatText(R.x,R.y-66,`⏱ -${timeLoss}s`,COL.red,2);SFX.hit();burst(R.x,R.y,"#fff",6);
 }
 
 // eat a whole food in one go (plate drops), worth a bit less than chewing it yourself
 function smashFood(f,mult){
   if(f.boss){chomp(f,{plate:1,chain:1});return;}
-  const kc=f.def.kcal/f.def.bites*f.left*R.secK*R.mult*(f.gold?5:1)*mult;R.kcal+=kc;f.left=0;
+  const kc=f.def.kcal/f.def.bites*f.left*R.secK*R.mult*(f.gold?R.goldX:1)*mult;R.kcal+=kc;f.left=0;
   floatText(f.x,f.y-f.r-8,"+"+fmt(kc),f.gold?COL.gold:COL.cream);burst(f.x,f.y,"#f5e6c4",8);eaten(f);
 }
 function events(dt){
@@ -1797,10 +1832,10 @@ function events(dt){
   // Gym Buddies: friendly lifters who eat food and hand you the kcal
   const bs=(150+20*lv("buddy"))*(R.boost>0?1.2:1);
   for(const b of R.buds){b.chew-=dt;b.mouth=Math.max(0,b.mouth-dt*6);
-    if(!b.tgt||!R.foods.includes(b.tgt)||b.tgt.boss){let best=null,bd=1e9;for(const f of R.foods){if(f.boss)continue;const d=Math.hypot(f.x-b.x,f.y-b.y)+Math.hypot(f.x-R.x,f.y-R.y)*.6;if(d<bd){bd=d;best=f;}}b.tgt=best;}
+    if(!b.tgt||!R.foods.includes(b.tgt)||b.tgt.boss){let best=null,bd=1e9;for(const f of R.foods){if(f.boss||f.clock)continue;const d=Math.hypot(f.x-b.x,f.y-b.y)+Math.hypot(f.x-R.x,f.y-R.y)*.6;if(d<bd){bd=d;best=f;}}b.tgt=best;}
     const t=b.tgt;if(t){const dx=t.x-b.x,dy=t.y-b.y,d=Math.hypot(dx,dy)||1;
       if(d>t.r+PR-6){b.vx=dx/d*bs;b.vy=dy/d*bs;b.face=dx<0?-1:1;}else{b.vx=b.vy=0;
-        if(b.chew<=0){b.chew=.5;b.mouth=1;const bites=Math.min(t.left,Math.max(1,Math.round(R.jaw*.5)));const kc=t.def.kcal/t.def.bites*bites*R.secK*R.mult*(t.gold?5:1)*.7;R.kcal+=kc;t.left-=bites;t.hit=1;t.sq=1;
+        if(b.chew<=0){b.chew=.5;b.mouth=1;const bites=Math.min(t.left,Math.max(1,Math.round(R.jaw*.5)));const kc=t.def.kcal/t.def.bites*bites*R.secK*R.mult*(t.gold?R.goldX:1)*.7;R.kcal+=kc;t.left-=bites;t.hit=1;t.sq=1;
           floatText(t.x,t.y-t.r-8,"+"+fmt(kc),"#bfe8a6");if(t.left<=0)eaten(t);}}}
     else b.vx=b.vy=0;
     b.x+=b.vx*dt;b.y+=b.vy*dt;b.walk+=Math.hypot(b.vx,b.vy)*dt/22;keepIn(b,PR);}
@@ -1816,19 +1851,21 @@ function drawEvents(tm){
 }
 function chomp(f,o={}){
   const def=f.def,boss=!!f.boss,cheat=R.cheatT>0;
-  const bites=boss?Math.min(f.hp,o.plate?R.jaw*.5:R.jaw*R.dmg):Math.min(R.jaw,f.left);
+  const crit=!o.plate&&R.crit&&Math.random()<R.crit;
+  const bites=boss?Math.min(f.hp,(o.plate?R.jaw*.5:R.jaw*R.dmg)*(crit?3:1)):Math.min(R.jaw*(crit?3:1),f.left);
+  if(crit)floatText(f.x,f.y-f.r-30,"BIG BITE!",COL.gold,1);
   if(bites<=0)return false;
-  if(R.comboT>0)R.combo++;else R.combo=1;R.comboT=1.6;R.maxCombo=Math.max(R.maxCombo,R.combo);
+  if(R.comboT>0)R.combo++;else R.combo=1;R.comboT=R.comboW;R.maxCombo=Math.max(R.maxCombo,R.combo);
   const cm=1+.02*Math.min(R.combo,R.comboCap);
   const per=boss?def.kc:def.kcal/def.bites*R.secK;
-  const kc=per*bites*R.mult*cm*(f.gold?5:1)*(o.plate?.8:1)*(cheat&&!boss?3:1);
+  const kc=per*bites*R.mult*cm*(f.gold?R.goldX:1)*(o.plate?.8:1)*(cheat&&!boss?3:1);
   R.kcal+=kc;
   if(!o.plate){R.chew=R.cd;R.mouth=1;}
   f.hit=1;f.sq=1;
-  if(boss){f.hp-=bites;if(!f.encore)S.bhp[R.sk]=Math.max(0,f.hp);R.bossDmg+=bites;if(!RM)R.shake=Math.max(R.shake,.25);}
+  if(boss){f.hp-=bites;R.bossDmg+=bites;if(!RM)R.shake=Math.max(R.shake,.25);}
   else f.left-=bites;
   burst(f.x,f.y,f.gold?COL.gold:"#f5e6c4",boss?6:7);sparkle(f.x,f.y-4,boss);
-  floatText(f.x+rnd(-10,10),f.y-f.r-8,"+"+fmt(kc),f.gold?COL.gold:COL.cream,f.gold||boss?1:0);
+  if(kc>0)floatText(f.x+rnd(-10,10),f.y-f.r-8,"+"+fmt(kc),f.gold?COL.gold:COL.cream,f.gold||boss?1:0);
   if(!SIM){if(f.gold)SFX.gold();else SFX.chomp(R.combo);}
   if(!o.chain&&!o.plate&&lv("chain")&&Math.random()<stat("chain")){
     const near=R.foods.filter(g=>g!==f&&!g.boss&&Math.hypot(g.x-f.x,g.y-f.y)<240).sort((a,b)=>Math.hypot(a.x-f.x,a.y-f.y)-Math.hypot(b.x-f.x,b.y-f.y)).slice(0,3);
@@ -1840,6 +1877,7 @@ function chomp(f,o={}){
 function eaten(f){
   const def=f.def,i=R.foods.indexOf(f);if(i<0)return;R.foods.splice(i,1);
   if(f.boss){bossDown(f);return;}
+  if(f.clock){const add=stat("clockV");R.t+=add;floatText(f.x,f.y-30,`⏱ +${add.toFixed(1)}s`,"#9fd3ff",2);if(!SIM)SFX.gold();return;}
   R.ate[def.name]=(R.ate[def.name]||0)+1;S.eat[def.name]=(S.eat[def.name]||0)+1;
   burst(f.x,f.y,f.gold?COL.gold:"#f5e6c4",12,1.2);
   if(f.gold){R.golds++;rumble(80,0,.5);if(!RM)R.shake=Math.max(R.shake,.4);const w=Math.min(R.wind,R.windLeft);if(w>0){R.windLeft-=w;R.t+=w;floatText(R.x,R.y-120,`+${w.toFixed(1)}s`,COL.gold,1);}}
@@ -1850,11 +1888,11 @@ function eaten(f){
   if(R.prog>=secAt(z,R.si)&&!R.bossOut&&R.bossWait<=0)spawnBoss(secDone(z,R.si));
   checkTasks();
 }
-const secAt=(z,i)=>Math.round(z.at*[1,1.1,1.2][i]);
+const secAt=(z,i)=>Math.round(z.at*[1,1.15,1.3][i]);
 function spawnBoss(encore){
   const b=R.boss;let hp,max;
   if(encore){max=Math.round(bossHp(b)*(.6+.25*R.encores));hp=max;R.encores++;}
-  else{max=bossHp(b);if(S.bhp[R.sk]==null||S.bhp[R.sk]>max)S.bhp[R.sk]=max;hp=S.bhp[R.sk];}
+  else{max=bossHp(b);hp=max;}
   R.bossOut=true;
   const r=b.final?66:56;
   R.foods.push({def:b,boss:true,encore:!!encore,x:WW/2,y:-120,ty:FY0()+r+40,enter:.8,r,hp,max,gold:false,pop:1,vx:0,vy:0,hit:0,sq:0,blink:2,step:0,wob:0,
@@ -1862,7 +1900,7 @@ function spawnBoss(encore){
   R.shake=.8;SFX.boss();rumble(450,1,.5);
   if(!SIM)$("#hBossIco").textContent=b.e;
   R.bossStart=hp;
-  banner(b.e,encore?`Encore: ${b.name}`:b.name,encore?`Back for seconds · ${max} bites`:hp<max?`Back with ${Math.ceil(hp)}/${max} HP · your ${Math.floor(max-hp)} damage is saved`:`${R.zone.secs[R.si].n} boss · ${max} bites to go`,"boss");
+  banner(b.e,encore?`Encore: ${b.name}`:b.name,encore?`Back for seconds · ${max} bites`:`${R.zone.secs[R.si].n} boss · ${max} bites · beat it before time runs out!`,"boss");
 }
 function bossDown(f){
   const z=R.zone,b=f.def,zi=ZI[z.id];
@@ -1905,15 +1943,15 @@ function bossAttacks(dt){
     });
     if(f.spin>0){f.spin-=dt;f.spinT-=dt;if(f.spinT<=0){f.spinT=.09;f.spinA+=.42;shoot(f,f.spinE,f.spinA,f.spinE.spd);shoot(f,f.spinE,f.spinA+Math.PI,f.spinE.spd);}}
     if(f.charge){const c=f.charge;if(c.t>0){c.t-=dt;}else{c.go+=dt;f.x+=Math.cos(c.ang)*820*dt;f.y+=Math.sin(c.ang)*820*dt;keepIn(f,f.r*.8);
-        if(Math.hypot(f.x-R.x,f.y-R.y)<f.r+PR)knock("Bonk!",.7,1.5,Math.cos(c.ang)*600,Math.sin(c.ang)*600);
+        if(Math.hypot(f.x-R.x,f.y-R.y)<f.r+PR)knock("Bonk!",.7,2,Math.cos(c.ang)*600,Math.sin(c.ang)*600);
         if(c.go>.55)f.charge=null;}}
   }
   for(const p of R.shots){p.x+=p.vx*dt;p.y+=p.vy*dt;p.life-=dt;p.rot+=dt*6;
-    if(Math.hypot(p.x-R.x,p.y-(R.y-14))<PR+p.r-4){if(R.dashT>0||R.inv>0){p.life=0;burst(p.x,p.y,"#fff",3);}else{p.life=0;knock("Splat!",.3,.75,p.vx*.4,p.vy*.4);}}
+    if(Math.hypot(p.x-R.x,p.y-(R.y-14))<PR+p.r-4){if(R.dashT>0||R.inv>0){p.life=0;burst(p.x,p.y,"#fff",3);}else{p.life=0;knock("Splat!",.3,1,p.vx*.4,p.vy*.4);}}
     if(p.x<FX0()-20||p.x>FX1()+20||p.y<FY0()-30||p.y>FY1()+20)p.life=0;}
   R.shots=R.shots.filter(p=>p.life>0);
   for(const m of R.slams){m.t-=dt;if(m.t<=0&&!m.hit){m.hit=1;burst(m.x,m.y,"#fff",14,1.4);R.shake=Math.max(R.shake,.6);SFX.hit();
-      if(Math.hypot(m.x-R.x,(m.y-(R.y+10))*1.4)<m.r)knock("Squashed!",.8,1.5,0,0);}}
+      if(Math.hypot(m.x-R.x,(m.y-(R.y+10))*1.4)<m.r)knock("Squashed!",.8,2,0,0);}}
   R.slams=R.slams.filter(m=>m.t>-.25);
 }
 function checkTasks(final){
@@ -1939,7 +1977,7 @@ function drawFoodEyes(f,x,y,s){
     ell(ctx,ex,ey,er,er*1.15);ctx.fillStyle="#fff";ctx.fill();ctx.stroke();
     circ(ctx,ex+lx*er*.4,ey+ly*er*.4,er*.5);ctx.fillStyle=OUT;ctx.fill();
     ctx.fillStyle="#fff";circ(ctx,ex+lx*er*.4-er*.18,ey+ly*er*.4-er*.2,er*.16);ctx.fill();}
-  if(f.boss){ctx.lineWidth=Math.max(3,r*.06);ctx.beginPath();ctx.moveTo(x-sp-er,ey-er*1.6);ctx.lineTo(x-sp+er*.8,ey-er*1.05);ctx.moveTo(x+sp+er,ey-er*1.6);ctx.lineTo(x+sp-er*.8,ey-er*1.05);ctx.stroke();}
+  if(f.boss||f.mini){ctx.lineWidth=Math.max(3,r*.06);ctx.beginPath();ctx.moveTo(x-sp-er,ey-er*1.6);ctx.lineTo(x-sp+er*.8,ey-er*1.05);ctx.moveTo(x+sp+er,ey-er*1.6);ctx.lineTo(x+sp-er*.8,ey-er*1.05);ctx.stroke();}
   else if(scared){ctx.fillStyle="#9fd3ff";ell(ctx,x+r*.62,y-r*.42,r*.08,r*.12);ctx.fill();ctx.lineWidth=1.5;ctx.stroke();}
 }
 function hpBar(x,y,w,frac,label){
@@ -1957,6 +1995,8 @@ function drawFood(f,tm){
   const hop=moving?Math.abs(Math.sin(f.step))*6:0;
   drawShadow(f.x,f.y+f.r*.85,f.r*.8*pop);
   if(f.gold){ctx.fillStyle=`rgba(242,194,48,${.18+.1*Math.sin(tm*6)})`;circ(ctx,f.x,f.y,f.r*1.5);ctx.fill();}
+  if(f.clock){ctx.fillStyle=`rgba(120,200,255,${.2+.1*Math.sin(tm*6)})`;circ(ctx,f.x,f.y,f.r*1.5);ctx.fill();}
+  if(f.mini){ctx.fillStyle=`rgba(216,66,58,${.16+.08*Math.sin(tm*5)})`;circ(ctx,f.x,f.y,f.r*1.45);ctx.fill();}
   // little legs on runners
   if(f.def.flee||f.boss&&f.def.mv!=="still"){ctx.strokeStyle=OUT;ctx.lineWidth=Math.max(3,f.r*.1);ctx.lineCap="round";const lg=Math.sin(f.step*2)*f.r*.18;
     ctx.beginPath();ctx.moveTo(f.x-f.r*.3,f.y+f.r*.5-hop);ctx.lineTo(f.x-f.r*.3+lg,f.y+f.r*.85);ctx.moveTo(f.x+f.r*.3,f.y+f.r*.5-hop);ctx.lineTo(f.x+f.r*.3-lg,f.y+f.r*.85);ctx.stroke();}
@@ -2060,7 +2100,7 @@ function drawHud(){
   lastCombo=R.combo;
   $("#hTime").style.width=`calc(${clamp(R.t/R.T,0,1)*100}% - 4px)`;
   $("#hTimeTxt").textContent=Math.max(0,R.t).toFixed(1)+"s";
-  $("#hStom").style.width=`calc(${clamp(R.comboT/1.6,0,1)*100}% - 4px)`;
+  $("#hStom").style.width=`calc(${clamp(R.comboT/R.comboW,0,1)*100}% - 4px)`;
   $("#hStomTxt").textContent=R.cheatT>0?"CHEAT MEAL ×3":R.combo?`${R.combo} · ×${(1+.02*Math.min(R.combo,R.comboCap)).toFixed(2)}`:"–";
   $("#stomBar").classList.toggle("full",R.cheatT>0);
   const z=R.zone,boss=R.foods.find(f=>f.boss);
@@ -2091,7 +2131,7 @@ function endRun(){
   if(R.maxCombo>=5)ex.push(`Best combo: ${R.maxCombo}`);
   if(R.golds)ex.push(`${R.golds} golden ${R.golds>1?"dishes":"dish"}`);
   if(R.shooed)ex.push(`${R.shooed} seagull${R.shooed>1?"s":""} shooed`);
-  if(!secDone(R.zone,R.si)&&S.bhp[R.sk]!=null){const took=Math.floor((R.bossStart??S.bhp[R.sk])-S.bhp[R.sk]);ex.push(`${R.boss.e} You took ${took} off ${R.boss.name}. ${Math.ceil(S.bhp[R.sk])}/${bossHp(R.boss)} left, saved for next run`);}
+  {const bf=R.foods.find(f=>f.boss&&!f.encore);if(bf)ex.push(`${R.boss.e} ${R.boss.name} got away with ${Math.ceil(bf.hp)}/${bf.max} left. Get stronger and try again!`);}
   if(R.bossKill)ex.push(R.bossKill.final?`🏆 ${R.zone.name} cleared! Trophy earned (+10% kcal)`:`${R.bossKill.name} beaten!`);
   if(R.next)ex.push(`🔓 Next up: ${R.next}`);
   if(R.wonNow)ex.push("You can start a new season from the gym.");
@@ -2187,7 +2227,7 @@ function sim(maxRuns=400,start={}){
     while(!R.done&&steps<20000){update(1/30);steps++;}
     const secs=R.T-Math.max(0,R.t)+8;time+=secs;S.cash+=income()*secs;
     for(const z of ZONES){if(S.zones.includes(z.id)&&!ms["open "+z.id])ms["open "+z.id]=`run ${r} · ${(time/60).toFixed(1)}m · dps ${(stat("jaw")*dmgMult()/stat("chew")).toFixed(1)}`;for(let k=0;k<3;k++)if(S.cleared[z.id+":"+k]&&!ms[z.id+k])ms[z.id+k]=r;if(S.beaten[z.id]&&!ms["beat "+z.id])ms["beat "+z.id]=`run ${r} · ${(time/60).toFixed(1)}m`;}
-    log.push(`run ${r} ${R.sk} £${fmt(S.cash)} +${fmt(income())}/s kcal ${fmt(R.kcal)} boss ${S.bhp[R.sk]!=null?Math.ceil(S.bhp[R.sk])+'/'+bossHp(R.boss):(S.cleared[R.sk]?'dead':'-')} hits ${R.hits||0} lv ${levels()} t ${(time/60).toFixed(1)}m`);
+    log.push(`run ${r} ${R.sk} £${fmt(S.cash)} +${fmt(income())}/s kcal ${fmt(R.kcal)} boss ${S.cleared[R.sk]?'dead':(R.foods.find(f=>f.boss)?Math.ceil(R.foods.find(f=>f.boss).hp)+'/'+bossHp(R.boss):'-')} hits ${R.hits||0} lv ${levels()} t ${(time/60).toFixed(1)}m`);
     R=null;simBuy();
     if(S.beaten.buffet)break;
   }
