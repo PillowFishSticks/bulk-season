@@ -21,6 +21,12 @@
 *{box-sizing:border-box}
 [hidden]{display:none!important}
 html,body{height:100%}
+/* feel like a game, not a web page: no scrollbars, no selecting, no stray cursor */
+*{scrollbar-width:none}*::-webkit-scrollbar{display:none}
+body{user-select:none;-webkit-user-select:none;touch-action:manipulation}
+img,canvas{-webkit-user-drag:none}
+textarea{user-select:text;-webkit-user-select:text}
+body.nocur,body.nocur *{cursor:none!important}
 body{margin:0;color:var(--cream);font:500 16px/1.35 var(--ui);overflow:hidden;-webkit-tap-highlight-color:transparent;
   background:var(--bg) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='96' height='48'%3E%3Crect width='96' height='48' fill='%23171010'/%3E%3Cg fill='%231f1614' stroke='%230c0706' stroke-width='3'%3E%3Crect x='1.5' y='1.5' width='45' height='21' rx='3'/%3E%3Crect x='49.5' y='1.5' width='45' height='21' rx='3'/%3E%3Crect x='-22.5' y='25.5' width='45' height='21' rx='3'/%3E%3Crect x='25.5' y='25.5' width='45' height='21' rx='3'/%3E%3Crect x='73.5' y='25.5' width='45' height='21' rx='3'/%3E%3C/g%3E%3C/svg%3E")}
 button{font:inherit;color:inherit;cursor:pointer}
@@ -81,14 +87,14 @@ body.touch .glyph{display:none!important}
 .tbar{position:relative;height:12px;border-radius:7px;background:#cdb88d;border:2px solid #6b4f2c;margin-top:8px;overflow:hidden}
 .tbar i{position:absolute;inset:0 auto 0 0;background:var(--green)}
 .trow{display:flex;justify-content:space-between;margin-top:6px;font:800 14px/1 var(--ui);color:#6b4f2c}
-.season{display:grid;gap:8px;text-align:center}
+
 .treeWrap{padding:16px 18px 18px;min-width:0}
 .treeWrap h2{font-size:34px;text-decoration:underline;text-decoration-thickness:2px;text-underline-offset:6px}
 .treeScroll{overflow-x:auto;overflow-y:hidden;margin:6px -6px 0;padding:6px}
 .tree{position:relative;width:100%;min-width:640px;aspect-ratio:100/64}
 .tree svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
 .node{position:absolute;transform:translate(-50%,-50%);width:5.6%;aspect-ratio:1;border-radius:50%;border:3px solid var(--out);padding:0;background:#b9a57c;display:grid;place-items:center;font-size:clamp(14px,1.7vw,26px);line-height:1;box-shadow:0 3px 0 rgba(60,35,10,.45);transition:transform .12s}
-.node:hover{transform:translate(-50%,-50%) scale(1.1)}
+@media (hover:hover){.node:hover{transform:translate(-50%,-50%) scale(1.1)}}
 .node.skill{width:7.6%;border-width:4px;font-size:clamp(18px,2.3vw,34px)}
 .node.root{width:8%}
 .node.own{background:radial-gradient(circle at 40% 35%,#fff1b8,#f2c230 55%,#c98f17)}
@@ -107,9 +113,48 @@ body.touch .glyph{display:none!important}
 .info .btn{min-width:140px}
 .foot{display:flex;justify-content:center;gap:16px;color:var(--muted);font-size:14px;padding:0 20px 24px;flex-wrap:wrap;text-align:center}
 
+/* ---------- TITLE ---------- */
+#title{display:grid;place-items:center;cursor:pointer}
+.tstage{position:relative;display:grid;justify-items:center;gap:10px;text-align:center;transform:scale(var(--tk,1))}
+.logo.big{font-size:110px;-webkit-text-stroke:4px var(--out);text-shadow:0 8px 0 var(--out),0 0 60px rgba(242,194,48,.35)}
+.tsub{font:800 18px/1 var(--ui);letter-spacing:.4em;color:var(--muted);text-transform:uppercase}
+#titleCv{width:760px;height:auto;border-radius:16px;border:4px solid var(--out);box-shadow:0 10px 0 rgba(0,0,0,.5);margin-top:8px}
+.press{margin-top:14px;font:900 34px/1 var(--disp);color:var(--cream);text-shadow:0 3px 0 var(--out);animation:blink 1.4s ease-in-out infinite}
+.press .padtxt,.press .tchtxt{display:none}
+body.pad .press .kbtxt{display:none} body.pad .press .padtxt{display:inline}
+body.touch .press .kbtxt{display:none} body.touch .press .tchtxt{display:inline}
+.tnote{font:700 15px/1 var(--ui);color:var(--muted)}
+@keyframes blink{50%{opacity:.35}}
+/* landscape screens: the hub is laid out at 1600×900 and scaled to fit, like a console game */
+body.staged #gym{overflow:hidden}
+body.staged .stage{position:absolute;left:50%;top:50%;width:1600px;height:900px;transform:translate(-50%,-50%) scale(var(--k,1));display:grid;grid-template-rows:auto minmax(0,1fr) auto}
+body.staged .hubtop{padding:18px 28px 8px;flex-wrap:nowrap}
+body.staged .hub{max-width:none;margin:0;min-height:0;grid-template-columns:420px minmax(0,1fr);padding:8px 28px 6px;align-items:stretch}
+body.staged .side{align-content:start;min-height:0;overflow:hidden}
+body.staged .lifterCard canvas{height:168px;object-fit:cover}
+body.staged .side{gap:12px}
+body.staged .card{padding:10px 12px}
+body.staged .stats{margin-top:8px}
+body.staged .zones{gap:6px;margin-top:6px}
+body.staged .zone{padding:4px 10px;grid-template-columns:34px 1fr auto}
+body.staged .zone .ze{font-size:24px}
+body.staged .go{padding:14px;font-size:24px}
+body.staged .treeWrap h2{font-size:32px}
+body.staged .treeWrap{display:grid;grid-template-rows:auto minmax(0,1fr) auto;min-height:0}
+body.staged .treeBody{display:grid;grid-template-columns:250px minmax(0,1fr);gap:16px;min-height:0;align-items:center}
+body.staged .treeScroll{overflow:visible;margin:0;padding:0}
+body.staged .tree{min-width:0}
+body.staged .foot{padding:4px 28px 16px;justify-content:space-between}
+body.staged .info{margin-top:6px}
+.notes{display:grid;gap:14px;align-content:center}
+.note{position:relative;background:#f6ebcd;border:3px solid #7a5a32;border-radius:6px;padding:16px 14px 14px;box-shadow:0 5px 0 rgba(80,50,20,.35);transform:rotate(-1.2deg)}
+.note::before{content:"";position:absolute;top:-9px;left:50%;width:16px;height:16px;margin-left:-8px;border-radius:50%;background:#c0392b;border:2px solid var(--out)}
+.note h3{margin:0;font:900 22px/1 var(--disp);text-align:center}
+.note.season{background:#3a2516;color:var(--cream);transform:rotate(1deg);text-align:center;display:grid;gap:8px;font-size:14px}
 /* ---------- RUN ---------- */
 #run{touch-action:none;user-select:none;-webkit-user-select:none;background:#0d0907}
 #run canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
+.hud{transform:scale(var(--hk,1));transform-origin:0 0;width:calc(100% / var(--hk,1));right:auto!important}
 .hud{position:absolute;left:0;right:0;top:0;display:flex;justify-content:space-between;align-items:flex-start;gap:14px;padding:10px 14px 0;pointer-events:none}
 .hl,.hr{display:flex;gap:10px;align-items:center;min-width:0}
 .hr{flex-direction:row-reverse}
@@ -129,19 +174,20 @@ body.touch .glyph{display:none!important}
 @keyframes pop{50%{transform:scale(1.3)}}
 .zname{font:900 18px/1 var(--disp);color:var(--cream);text-shadow:0 2px 0 var(--out);white-space:nowrap}
 .bossIco{width:42px;height:42px;flex:none;border-radius:10px;border:3px solid var(--out);background:linear-gradient(#ffe48a,#c98f17);display:grid;place-items:center;font-size:22px;box-shadow:0 3px 0 rgba(0,0,0,.5)}
-.skillbar{position:absolute;left:50%;bottom:calc(8px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);display:flex;gap:12px;align-items:flex-end}
+.skillbar{position:absolute;left:50%;bottom:calc(8px + env(safe-area-inset-bottom,0px));transform:translateX(-50%) scale(var(--hk,1));transform-origin:50% 100%;display:flex;gap:12px;align-items:flex-end}
 .sk{position:relative;width:64px;height:64px;border-radius:12px;border:3px solid var(--out);background:linear-gradient(#8a5a33,#5c3820);box-shadow:inset 0 2px 0 rgba(255,255,255,.18),0 4px 0 rgba(0,0,0,.5);display:grid;place-items:center;font-size:30px;padding:0;overflow:hidden;touch-action:none}
 .sk.ready{border-color:#f2c230;box-shadow:0 0 0 2px var(--out),0 0 14px rgba(242,194,48,.55),0 4px 0 rgba(0,0,0,.5)}
 .sk .cd{position:absolute;inset:0;background:conic-gradient(rgba(10,6,4,.72) var(--p,0%),transparent 0);pointer-events:none}
 .sk .glyph{position:absolute;right:2px;bottom:2px;transform:scale(.85);transform-origin:100% 100%}
 .sk.off{filter:grayscale(1);opacity:.35}
 .sk.active{animation:flash .25s infinite alternate}
-.pauseBtn{position:absolute;right:12px;bottom:calc(12px + env(safe-area-inset-bottom,0px));width:46px;height:46px;border-radius:50%;border:3px solid var(--out);background:var(--wood);font:900 16px/1 var(--ui);color:var(--cream);box-shadow:0 3px 0 rgba(0,0,0,.5)}
-.hint{position:absolute;left:50%;bottom:92px;transform:translateX(-50%);padding:8px 14px;border-radius:10px;background:rgba(20,12,8,.85);border:2px solid var(--out);font:700 15px/1.3 var(--ui);color:var(--cream);pointer-events:none;transition:opacity .6s;text-align:center;width:max-content;max-width:calc(100vw - 32px)}
+.pauseBtn{transform:scale(var(--hk,1));transform-origin:100% 100%;position:absolute;right:12px;bottom:calc(12px + env(safe-area-inset-bottom,0px));width:46px;height:46px;border-radius:50%;border:3px solid var(--out);background:var(--wood);font:900 16px/1 var(--ui);color:var(--cream);box-shadow:0 3px 0 rgba(0,0,0,.5)}
+.hint{position:absolute;left:50%;bottom:calc(92px * var(--hk,1));transform:translateX(-50%) scale(var(--hk,1));transform-origin:50% 100%;padding:8px 14px;border-radius:10px;background:rgba(20,12,8,.85);border:2px solid var(--out);font:700 15px/1.3 var(--ui);color:var(--cream);pointer-events:none;transition:opacity .6s;text-align:center;width:max-content;max-width:calc(100vw - 32px)}
 
 /* ---------- MODALS ---------- */
 .modal{position:absolute;inset:0;background:rgba(8,5,3,.72);display:grid;place-items:center;padding:16px;z-index:5;overflow-y:auto}
-.mcard{width:min(460px,100%);padding:22px;display:grid;gap:14px;text-align:center}
+.mcard{width:min(460px,100%);padding:22px;display:grid;gap:14px;text-align:center;transform:scale(var(--mk,1));max-height:calc((100vh - 40px) / var(--mk,1));overflow-y:auto;animation:cardIn .22s cubic-bezier(.3,1.4,.6,1)}
+@keyframes cardIn{from{opacity:0;transform:scale(calc(var(--mk,1) * .9))}}
 .mcard h2{margin:0;font:900 34px/1 var(--disp)}
 .mcard .big{font:900 46px/1 var(--disp);color:#b5320f;font-variant-numeric:tabular-nums}
 .ate{display:flex;flex-wrap:wrap;justify-content:center;gap:6px 14px;font:700 16px/1.3 var(--ui)}
@@ -149,6 +195,8 @@ body.touch .glyph{display:none!important}
 .extra{display:grid;gap:4px;font:700 15px/1.3 var(--ui);color:#6b4f2c}
 .mbtns{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
 .mbtns .btn{flex:1 1 150px}
+.mlist{display:grid;gap:10px}
+.mlist .btn{padding:14px;font-size:19px}
 #banner{position:absolute;inset:0;display:grid;place-items:center;pointer-events:none;z-index:8}
 #banner .bwrap{position:relative;display:grid;place-items:center;gap:6px;text-align:center;animation:bin .35s cubic-bezier(.3,1.6,.6,1)}
 #banner .rays{position:absolute;width:420px;height:420px;left:50%;top:50%;margin:-210px 0 0 -210px;border-radius:50%;background:repeating-conic-gradient(rgba(255,214,90,.55) 0 7deg,transparent 7deg 22deg);-webkit-mask:radial-gradient(circle,#000 18%,transparent 68%);mask:radial-gradient(circle,#000 18%,transparent 68%);animation:spin 8s linear infinite}
@@ -160,18 +208,31 @@ body.touch .glyph{display:none!important}
 @keyframes bin{from{transform:scale(.3);opacity:0}}
 .mcard.wide{width:min(640px,100%);text-align:left}
 .mcard.wide h2{text-align:center}
-.mcard .help p{margin:0 0 10px;font-size:16px}
-.help table{width:100%;border-collapse:collapse;font-size:15px;margin:4px 0 12px}
-.help th,.help td{padding:5px 8px;border-bottom:1px solid #c9b48a;text-align:left;vertical-align:top}
-.help th{font:800 12px/1.2 var(--ui);letter-spacing:.1em;text-transform:uppercase;color:#6b4f2c}
+.help{width:min(860px,100%);gap:18px;padding:26px 30px}
+.help h2{font-size:40px}
+.hsteps{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.hstep{background:rgba(255,255,255,.35);border:3px solid #b49766;border-radius:14px;padding:14px 12px;display:grid;gap:6px;justify-items:center;text-align:center}
+.hstep .hi{font-size:40px;line-height:1;filter:drop-shadow(2px 0 0 var(--out)) drop-shadow(-2px 0 0 var(--out)) drop-shadow(0 2px 0 var(--out)) drop-shadow(0 -2px 0 var(--out))}
+.hstep b{font:900 20px/1 var(--disp)}
+.hstep p{margin:0;font-size:15px;line-height:1.35;color:#5a432b}
+.ctrls{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px 22px;background:#3a2516;border:3px solid var(--out);border-radius:14px;padding:14px 18px;color:var(--cream)}
+.crow{display:flex;justify-content:space-between;align-items:center;gap:10px;font:800 17px/1.2 var(--disp);padding:4px 0;border-bottom:1px dashed rgba(255,255,255,.12)}
+.crow:nth-last-child(-n+2){border-bottom:0}
+.crow .glyph{height:30px;min-width:30px;font-size:14px;padding:0 8px}
+.crow .glyph.pd{width:30px;padding:0}
+.crow .glyph.pS{width:auto!important}
+.tc{display:none;font:700 15px/1 var(--ui);color:var(--muted)}
+body.touch .tc{display:inline}
+.hnote{text-align:center;font:700 15px/1.35 var(--ui);color:#6b4f2c}
+.hnote .pdt,.hnote .tct{display:none}
+body.pad .hnote .kbt{display:none} body.pad .hnote .pdt{display:inline}
+body.touch .hnote .kbt{display:none} body.touch .hnote .tct{display:inline}
+.help .btn{font-size:20px;padding:14px}
 .mcard textarea{width:100%;resize:vertical;border:3px solid #6b4f2c;border-radius:8px;background:#f7ecd2;color:var(--pink);font:600 13px/1.35 ui-monospace,Consolas,monospace;padding:8px}
 .mcard p{margin:0}
 .toast{position:absolute;left:50%;top:18px;transform:translateX(-50%);padding:9px 16px;border-radius:10px;border:3px solid var(--out);background:var(--parch);color:var(--pink);font:800 16px/1.2 var(--disp);z-index:9;pointer-events:none;box-shadow:0 4px 0 rgba(0,0,0,.45);text-align:center;max-width:calc(100vw - 32px)}
 
-@media (min-width:901px){
-  .tree{width:min(100%,calc((100vh - 300px) * 1.5625));min-width:560px;margin:0 auto}
-  .lifterCard canvas{max-height:calc(100vh - 640px);min-height:150px;object-fit:cover}
-}
+
 @media (max-width:900px){
   .hub{grid-template-columns:minmax(0,1fr)}
   .hubtop{justify-content:center}
@@ -189,13 +250,30 @@ body.touch .glyph{display:none!important}
   .sk{width:56px;height:56px;font-size:26px}
   .info{grid-template-columns:44px 1fr}
   .info .btn{grid-column:1/-1}
+  .hsteps,.ctrls{grid-template-columns:minmax(0,1fr)}
+  .hstep{grid-template-columns:auto 1fr;justify-items:start;text-align:left;column-gap:12px}
+  .hstep .hi{grid-row:span 2;font-size:32px}
+  .help{padding:18px}
+  .crow:nth-last-child(2){border-bottom:1px dashed rgba(255,255,255,.12)}
 }
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
 
 <div id="app">
-  <section id="gym" class="screen">
-    <div class="vig" style="position:fixed"></div>
+  <section id="title" class="screen">
+    <div class="vig"></div>
+    <div class="tstage">
+      <h1 class="logo big">BULK SEASON</h1>
+      <div class="tsub">Eat · Lift · Repeat</div>
+      <canvas id="titleCv" width="900" height="420" aria-hidden="true"></canvas>
+      <div class="press"><span class="kbtxt">Press any key</span><span class="padtxt">Press any button</span><span class="tchtxt">Tap to start</span></div>
+      <div class="tnote">Plays best fullscreen with a keyboard or an Xbox controller</div>
+    </div>
+  </section>
+
+  <section id="gym" class="screen" hidden>
+    <div class="vig"></div>
+    <div class="stage" id="stage">
     <header class="hubtop">
       <div class="plaques">
         <div class="plaque" title="kcal to spend"><div class="ico">🔥</div><div class="val" id="bankKcal">0</div></div>
@@ -221,24 +299,28 @@ body.touch .glyph{display:none!important}
         </div>
         <button class="btn gold go" id="goBtn">Hit the market</button>
         <div class="card">
-          <div class="lbl">Where to eat</div>
+          <div class="lbl">Where to eat <span class="glyph pd pS">LB</span><span class="glyph pd pS">RB</span></div>
           <div class="zones" id="zones"></div>
-        </div>
-        <div class="parch tasks" id="taskCard">
-          <h3>Tasks</h3>
-          <div class="task" id="taskTxt"></div>
-          <div class="tbar"><i id="taskBar"></i></div>
-          <div class="trow"><span id="taskProg"></span><span id="taskRew"></span></div>
-        </div>
-        <div class="card season" id="seasonCard" hidden>
-          <div class="lbl">You're the champion</div>
-          <div>Start a new season. Your upgrades, markets and bosses reset, but you keep medals that boost all kcal for good.</div>
-          <button class="btn gold" id="seasonBtn">New season</button>
         </div>
       </aside>
       <section class="parch treeWrap">
         <h2>Skill Tree</h2>
-        <div class="treeScroll"><div class="tree" id="tree"><svg id="treeSvg" viewBox="0 0 100 64" preserveAspectRatio="none"></svg></div></div>
+        <div class="treeBody">
+          <div class="notes">
+            <div class="note tasks" id="taskCard">
+              <h3>Tasks</h3>
+              <div class="task" id="taskTxt"></div>
+              <div class="tbar"><i id="taskBar"></i></div>
+              <div class="trow"><span id="taskProg"></span><span id="taskRew"></span></div>
+            </div>
+            <div class="note season" id="seasonCard" hidden>
+              <div class="lbl">You're the champion</div>
+              <div>Start a new season. Upgrades, markets and bosses reset, but you keep medals that boost all kcal for good.</div>
+              <button class="btn gold" id="seasonBtn">New season</button>
+            </div>
+          </div>
+          <div class="treeScroll"><div class="tree" id="tree"><svg id="treeSvg" viewBox="0 0 100 64" preserveAspectRatio="none"></svg></div></div>
+        </div>
         <div class="info" id="info">
           <div class="ie" id="iE">🏋️</div>
           <div><h4 id="iName"></h4><p id="iDesc"></p><p id="iVal"></p></div>
@@ -247,8 +329,9 @@ body.touch .glyph{display:none!important}
       </section>
     </main>
     <div class="foot">
-      <span>Move: <span class="glyph kb">WASD</span><span class="glyph pd pS">L</span> · Skills: <span class="glyph kb">Space</span><span class="glyph kb">Q</span><span class="glyph kb">E</span><span class="glyph kb">R</span><span class="glyph pd pA">A</span><span class="glyph pd pB">B</span><span class="glyph pd pX">X</span><span class="glyph pd pY">Y</span> · Pause: <span class="glyph kb">Esc</span><span class="glyph pd pS">☰</span></span>
+      <span>Move <span class="glyph kb">WASD</span><span class="glyph pd pS">L</span> · Skills <span class="glyph kb">Space</span><span class="glyph kb">Q</span><span class="glyph kb">E</span><span class="glyph kb">R</span><span class="glyph pd pA">A</span><span class="glyph pd pB">B</span><span class="glyph pd pX">X</span><span class="glyph pd pY">Y</span> · Pause <span class="glyph kb">Esc</span><span class="glyph pd pS">☰</span></span>
       <span><button class="btn small" id="saveBtn">Save &amp; devices</button> <button class="btn small" id="resetBtn">Reset progress</button></span>
+    </div>
     </div>
   </section>
 
@@ -288,7 +371,7 @@ body.touch .glyph{display:none!important}
   <div class="modal" id="pause" hidden>
     <div class="parch mcard">
       <h2>Paused</h2>
-      <div class="mbtns" style="flex-direction:column">
+      <div class="mlist">
         <button class="btn gold" id="resumeBtn">Resume</button>
         <button class="btn" id="fsBtn2">Toggle fullscreen</button>
         <button class="btn" id="muteBtn2">Sound: on</button>
@@ -305,26 +388,23 @@ body.touch .glyph{display:none!important}
     </div>
   </div>
   <div class="modal" id="helpModal" hidden>
-    <div class="parch mcard wide">
+    <div class="parch mcard help">
       <h2>How to play</h2>
-      <div class="help">
-        <p>Eat as much as you can before your <b>Appetite</b> runs out. Every bite fills your <b>Stomach</b> and digestion slowly empties it. When you're stuffed you can't eat. Keep chomping without a break to build a <b>combo</b> for bonus kcal.</p>
-        <p>Eat enough in a market and its <b>boss</b> turns up. Bosses keep their damage between runs. Beat one to earn a trophy (+10% kcal) and open the next market.</p>
-        <p>Back at the gym, spend kcal on the <b>Skill Tree</b>. That's where Dash, Big Inhale, Plate Toss and Cheat Meal unlock.</p>
-        <table>
-          <tr><th></th><th>Keyboard</th><th>Xbox controller</th><th>Touch</th></tr>
-          <tr><td>Move</td><td>WASD / arrows</td><td>Left stick / d-pad</td><td>Drag</td></tr>
-          <tr><td>Dash</td><td>Space</td><td>A (or RB)</td><td rowspan="4">Skill buttons</td></tr>
-          <tr><td>Big Inhale</td><td>Q</td><td>B (or LB)</td></tr>
-          <tr><td>Plate Toss</td><td>E (aims at the mouse)</td><td>X (aim with right stick)</td></tr>
-          <tr><td>Cheat Meal</td><td>R</td><td>Y</td></tr>
-          <tr><td>Pause</td><td>Esc</td><td>Start ☰</td><td>II button</td></tr>
-          <tr><td>Menus</td><td>Arrows + Enter</td><td>D-pad + A, B back, LB/RB switch market, Start to play</td><td>Tap</td></tr>
-        </table>
-        <p>Using a controller? Press any button on it once so the browser picks it up. Press <b>F</b> for fullscreen.</p>
-        <p>Your progress saves by itself in this browser. Use <b>Save &amp; devices</b> at the bottom of the gym to move it to another device.</p>
+      <div class="hsteps">
+        <div class="hstep"><span class="hi">🍔</span><b>Eat</b><p>Walk into food before your appetite runs out. Your stomach fills as you eat and empties as you digest. Keep chomping for a combo.</p></div>
+        <div class="hstep"><span class="hi">👑</span><b>Beat the boss</b><p>Eat enough and the market's boss turns up. It keeps its damage between runs. Beat it to open the next market.</p></div>
+        <div class="hstep"><span class="hi">🏋️</span><b>Get stronger</b><p>Spend kcal on the Skill Tree. That's where Dash, Big Inhale, Plate Toss and Cheat Meal unlock.</p></div>
       </div>
-      <div class="mbtns"><button class="btn gold" id="helpClose">Got it</button></div>
+      <div class="ctrls">
+        <div class="crow">Move <span><span class="glyph kb">WASD</span><span class="glyph pd pS">L</span><span class="tc">Drag</span></span></div>
+        <div class="crow">⚡ Dash <span><span class="glyph kb">Space</span><span class="glyph pd pA">A</span><span class="tc">Skill button</span></span></div>
+        <div class="crow">🌪️ Big Inhale <span><span class="glyph kb">Q</span><span class="glyph pd pB">B</span><span class="tc">Skill button</span></span></div>
+        <div class="crow">🥏 Plate Toss <span><span class="glyph kb">E</span><span class="glyph pd pX">X</span><span class="tc">Skill button</span></span></div>
+        <div class="crow">🍰 Cheat Meal <span><span class="glyph kb">R</span><span class="glyph pd pY">Y</span><span class="tc">Skill button</span></span></div>
+        <div class="crow">Pause <span><span class="glyph kb">Esc</span><span class="glyph pd pS">☰</span><span class="tc">II button</span></span></div>
+      </div>
+      <div class="hnote"><span class="kbt">Plate Toss aims at your mouse. Press F for fullscreen.</span><span class="pdt">Aim Plate Toss with the right stick. LB/RB switch market in the gym.</span><span class="tct">Tap the skill buttons at the bottom of the screen.</span><br>Progress saves by itself. Use Save &amp; devices to move it to another device.</div>
+      <button class="btn gold" id="helpClose">Let's eat</button>
     </div>
   </div>
   <div class="modal" id="saveModal" hidden>
@@ -748,7 +828,7 @@ const toggleMusic=()=>{S.music=!S.music;save();audio();renderGym();};
 $("#musicBtn").onclick=toggleMusic;$("#musicBtn2").onclick=toggleMusic;
 function openModal(id,focus){$("#"+id).hidden=false;$(focus).focus();}
 $("#helpBtn").onclick=()=>openModal("helpModal","#helpClose");
-$("#helpClose").onclick=()=>{$("#helpModal").hidden=true;$("#goBtn").focus();};
+$("#helpClose").onclick=()=>{$("#helpModal").hidden=true;$(R?"#resumeBtn":"#goBtn").focus();};
 // Save transfer: the whole save as a copy-pasteable code
 const SAVEP="BULK1:";
 const saveCode=()=>SAVEP+btoa(unescape(encodeURIComponent(JSON.stringify(S))));
@@ -779,8 +859,8 @@ $("#seasonYes").onclick=()=>{
 
 // Hub lifter: overhead pressing a bar loaded with plates that match your upgrades
 const hubCv=$("#hubCv"),hctx=hubCv.getContext("2d");
-function drawHub(t){
-  const c=hctx,W=hubCv.width,H=hubCv.height;
+function drawHub(t,cvs=hubCv){
+  const c=cvs.getContext("2d"),W=cvs.width,H=cvs.height;
   c.clearRect(0,0,W,H);
   // back wall + floor
   c.fillStyle="#2a1d18";c.fillRect(0,0,W,H);
@@ -824,7 +904,8 @@ function layout(){
   DPR=Math.min(2,window.devicePixelRatio||1);
   const vw=innerWidth,vh=innerHeight;
   cv.width=Math.round(vw*DPR);cv.height=Math.round(vh*DPR);
-  const hud=$("#hud"),top=(hud.offsetHeight||70)+6,bot=($("#skillbar").offsetHeight||70)+16;
+  fitScreen();
+  const hud=$("#hud"),top=(hud.getBoundingClientRect().height||70)+6,bot=($("#skillbar").getBoundingClientRect().height||70)+16;
   const narrow=vw<640;
   const ax=narrow?4:10,ay=narrow?top:top,aw=vw-ax*2,ah=vh-ay-(narrow?bot:bot);
   const A=aw/Math.max(1,ah);
@@ -958,6 +1039,7 @@ const pUp=()=>{if(R)R.tx=R.ty=null;};
 cv.addEventListener("pointerup",pUp);cv.addEventListener("pointercancel",pUp);
 addEventListener("keydown",e=>{
   const k=e.key.toLowerCase();setMode("kb");
+  if(!$("#title").hidden){if(!e.repeat&&k!=="f"&&k!=="f11"&&k!=="escape")leaveTitle(true);e.preventDefault();return;}
   if(/INPUT|TEXTAREA/.test(document.activeElement.tagName)){if(k==="escape")navBack();return;}
   if(k==="f"&&!e.repeat){toggleFS();return;}
   if(R&&!R.done){
@@ -995,6 +1077,7 @@ function pollPad(dt){
   if(any)setMode("pad");
   let rx=gp.axes[2]||0,ry=gp.axes[3]||0;if(Math.hypot(rx,ry)<.4){rx=0;ry=0;}
   const st={ax,ay,rx,ry,A:pressed(0),B:pressed(1),X:pressed(2),Y:pressed(3),LB:pressed(4),RB:pressed(5),Start:pressed(9),Back:pressed(8)};
+  if(!$("#title").hidden){if(st.A||st.B||st.X||st.Y||st.Start)leaveTitle(false);return st;}
   if(R&&!R.done){
     if(st.Start){togglePause();}
     else if(paused){padMenu(st,dt);}
@@ -1482,10 +1565,34 @@ function frame(now){
   if(R&&!R.done&&!paused)update(dt);
   if(R)draw();
   else if(!$("#gym").hidden)drawHub(now/1000);
+  else if(!$("#title").hidden)drawHub(now/1000,$("#titleCv"));
+  document.body.classList.toggle("nocur",document.body.classList.contains("pad")||(!!R&&!paused&&!R.done&&now-lastMouse>1500));
   requestAnimationFrame(frame);
 }
 renderGym();
-if(!S.runs&&!DEBUG)openModal("helpModal","#helpClose");
+let lastMouse=0;
+addEventListener("pointermove",e=>{if(e.pointerType==="mouse"){lastMouse=performance.now();if(document.body.classList.contains("pad")&&Math.abs(e.movementX)+Math.abs(e.movementY)>3)setMode("kb");}});
+addEventListener("contextmenu",e=>e.preventDefault());
+// Fit everything to the screen: the hub is a fixed 1600×900 stage scaled to fit; HUD and menus scale up on TVs
+function fitScreen(){
+  const vw=innerWidth,vh=innerHeight,land=vw>=vh*1.15&&vh>=480&&vw>=800,b=document.body;
+  const k=Math.min(vw/1600,vh/900);
+  b.classList.toggle("staged",land);
+  b.style.setProperty("--k",k.toFixed(4));
+  b.style.setProperty("--hk",land?clamp(Math.min(vw/1500,vh/840),1,1.9).toFixed(3):1);
+  b.style.setProperty("--mk",land?clamp(k*1.05,.8,1.9).toFixed(3):1);
+  b.style.setProperty("--tk",clamp(Math.min(vw/1100,vh/900),.35,2).toFixed(3));
+}
+addEventListener("resize",fitScreen);fitScreen();
+function leaveTitle(goFS){
+  if($("#title").hidden)return;
+  $("#title").hidden=true;$("#gym").hidden=false;audio();renderGym();
+  if(goFS&&!document.fullscreenElement){try{document.documentElement.requestFullscreen({navigationUI:"hide"}).catch(()=>{});}catch(e){}}
+  if(!S.runs)openModal("helpModal","#helpClose");else $("#goBtn").focus();
+  {const ts=document.querySelector(".treeScroll");ts.scrollLeft=(ts.scrollWidth-ts.clientWidth)/2;}
+}
+$("#title").addEventListener("pointerdown",e=>{if(e.pointerType==="touch")setMode("touch");leaveTitle(e.pointerType!=="touch");});
+if(DEBUG){$("#title").hidden=true;$("#gym").hidden=false;}
 {const ts=document.querySelector(".treeScroll");ts.scrollLeft=(ts.scrollWidth-ts.clientWidth)/2;} // small screens: start the tree on its root
 if(document.fonts&&document.fonts.ready)document.fonts.ready.then(()=>{SPR.clear();renderGym();});
 requestAnimationFrame(frame);

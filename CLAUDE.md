@@ -25,6 +25,7 @@ An active incremental web game modelled on **Chef Knight** (Steam). The loop is:
 - Audio: `audio()` makes the context on the first click or key press. `SFX` respects `S.muted`, and the music respects `S.music` independently. Music is a tiny step sequencer (`SONGS.hub` / `SONGS.run`, 64 sixteenth-note steps of MIDI notes) scheduled by `musicTick`, with `setSong()` switching tracks per screen.
 - A "How to play" modal opens on the first visit (`S.runs===0`).
 - `startRun` / `update` / `chomp` / `eaten` / `draw` / `endRun` make up the run. A single `frame()` loop also polls the gamepad and animates the hub.
+- Screens: a "Press any key/button" title (`#title`, `leaveTitle()`; a key or click also requests fullscreen), then the gym hub, the run, and modals. On landscape screens, `fitScreen()` adds `body.staged`: the hub is laid out at a fixed 1600×900 `#stage` and scaled with `--k` to fit (no scrolling, like a console game). The run HUD scales with `--hk`, and modal cards with `--mk`, so it all reads well on a TV. Portrait phones fall back to the scrolling layout. Scrollbars, text selection and the context menu are disabled. The cursor hides when a pad is in use or the mouse is idle during a run.
 - The hub's tree and market list are built once. `renderGym()` only updates classes and text, so controller focus survives purchases.
 - Prestige: once The Buffet is beaten, "New season" resets the season and grants medals (+15% kcal each, `medalsFor`). Boss HP scales ×1.6 per season.
 
@@ -41,7 +42,7 @@ Open `index.html#debug` and run `BS.sim(900)` in the console. A bot plays full s
 - There's also a private Claude artifact copy (Claude publishes the file minus its first 3 lines and the final `</html>`, because artifacts add their own doctype/head).
 
 ## Testing
-Do a quick Playwright check, not a test suite. Load the page at 1366×768 and 390×844, start a run, sweep with the arrow keys, wait for the results screen, and check for page errors and no horizontal overflow on `#gym`. For the controller, stub `navigator.getGamepads` with a fake pad and step through the menus.
+Do a quick Playwright check, not a test suite. Load the page at 1920×1080 (the owner plays fullscreen on a TV), 1366×768 and 390×844, press a key past the title, start a run, sweep with the arrow keys, wait for the results screen, and check for page errors and no horizontal overflow on `#gym`. For the controller, stub `navigator.getGamepads` with a fake pad and step through the menus.
 
 ## Open ideas / next steps
 - Get the owner's feedback after a real playthrough and retune.
