@@ -3,36 +3,45 @@
 The owner (PillowFishSticks) isn't a developer and wants Claude to own the code. Keep it simple and cheap to maintain: no frameworks, no build step, no dependencies.
 
 ## What it is
-An active incremental web game, in the style of Chef Knight, Loot Frog, Hole Is Mine and Shelldiver. The loop is: short timed run → collect a resource → spend it at a hub on an upgrade tree → go deeper. It's themed on eating food and the gym, and it must play well on a phone (touch drag) and a laptop (WASD/arrows).
+An active incremental web game modelled on **Chef Knight** (Steam). The loop is: short timed run → collect a resource → spend it at a hub on a skill tree → go deeper. It's themed on eating food and the gym. It is **desktop-first** (landscape, fullscreen, keyboard or Xbox controller), and it still works on a phone with touch drag.
+
+## Look and feel (match Chef Knight)
+- Hand-drawn cartoon style: thick dark outlines (`OUT` #2a1a12), a dark brick and stone dungeon, warm lamp glow and a vignette.
+- UI is wooden plaques and parchment panels. Fonts are Alegreya (display) and Alegreya Sans (UI).
+- Foods are emoji turned into outlined "stickers" by `sprite()`, with googly eyes that track the player. Runners get little legs. Hits flash white and squash.
+- The lifter is drawn procedurally in `drawLifter()`: chibi build, walk cycle, a belly that grows with stomach fill, a chomping mouth and dizzy eyes.
 
 ## Files
 - `index.html` is the whole game: CSS, markup and JS in one file.
 - `README.md` is the player-facing description.
 
-## Code map (inside `index.html`'s `<script>`)
-- `ZONES` lists the five markets (Corner Shop, The Chippy, Curry House, Street Food, The Buffet). Each has an unlock `cost`, awning colours, floor tiles and foods.
-- `F(emoji, name, fill, kcal, {w, bites, flee, spicy, size})` defines a food. `fill` and `kcal` cover the whole item, and multi-bite foods split them per bite. `w` is spawn weight.
-- `ROAST` is the boss at The Buffet. It has 300 bites, and the bites left persist in the save as `S.roast`. Finishing it sets `S.won`.
-- `GROUPS` and `UPS` hold the upgrades, grouped by bumper-plate colour (25kg red, 20kg blue, 15kg yellow, 10kg green, 5kg white). Each upgrade has `max`, `base` cost, growth `k`, value fn `v(level)` and label fn `f(value)`. Cost is `base * k^level`.
-- The save is `localStorage` key `bulkSeason.v1` (`fresh()` lists the fields). Bump the key if the save shape changes incompatibly.
-- `startRun` / `update` / `chomp` / `draw` / `endRun` make up the run loop on a canvas. The HUD is HTML overlaid on top.
-- `renderGym` draws the hub screen.
+## Code map (inside `<script>`)
+- `ZONES`: five markets. Each has a `cost`, `at` (foods eaten in a run before its boss appears), a theme `th`, `foods`, a `boss` and hazards `hz`. It also has `tasks`, which are done in order and pay a flat kcal reward.
+- `F(emoji, name, fill, kcal, {w, bites, flee, spicy, size})` defines a food. `fill` and `kcal` cover the whole item.
+- Boss fields: `hp` (bites), `fill` per bite, `kc` (kcal per bite) and a flat `reward`. Movement `mv` is wander, flee, dart or still. `mi` is the minion-spawn interval, and `fire` leaves fire patches. HP left persists in `S.bhp`. Beating a boss sets `S.beaten[zone]`, gives a trophy (+10% kcal) and opens the next market for purchase. Bosses always fill your stomach, even during Cheat Meal.
+- `NODES` is the skill tree: `p` (parent), `x`/`y` on a 100×64 grid, `max`, `base`, `k`, `v(level)` and `f(value)`. Cost is `base * k^level`. `skill:1` marks the four active skills (`SKILLS`: Dash, Big Inhale, Plate Toss, Cheat Meal).
+- Hazards are updated in `hazards()`: puddles/grease (slide or slow), fire spills, seagulls (steal food; run into them to shoo), scooters (warning lane, then a knock), waiters (bump them to drop food) and Big Dave (a rival eater). A knock means stun plus lost time, never death.
+- The save is `localStorage` key `bulkSeason.v2` (`fresh()` lists the fields). Bump the key if the save shape changes incompatibly.
+- `startRun` / `update` / `chomp` / `eaten` / `draw` / `endRun` make up the run. A single `frame()` loop also polls the gamepad and animates the hub.
+- The hub's tree and market list are built once. `renderGym()` only updates classes and text, so controller focus survives purchases.
+- Prestige: once The Buffet is beaten, "New season" resets the season and grants medals (+15% kcal each, `medalsFor`). Boss HP scales ×1.6 per season.
 
-## Mechanics
-- The run lasts `appetite` seconds. Eating fills the stomach (`stomach` cap), and `digest` empties it each second. When the stomach is full you can't bite.
-- One chomp every `chew` seconds takes `jaw` bites. `metab` multiplies kcal. Golden food (`lucky` chance) gives ×5 kcal.
-- Spicy food gives a 3s speed boost, and `flee` foods run away from the player.
-- kcal is the only currency: it's earned in runs and spent on upgrades and zone unlocks.
+## Controls
+- Keyboard: WASD or arrows to move, Space/Shift Dash, Q Inhale, E Plate Toss, R Cheat Meal, Esc/P pause, F fullscreen. Arrows and Enter navigate menus.
+- Xbox pad: left stick or d-pad to move, A Dash, B Inhale, X Toss, Y Cheat, Start to pause. In menus, d-pad/stick do spatial navigation (`navMove`), A presses, B backs out, and Start begins a run. Glyph hints switch with the last input device (`body.pad` / `body.touch`).
+
+## Balance
+Open `index.html#debug` and run `BS.sim(900)` in the console. A bot plays full seasons headlessly and buys the cheapest upgrade each time, then returns milestones (run number and minutes at each market open and boss kill). Tuning targets as of 2026-10-11: the bot finishes season 1 in about 35 minutes, so a person should take roughly an hour. Each boss should take about two runs.
 
 ## Hosting
 - The repo is public, and GitHub Pages serves `main` at `/` (root): https://pillowfishsticks.github.io/bulk-season/
 - There's also a private Claude artifact copy (Claude publishes the file minus its first 3 lines and the final `</html>`, because artifacts add their own doctype/head).
 
 ## Testing
-Run one Playwright smoke test at 390×780: load the file, start a run, sweep with the arrow keys, wait for the results screen, and check for page errors and that `#gym` has no horizontal overflow.
+Do a quick Playwright check, not a test suite. Load the page at 1366×768 and 390×844, start a run, sweep with the arrow keys, wait for the results screen, and check for page errors and no horizontal overflow on `#gym`. For the controller, stub `navigator.getGamepads` with a fake pad and step through the menus.
 
 ## Open ideas / next steps
-- Tune pacing once the owner has played (is the Chippy unlock at 900 kcal too slow or fast?).
-- More juice: sound variety, combo multiplier for fast eating, unique boss per zone.
-- Quests per zone (eat N of X to unlock recipes/zones), like Chef Knight.
+- Get the owner's feedback after a real playthrough and retune.
+- Cooking/recipes like Chef Knight (combine eaten foods into dishes for bonuses).
+- More bosses per market, or "floors" within a market.
 - Cross-device save sync would need accounts. Not planned.
