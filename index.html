@@ -72,15 +72,18 @@ body.touch .glyph{display:none!important}
 .stat b{display:block;font:800 18px/1.15 var(--disp);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-variant-numeric:tabular-nums}
 .stat small{display:block;color:var(--muted);font-size:12px;line-height:1.2}
 .zones{display:grid;gap:7px;margin-top:8px}
-.mkt{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:8px;padding:5px 6px 5px 10px;border:3px solid #12141a;border-radius:11px;background:#343a47;box-shadow:0 3px 0 rgba(0,0,0,.4)}
+.mkt{display:grid;grid-template-columns:minmax(0,1fr);gap:6px;padding:6px 8px 8px;border:3px solid #12141a;border-radius:11px;background:#343a47;box-shadow:0 3px 0 rgba(0,0,0,.4)}
 .mkt.cur{background:#3f4757;border-color:#fbf0d6}
 .mkt.locked{opacity:.5}
 .mname{display:flex;align-items:center;gap:9px;min-width:0}
-.mname .ze{font-size:26px;line-height:1;filter:drop-shadow(0 2px 0 var(--out))}
+.mname>span:last-child{flex:1;display:flex;align-items:baseline;justify-content:space-between;gap:8px;min-width:0}
+.mkt.locked{padding:6px 10px}
+.mkt.locked .secs{display:none}
+.mname .ze{font-size:22px;line-height:1;filter:drop-shadow(0 2px 0 var(--out))}
 .mname b{display:block;font:800 17px/1.1 var(--disp);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.mname small{display:block;font-size:12px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.secs{display:flex;gap:5px}
-.sec{position:relative;width:44px;height:42px;padding:0;border:3px solid #12141a;border-radius:10px;background:#1b1e26;display:grid;place-items:center;font-size:22px;line-height:1;box-shadow:0 3px 0 rgba(0,0,0,.45)}
+.mname small{display:block;flex:none;font-size:12px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.secs{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:6px}
+.sec{position:relative;width:100%;height:40px;padding:0;border:3px solid #12141a;border-radius:10px;background:#1b1e26;display:grid;place-items:center;font-size:22px;line-height:1;box-shadow:0 3px 0 rgba(0,0,0,.45)}
 .sec.open{background:linear-gradient(#3e6aa0,#2a4a75);border-color:#9fd3ff}
 .sec.done{background:linear-gradient(#2f5a34,#1f3d24);border-color:#7fd06b}
 .sec.lock{filter:grayscale(1);opacity:.55}
@@ -521,7 +524,7 @@ body.touch .hnote .kbt{display:none} body.touch .hnote .tct{display:inline}
       <textarea id="saveOut" rows="4" readonly aria-label="Your save code"></textarea>
       <div class="mbtns"><button class="btn" id="saveCopy">Copy code</button><button class="btn" id="saveFile">Download as file</button></div>
       <textarea id="saveIn" rows="3" placeholder="Paste a save code here" aria-label="Paste a save code"></textarea>
-      <div class="mbtns"><button class="btn" id="saveLoad">Load code</button><button class="btn gold" id="saveClose">Done</button></div>
+      <div class="mbtns"><button class="btn" id="saveLoad">Load code</button><button class="btn" id="saveBackup">Restore backup</button><button class="btn gold" id="saveClose">Done</button></div>
     </div>
   </div>
   <section id="credits" class="screen" hidden>
@@ -675,7 +678,8 @@ const KEY="bulkSeason.v2";
 const fresh=()=>({kcal:0,total:0,best:0,runs:0,lv:{start:1},v5:1,zones:["shop"],zone:"shop",si:0,sec:{shop:1},cleared:{},bhp:{},beaten:{},task:{},eat:{},shoo:0,
   season:1,medals:0,seasonKcal:0,cash:0,cashT:0,g:{},sp:{},won:false,muted:false,music:true,seen:false});
 let S=fresh();
-try{const raw=localStorage.getItem(KEY);if(raw)S=migrate(Object.assign(fresh(),JSON.parse(raw)));}catch(e){}
+// Every load keeps a backup of the save it found, so nothing is ever lost to an update (Save & devices → Restore backup)
+try{const raw=localStorage.getItem(KEY);if(raw){try{localStorage.setItem(KEY+".backup",raw);}catch(e){}const p=JSON.parse(raw);p.v5=p.v5||0;S=migrate(Object.assign(fresh(),p));}}catch(e){console.error("Save failed to load (kept as backup):",e);S=fresh();S.loadFailed=1;}
 // older saves tracked "boss index per market"; turn that into unlocked/cleared sections
 function migrate(x){
   if(x.bi){for(const id of x.zones){const n=x.beaten[id]?3:Math.min(2,x.bi[id]||0);x.sec[id]=Math.max(x.sec[id]||0,Math.min(3,n+1));for(let k=0;k<n;k++)x.cleared[id+":"+k]=true;
@@ -689,7 +693,8 @@ function migrate(x){
   x.si=Math.min(x.si||0,(x.sec[x.zone]||1)-1);
   return x;
 }
-const save=()=>{if(DEBUG&&SIM)return;try{localStorage.setItem(KEY,JSON.stringify(S));}catch(e){}};
+let readOnly=false;   // set when the game is saving from another tab, so an old tab can't overwrite newer progress
+const save=()=>{if(DEBUG&&SIM)return;if(S.loadFailed||readOnly)return;try{localStorage.setItem(KEY,JSON.stringify(S));}catch(e){}};
 try{navigator.storage&&navigator.storage.persist&&navigator.storage.persist();}catch(e){}
 const lv=id=>S.lv[id]||0;
 const stat=id=>NI[id].v(lv(id));
@@ -1081,6 +1086,12 @@ $("#saveBtn").onclick=()=>{$("#saveOut").value=saveCode();$("#saveIn").value="";
 $("#saveClose").onclick=()=>{$("#saveModal").hidden=true;$("#saveBtn").focus();};
 $("#saveCopy").onclick=async()=>{const t=$("#saveOut");try{await navigator.clipboard.writeText(t.value);toast("Save code copied");}catch(e){t.select();document.execCommand&&document.execCommand("copy");toast("Save code copied");}};
 $("#saveFile").onclick=()=>{const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([saveCode()],{type:"text/plain"}));a.download="bulk-season-save.txt";a.click();setTimeout(()=>URL.revokeObjectURL(a.href),2000);};
+let bakArm=0;
+$("#saveBackup").onclick=()=>{let raw=null;try{raw=localStorage.getItem(KEY+".backup");}catch(e){}
+  if(!raw){toast("No backup found");SFX.no();return;}
+  if(Date.now()-bakArm>4000){bakArm=Date.now();$("#saveBackup").textContent="Press again to restore";return;}
+  try{const p=JSON.parse(raw);p.v5=p.v5||0;S=migrate(Object.assign(fresh(),p));save();renderGym();$("#saveModal").hidden=true;toast(`Backup restored: ${fmt(S.kcal)} kcal`);}catch(e){toast("That backup couldn't be read");}
+  $("#saveBackup").textContent="Restore backup";};
 let loadArm=0;
 $("#saveLoad").onclick=()=>{
   const raw=$("#saveIn").value.trim();
@@ -2314,6 +2325,7 @@ renderGym();
 let lastMouse=0;
 addEventListener("pointermove",e=>{if(e.pointerType==="mouse"){lastMouse=performance.now();if(document.body.classList.contains("pad")&&Math.abs(e.movementX)+Math.abs(e.movementY)>3)setMode("kb");}});
 addEventListener("contextmenu",e=>e.preventDefault());
+addEventListener("storage",e=>{if(e.key===KEY&&!readOnly){readOnly=true;banner("⚠️","Open in another tab","This tab won't save any more. Reload it to play here.","boss");}});
 // Fit everything to the screen: the hub is a fixed 1600×900 stage scaled to fit; HUD and menus scale up on TVs
 function fitScreen(){
   const vw=innerWidth,vh=innerHeight,land=vw>=vh*1.15&&vh>=480&&vw>=800,b=document.body;
