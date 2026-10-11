@@ -227,7 +227,7 @@ body.touch .press .kbtxt{display:none} body.touch .press .tchtxt{display:inline}
 @keyframes blink{50%{opacity:.35}}
 /* landscape screens: the hub is laid out at 1600×900 and scaled to fit, like a console game */
 body.staged #gym{overflow:hidden}
-body.staged .stage{position:absolute;left:50%;top:50%;width:1600px;height:900px;transform:translate(-50%,-50%) scale(var(--k,1));display:grid;grid-template-rows:auto minmax(0,1fr) auto}
+body.staged .stage{position:absolute;left:50%;top:50%;width:var(--sw,1600px);height:var(--sh,900px);transform:translate(-50%,-50%) scale(var(--k,1));display:grid;grid-template-rows:auto minmax(0,1fr) auto}
 body.staged .hubtop{padding:18px 28px 8px;flex-wrap:nowrap}
 body.staged .hub{max-width:none;margin:0;min-height:0;grid-template-columns:420px minmax(0,1fr);padding:8px 28px 6px;align-items:stretch}
 body.staged .side{align-content:start;min-height:0;overflow:hidden}
@@ -250,6 +250,11 @@ body.staged .tree{height:100%}
 body.staged .treeBody{height:100%;align-items:stretch}
 body.staged .foot{padding:4px 28px 16px;justify-content:space-between}
 body.staged .info{margin-top:6px}
+body.touch .ctlhint{visibility:hidden}
+body.phone .plaques,body.phone .tools{flex-wrap:nowrap}
+body.phone .tools .btn{white-space:nowrap}
+body.phone .treeBody{grid-template-columns:210px minmax(0,1fr);gap:10px}
+body.phone .stage{grid-template-rows:auto minmax(0,1fr) auto}
 .notes{display:grid;gap:14px;align-content:center}
 .note{position:relative;background:#f6ebcd;border:3px solid #7a5a32;border-radius:6px;padding:16px 14px 14px;box-shadow:0 5px 0 rgba(80,50,20,.35);transform:rotate(-1.2deg)}
 .note::before{content:"";position:absolute;top:-9px;left:50%;width:16px;height:16px;margin-left:-8px;border-radius:50%;background:#c0392b;border:2px solid var(--out)}
@@ -287,6 +292,18 @@ body.staged .info{margin-top:6px}
 .sk.active{animation:flash .25s infinite alternate}
 .pauseBtn{transform:scale(var(--hk,1));transform-origin:100% 100%;position:absolute;right:12px;bottom:calc(12px + env(safe-area-inset-bottom,0px));width:46px;height:46px;border-radius:50%;border:3px solid var(--out);background:var(--wood);font:900 16px/1 var(--ui);color:var(--cream);box-shadow:0 3px 0 rgba(0,0,0,.5)}
 .hint{position:absolute;left:50%;bottom:calc(92px * var(--hk,1));transform:translateX(-50%) scale(var(--hk,1));transform-origin:50% 100%;padding:8px 14px;border-radius:10px;background:rgba(20,12,8,.85);border:2px solid var(--out);font:700 15px/1.3 var(--ui);color:var(--cream);pointer-events:none;transition:opacity .6s;text-align:center;width:max-content;max-width:calc(100vw - 32px)}
+
+/* on-screen controller (touch): a floating stick on the left, skills as a face-button cluster on the right */
+.vstick{display:none;position:absolute;left:calc(120px + env(safe-area-inset-left,0px));top:calc(100% - 120px - env(safe-area-inset-bottom,0px));width:150px;height:150px;margin:-75px 0 0 -75px;border-radius:50%;background:radial-gradient(rgba(255,255,255,.04),rgba(255,255,255,.13));border:3px solid rgba(255,255,255,.28);box-shadow:0 0 0 3px rgba(0,0,0,.35);pointer-events:none;opacity:.4;transition:opacity .2s}
+body.touch .vstick{display:block}
+.vstick.on{opacity:1;transition:none}
+.vstick i{position:absolute;left:50%;top:50%;width:68px;height:68px;margin:-34px 0 0 -34px;border-radius:50%;background:linear-gradient(#4f596e,#2a303c);border:3px solid #0b0c10;box-shadow:inset 0 2px 0 rgba(255,255,255,.22),0 4px 0 rgba(0,0,0,.5)}
+body.touch .skillbar{left:auto;right:calc(14px + env(safe-area-inset-right,0px));bottom:calc(10px + env(safe-area-inset-bottom,0px));transform:none;display:grid;grid-template-columns:repeat(3,64px);grid-template-rows:repeat(3,58px);grid-template-areas:". y ." "x . b" ". a .";gap:0;place-items:center}
+body.touch .sk{width:70px;height:70px;border-radius:50%;font-size:32px}
+body.touch .sk .cd{border-radius:50%}
+body.touch .sk[data-id=dash]{grid-area:a;width:84px;height:84px;font-size:38px}
+body.touch .sk[data-id=inhale]{grid-area:b} body.touch .sk[data-id=toss]{grid-area:x} body.touch .sk[data-id=cheat]{grid-area:y}
+body.touch .pauseBtn{right:auto;left:50%;transform:translateX(-50%);bottom:calc(10px + env(safe-area-inset-bottom,0px))}
 
 /* ---------- MODALS ---------- */
 .modal{position:absolute;inset:0;background:rgba(8,5,3,.72);display:grid;place-items:center;padding:16px;z-index:5;overflow-y:auto}
@@ -461,7 +478,7 @@ body.touch .hnote .kbt{display:none} body.touch .hnote .tct{display:inline}
       </section>
     </main>
     <div class="foot">
-      <span>Move <span class="glyph kb">WASD</span><span class="glyph pd pS">L</span> · Skills <span class="glyph kb">Space</span><span class="glyph kb">Q</span><span class="glyph kb">E</span><span class="glyph kb">R</span><span class="glyph pd pA">A</span><span class="glyph pd pB">B</span><span class="glyph pd pX">X</span><span class="glyph pd pY">Y</span> · Pause <span class="glyph kb">Esc</span><span class="glyph pd pS">☰</span></span>
+      <span class="ctlhint">Move <span class="glyph kb">WASD</span><span class="glyph pd pS">L</span> · Skills <span class="glyph kb">Space</span><span class="glyph kb">Q</span><span class="glyph kb">E</span><span class="glyph kb">R</span><span class="glyph pd pA">A</span><span class="glyph pd pB">B</span><span class="glyph pd pX">X</span><span class="glyph pd pY">Y</span> · Pause <span class="glyph kb">Esc</span><span class="glyph pd pS">☰</span></span>
       <span><button class="btn small" id="saveBtn">Save &amp; devices</button> <button class="btn small" id="resetBtn">Reset progress</button></span>
     </div>
     </div>
@@ -487,6 +504,7 @@ body.touch .hnote .kbt{display:none} body.touch .hnote .tct{display:inline}
       </div>
     </div>
     <div class="skillbar" id="skillbar"></div>
+    <div class="vstick" id="vstick"><i></i></div>
     <button class="pauseBtn" id="pauseBtn" aria-label="Pause">II</button>
     <div class="hint" id="hint"></div>
   </section>
@@ -1318,7 +1336,7 @@ function layout(){
   const vw=innerWidth,vh=innerHeight;
   cv.width=Math.round(vw*DPR);cv.height=Math.round(vh*DPR);
   fitScreen();
-  const hud=$("#hud"),top=(hud.getBoundingClientRect().height||70)+6,bot=($("#skillbar").getBoundingClientRect().height||70)+16;
+  const hud=$("#hud"),top=(hud.getBoundingClientRect().height||70)+6,bot=document.body.classList.contains("touch")?6:($("#skillbar").getBoundingClientRect().height||70)+16;
   const narrow=vw<640;
   const ax=narrow?4:10,ay=narrow?top:top,aw=vw-ax*2,ah=vh-ay-(narrow?bot:bot);
   const A=aw/Math.max(1,ah);
@@ -1642,7 +1660,7 @@ let R=null,paused=false;
 const MAXRUN=25;
 const runLen=()=>Math.min(MAXRUN,stat("appetite")+stat("appetite2")+.5*sl("pre"));
 function addTime(x){const room=MAXRUN-R.el-R.t;const a=Math.max(0,Math.min(x,room));R.t+=a;return a;}
-function startRun(){HC.clear();
+function startRun(){HC.clear();vsReset();
   if(!SIM){setSong("run");$("#gym").hidden=true;$("#run").hidden=false;$("#results").hidden=true;$("#pause").hidden=true;paused=false;buildSkillbar();}
   const zone=selZone(),si=selSec();
   R={zone,si,sk:secKey(zone,si),secK:SECK[si],boss:zone.bosses[si],shots:[],slams:[],t:runLen(),T:runLen(),el:0,will:stat("appetite3"),clockT:6,crit:.05+stat("crit"),slamP:.04+stat("bslam"),slamR:150+25*lv("bslam"),pounds:[],goldX:stat("gold2"),comboW:stat("combo2"),helps:stat("digest"),helpLeft:15,miniT:4,dropT:3,drops:[],zaps:[],buds:[],hitT:(1-.08*sl("tea"))*stat("armor"),mult:kcalMult(),
@@ -1672,7 +1690,7 @@ function startRun(){HC.clear();
     drawPort();
   }
 }
-const hintMove=()=>document.body.classList.contains("touch")?"Drag to move.":document.body.classList.contains("pad")?"Left stick to move.":"WASD or arrows to move.";
+const hintMove=()=>document.body.classList.contains("touch")?"Touch and drag anywhere to move.":document.body.classList.contains("pad")?"Left stick to move.":"WASD or arrows to move.";
 function hzHint(z){const h=z.hz;if(h.gull)return "Seagulls nick your food. Run into them to shoo them off!";if(h.fire)return "Watch the chilli spills. They flare up!";if(h.scooter)return "Scooters! Watch for the warning arrows.";if(h.waiter)return "Bump a waiter to make them drop food. Big Dave is eating too!";if(h.puddle)return "Wet floor! You'll slide on puddles.";return "";}
 let hintT;function showHint(s){const h=$("#hint");if(!s){h.style.opacity=0;return;}h.textContent=s;h.style.opacity=1;clearTimeout(hintT);hintT=setTimeout(()=>h.style.opacity=0,4200);}
 
@@ -1699,10 +1717,21 @@ function setupHazards(){
 // Input
 const KEYS={};
 function toWorld(cx,cy){return[(cx-OX)/SCL,(cy-OY)/SCL];}
-cv.addEventListener("pointerdown",e=>{if(!R||paused)return;cv.setPointerCapture(e.pointerId);[R.tx,R.ty]=toWorld(e.clientX,e.clientY);ac();if(e.pointerType==="touch")setMode("touch");});
+// Touch: the first finger down anywhere on the arena becomes a floating stick centred where it landed
+const VS={id:null,ox:0,oy:0,dx:0,dy:0},VR=60;
+function vsDraw(){const el=$("#vstick");el.classList.toggle("on",VS.id!==null);el.style.left=VS.id!==null?VS.ox+"px":"";el.style.top=VS.id!==null?VS.oy+"px":"";el.firstElementChild.style.transform=`translate(${VS.dx*VR}px,${VS.dy*VR}px)`;}
+function vsReset(){VS.id=null;VS.dx=VS.dy=0;vsDraw();}
+cv.addEventListener("pointerdown",e=>{if(!R||paused)return;try{cv.setPointerCapture(e.pointerId);}catch(err){}ac();
+  if(e.pointerType==="touch"){setMode("touch");if(VS.id===null){VS.id=e.pointerId;VS.ox=e.clientX;VS.oy=e.clientY;VS.dx=VS.dy=0;vsDraw();}return;}
+  [R.tx,R.ty]=toWorld(e.clientX,e.clientY);});
 const MOUSE={x:0,y:0,t:-1e9};
-cv.addEventListener("pointermove",e=>{if(e.pointerType==="mouse"){[MOUSE.x,MOUSE.y]=toWorld(e.clientX,e.clientY);MOUSE.t=performance.now();}if(R&&R.tx!==null)[R.tx,R.ty]=toWorld(e.clientX,e.clientY);});
-const pUp=()=>{if(R)R.tx=R.ty=null;};
+cv.addEventListener("pointermove",e=>{
+  if(e.pointerId===VS.id){let dx=(e.clientX-VS.ox)/VR,dy=(e.clientY-VS.oy)/VR;const l=Math.hypot(dx,dy);
+    // drag past the rim and the stick follows your thumb
+    if(l>1.5){VS.ox+=dx/l*(l-1.5)*VR;VS.oy+=dy/l*(l-1.5)*VR;}
+    if(l>1){dx/=l;dy/=l;}VS.dx=dx;VS.dy=dy;vsDraw();return;}
+  if(e.pointerType==="mouse"){[MOUSE.x,MOUSE.y]=toWorld(e.clientX,e.clientY);MOUSE.t=performance.now();}if(R&&R.tx!==null)[R.tx,R.ty]=toWorld(e.clientX,e.clientY);});
+const pUp=e=>{if(e.pointerId===VS.id){vsReset();return;}if(R)R.tx=R.ty=null;};
 cv.addEventListener("pointerup",pUp);cv.addEventListener("pointercancel",pUp);
 addEventListener("keydown",e=>{
   const k=e.key.toLowerCase();setMode("kb");
@@ -1727,6 +1756,7 @@ addEventListener("keyup",e=>{KEYS[e.key.toLowerCase()]=0;});
 addEventListener("blur",()=>{for(const k in KEYS)KEYS[k]=0;});
 function setMode(m){const b=document.body.classList;if(m==="pad"&&!b.contains("pad")){b.add("pad");b.remove("touch");}else if(m==="kb"&&(b.contains("pad")||b.contains("touch"))){b.remove("pad","touch");}else if(m==="touch"&&!b.contains("touch")){b.add("touch");b.remove("pad");}}
 addEventListener("pointerdown",e=>{if(e.pointerType==="touch")setMode("touch");else if(e.pointerType==="mouse")setMode("kb");},true);
+if(matchMedia("(pointer:coarse)").matches)setMode("touch");
 
 /* ---------- GAMEPAD ---------- */
 const PB={};let padRep={dir:null,t:0},PADGP=null;
@@ -1839,10 +1869,10 @@ function buildSkillbar(){
 }
 function togglePause(){
   if(!R||R.done)return;
-  paused=!paused;$("#pause").hidden=!paused;
+  paused=!paused;$("#pause").hidden=!paused;vsReset();
   if(paused){for(const k in KEYS)KEYS[k]=0;$("#resumeBtn").focus();}
 }
-$("#pauseBtn").onclick=togglePause;$("#resumeBtn").onclick=togglePause;
+let pTouch=0;$("#pauseBtn").addEventListener("pointerdown",e=>{if(e.pointerType==="touch"){e.stopPropagation();pTouch=performance.now();togglePause();}});$("#pauseBtn").onclick=()=>{if(performance.now()-pTouch>700)togglePause();};$("#resumeBtn").onclick=togglePause;
 $("#quitBtn").onclick=()=>{paused=false;$("#pause").hidden=true;endRun();};
 document.addEventListener("visibilitychange",()=>{if(document.hidden&&R&&!R.done&&!paused)togglePause();});
 
@@ -1874,6 +1904,7 @@ function update(dt){
     if(k.arrowleft||k.a)mx--;if(k.arrowright||k.d)mx++;if(k.arrowup||k.w)my--;if(k.arrowdown||k.s)my++;
     if(mx||my){const l=Math.hypot(mx,my);mx/=l;my/=l;}
     else if(R.pax||R.pay){mx=R.pax;my=R.pay;const l=Math.hypot(mx,my);if(l>1){mx/=l;my/=l;}}
+    else if(VS.id!==null){const l=Math.hypot(VS.dx,VS.dy);if(l>.15){const m=Math.min(1,(l-.15)/.5);mx=VS.dx/l*m;my=VS.dy/l*m;}}
     else if(R.tx!==null){const dx=R.tx-R.x,dy=R.ty-R.y,d=Math.hypot(dx,dy);if(d>6){const m=Math.min(1,d/50);mx=dx/d*m;my=dy/d*m;}}
   }
   let accel=16,slow=1;
@@ -2496,8 +2527,14 @@ addEventListener("contextmenu",e=>e.preventDefault());
 addEventListener("storage",e=>{if(e.key===KEY&&!readOnly){readOnly=true;banner("⚠️","Open in another tab","This tab won't save any more. Reload it to play here.","boss");}});
 // Fit everything to the screen: the hub is a fixed 1600×900 stage scaled to fit; HUD and menus scale up on TVs
 function fitScreen(){
-  const vw=innerWidth,vh=innerHeight,land=vw>=vh*1.15&&vh>=480&&vw>=800,b=document.body;
-  const k=Math.min(vw/1600,vh/900);
+  const vw=innerWidth,vh=innerHeight,land=vw>=vh*1.15&&vh>=300&&vw>=560,b=document.body;
+  let k=Math.min(vw/1600,vh/900);
+  // phones on their side: a 1600×900 stage would be unreadably small, so use a smaller stage that fills the screen
+  const phone=land&&k<.62;
+  if(phone)k=clamp(Math.min(vh/620,vw/1150),k,1);
+  b.style.setProperty("--sw",phone?(vw/k).toFixed(1)+"px":"1600px");
+  b.style.setProperty("--sh",phone?(vh/k).toFixed(1)+"px":"900px");
+  b.classList.toggle("phone",phone);
   b.classList.toggle("staged",land);
   b.style.setProperty("--k",k.toFixed(4));
   b.style.setProperty("--hk",land?clamp(Math.min(vw/1500,vh/840),1,1.9).toFixed(3):1);
@@ -2508,12 +2545,12 @@ addEventListener("resize",fitScreen);fitScreen();
 function leaveTitle(goFS){
   if($("#title").hidden)return;
   $("#title").hidden=true;$("#gym").hidden=false;audio();renderGym();
-  if(goFS&&!document.fullscreenElement){try{document.documentElement.requestFullscreen({navigationUI:"hide"}).catch(()=>{});}catch(e){}}
+  if(goFS&&!document.fullscreenElement){try{document.documentElement.requestFullscreen({navigationUI:"hide"}).then(()=>{if(document.body.classList.contains("touch"))screen.orientation.lock("landscape").catch(()=>{});}).catch(()=>{});}catch(e){}}
   if(!S.runs)openModal("helpModal","#helpClose");else $("#goBtn").focus();
   if(awayEarned>=1)setTimeout(()=>banner("💷","Welcome back!",`Your gym earned ${money(awayEarned)} while you were away`,"gold"),400);
   homeTree();
 }
-$("#title").addEventListener("pointerdown",e=>{if(e.pointerType==="touch")setMode("touch");leaveTitle(e.pointerType!=="touch");});
+$("#title").addEventListener("pointerdown",e=>{if(e.pointerType==="touch")setMode("touch");leaveTitle(true);});
 if(DEBUG){$("#title").hidden=true;$("#gym").hidden=false;}
 homeTree(); // small screens: start the tree on its root
 if(document.fonts&&document.fonts.ready)document.fonts.ready.then(()=>{SPR.clear();renderGym();});
