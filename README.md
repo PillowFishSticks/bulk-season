@@ -8,7 +8,7 @@ Play: https://pillowfishsticks.github.io/bulk-season/
 
 1. **Run.** Walk into food to eat it before your *Appetite* runs out. Chain bites quickly to build a combo.
 2. **Stomach.** Every bite fills you up and digestion slowly empties you. When you're stuffed you can't eat.
-3. **Bosses.** Eat enough in a market and its boss turns up: The Big Cheese, Moby Cod, The Phaal Pot, Doner Mountain and The Sunday Roast. Bosses keep their damage between runs. Beat one to earn a trophy and open the next market.
+3. **Bosses.** Each market has three bosses in a row (eat, boss, eat, boss, eat, boss). Bosses keep their damage and wait for you next run. Beat all three to earn a trophy and open the next market. After that they come back as encore bosses for bonus kcal.
 4. **Gym.** Spend kcal on the skill tree. It unlocks four skills (Dash, Big Inhale, Plate Toss, Cheat Meal) plus upgrades for your belly, engine, jaw, footwork and the market.
 5. **New season.** Clear The Buffet and you can start again with medals that boost every kcal for good.
 
