@@ -158,6 +158,14 @@ body.touch .glyph{display:none!important}
 #banner.boss .bt{color:var(--red)} #banner.gold .bt{color:var(--gold)}
 @keyframes spin{to{transform:rotate(360deg)}}
 @keyframes bin{from{transform:scale(.3);opacity:0}}
+.mcard.wide{width:min(640px,100%);text-align:left}
+.mcard.wide h2{text-align:center}
+.mcard .help p{margin:0 0 10px;font-size:16px}
+.help table{width:100%;border-collapse:collapse;font-size:15px;margin:4px 0 12px}
+.help th,.help td{padding:5px 8px;border-bottom:1px solid #c9b48a;text-align:left;vertical-align:top}
+.help th{font:800 12px/1.2 var(--ui);letter-spacing:.1em;text-transform:uppercase;color:#6b4f2c}
+.mcard textarea{width:100%;resize:vertical;border:3px solid #6b4f2c;border-radius:8px;background:#f7ecd2;color:var(--pink);font:600 13px/1.35 ui-monospace,Consolas,monospace;padding:8px}
+.mcard p{margin:0}
 .toast{position:absolute;left:50%;top:18px;transform:translateX(-50%);padding:9px 16px;border-radius:10px;border:3px solid var(--out);background:var(--parch);color:var(--pink);font:800 16px/1.2 var(--disp);z-index:9;pointer-events:none;box-shadow:0 4px 0 rgba(0,0,0,.45);text-align:center;max-width:calc(100vw - 32px)}
 
 @media (min-width:901px){
@@ -195,7 +203,9 @@ body.touch .glyph{display:none!important}
       </div>
       <h1 class="logo">BULK SEASON<small id="seasonLbl">SEASON 1</small></h1>
       <div class="tools">
+        <button class="btn small" id="helpBtn">How to play</button>
         <button class="btn small" id="muteBtn">Sound: on</button>
+        <button class="btn small" id="musicBtn">Music: on</button>
         <button class="btn small" id="fsBtn">Fullscreen <span class="glyph kb">F</span></button>
       </div>
     </header>
@@ -238,7 +248,7 @@ body.touch .glyph{display:none!important}
     </main>
     <div class="foot">
       <span>Move: <span class="glyph kb">WASD</span><span class="glyph pd pS">L</span> · Skills: <span class="glyph kb">Space</span><span class="glyph kb">Q</span><span class="glyph kb">E</span><span class="glyph kb">R</span><span class="glyph pd pA">A</span><span class="glyph pd pB">B</span><span class="glyph pd pX">X</span><span class="glyph pd pY">Y</span> · Pause: <span class="glyph kb">Esc</span><span class="glyph pd pS">☰</span></span>
-      <button class="btn small" id="resetBtn">Reset progress</button>
+      <span><button class="btn small" id="saveBtn">Save &amp; devices</button> <button class="btn small" id="resetBtn">Reset progress</button></span>
     </div>
   </section>
 
@@ -248,8 +258,8 @@ body.touch .glyph{display:none!important}
       <div class="hl">
         <div class="port"><canvas id="portCv" width="120" height="120"></canvas></div>
         <div class="bars">
-          <div class="hbar" id="timeBar" style="--c:var(--gold)"><i id="hTime"></i><span><b>⏱ Appetite</b><b id="hTimeTxt"></b></span></div>
-          <div class="hbar" id="stomBar" style="--c:var(--red)"><i id="hStom"></i><span><b>🍽 Stomach</b><b id="hStomTxt"></b></span></div>
+          <div class="hbar" id="timeBar" style="--c:var(--gold)"><i id="hTime"></i><span><b>⏱️ Appetite</b><b id="hTimeTxt"></b></span></div>
+          <div class="hbar" id="stomBar" style="--c:var(--red)"><i id="hStom"></i><span><b>🍔 Stomach</b><b id="hStomTxt"></b></span></div>
         </div>
       </div>
       <div class="kcal"><b id="hKcal">0</b><span class="combo" id="hCombo"></span></div>
@@ -282,6 +292,7 @@ body.touch .glyph{display:none!important}
         <button class="btn gold" id="resumeBtn">Resume</button>
         <button class="btn" id="fsBtn2">Toggle fullscreen</button>
         <button class="btn" id="muteBtn2">Sound: on</button>
+        <button class="btn" id="musicBtn2">Music: on</button>
         <button class="btn" id="quitBtn">End run (keep kcal)</button>
       </div>
     </div>
@@ -291,6 +302,39 @@ body.touch .glyph{display:none!important}
       <h2>New season?</h2>
       <p id="seasonTxt" style="margin:0;font-size:17px"></p>
       <div class="mbtns"><button class="btn" id="seasonNo">Not yet</button><button class="btn gold" id="seasonYes">Start season</button></div>
+    </div>
+  </div>
+  <div class="modal" id="helpModal" hidden>
+    <div class="parch mcard wide">
+      <h2>How to play</h2>
+      <div class="help">
+        <p>Eat as much as you can before your <b>Appetite</b> runs out. Every bite fills your <b>Stomach</b> and digestion slowly empties it. When you're stuffed you can't eat. Keep chomping without a break to build a <b>combo</b> for bonus kcal.</p>
+        <p>Eat enough in a market and its <b>boss</b> turns up. Bosses keep their damage between runs. Beat one to earn a trophy (+10% kcal) and open the next market.</p>
+        <p>Back at the gym, spend kcal on the <b>Skill Tree</b>. That's where Dash, Big Inhale, Plate Toss and Cheat Meal unlock.</p>
+        <table>
+          <tr><th></th><th>Keyboard</th><th>Xbox controller</th><th>Touch</th></tr>
+          <tr><td>Move</td><td>WASD / arrows</td><td>Left stick / d-pad</td><td>Drag</td></tr>
+          <tr><td>Dash</td><td>Space</td><td>A (or RB)</td><td rowspan="4">Skill buttons</td></tr>
+          <tr><td>Big Inhale</td><td>Q</td><td>B (or LB)</td></tr>
+          <tr><td>Plate Toss</td><td>E (aims at the mouse)</td><td>X (aim with right stick)</td></tr>
+          <tr><td>Cheat Meal</td><td>R</td><td>Y</td></tr>
+          <tr><td>Pause</td><td>Esc</td><td>Start ☰</td><td>II button</td></tr>
+          <tr><td>Menus</td><td>Arrows + Enter</td><td>D-pad + A, B back, LB/RB switch market, Start to play</td><td>Tap</td></tr>
+        </table>
+        <p>Using a controller? Press any button on it once so the browser picks it up. Press <b>F</b> for fullscreen.</p>
+        <p>Your progress saves by itself in this browser. Use <b>Save &amp; devices</b> at the bottom of the gym to move it to another device.</p>
+      </div>
+      <div class="mbtns"><button class="btn gold" id="helpClose">Got it</button></div>
+    </div>
+  </div>
+  <div class="modal" id="saveModal" hidden>
+    <div class="parch mcard">
+      <h2>Save &amp; devices</h2>
+      <p>Progress saves by itself in this browser after every run and every purchase. To carry on somewhere else, copy this code, then paste it into the same box on the other device.</p>
+      <textarea id="saveOut" rows="4" readonly aria-label="Your save code"></textarea>
+      <div class="mbtns"><button class="btn" id="saveCopy">Copy code</button><button class="btn" id="saveFile">Download as file</button></div>
+      <textarea id="saveIn" rows="3" placeholder="Paste a save code here" aria-label="Paste a save code"></textarea>
+      <div class="mbtns"><button class="btn" id="saveLoad">Load code</button><button class="btn gold" id="saveClose">Done</button></div>
     </div>
   </div>
   <div id="banner" hidden><div class="bwrap"><div class="rays"></div><div class="bico" id="bIco"></div><div class="bt" id="bTitle"></div><div class="bs" id="bSub"></div></div></div>
@@ -319,31 +363,31 @@ const ZONES=[
   foods:[F("🍌","Banana",6,12,{w:3}),F("🍪","Cookie",5,18,{w:3}),F("🍫","Choc bar",8,32,{w:2}),F("🥪","Meal deal",14,60,{w:1.4,bites:2,size:1.15}),F("🥧","Pork pie",12,100,{w:.5})],
   boss:{e:"🧀",name:"The Big Cheese",hp:50,fill:8,kc:30,reward:300,mv:"wander",spd:70,mi:5},
   hz:{puddle:3},
-  tasks:[{k:"eat",f:"Cookie",n:20,r:150},{k:"run",n:600,r:300},{k:"combo",n:12,r:500}]},
+  tasks:[{k:"eat",f:"Cookie",pl:"Cookies",n:20,r:150},{k:"run",n:600,r:300},{k:"combo",n:12,r:500}]},
  {id:"chippy",name:"The Chippy",e:"🍟",cost:4000,at:24,
   th:{floor:["#3e5057","#384950"],wall:"#2c414b",awn:[COL.yellow,COL.blue],glow:"220,240,255"},
   foods:[F("🍟","Chips",10,64,{w:3}),F("🥚","Pickled egg",5,36,{w:2}),F("🌭","Saveloy",9,74,{w:2}),F("🐟","Battered cod",16,180,{w:1,flee:1,size:1.2}),F("🍔","Chip butty",18,230,{w:.6,bites:2,size:1.2})],
   boss:{e:"🐟",name:"Moby Cod",hp:100,fill:10,kc:96,reward:5000,mv:"flee",spd:150,mi:4},
   hz:{grease:2,gull:2},
-  tasks:[{k:"eat",f:"Chips",n:40,r:5000},{k:"shoo",n:6,r:10000},{k:"run",n:40000,r:20000}]},
+  tasks:[{k:"eat",f:"Chips",pl:"portions of Chips",n:40,r:5000},{k:"shoo",n:6,r:10000},{k:"run",n:40000,r:20000}]},
  {id:"curry",name:"Curry House",e:"🍛",cost:150000,at:28,
   th:{floor:["#573c33","#4f362e"],wall:"#4a2826",awn:[COL.red,"#f2a33a"],glow:"255,190,120"},
   foods:[F("🍚","Pilau rice",10,170,{w:3}),F("🥟","Samosa",8,190,{w:2.5}),F("🍛","Tikka masala",18,540,{w:1.2,bites:2,size:1.2}),F("🌶️","Vindaloo chilli",6,250,{w:.8,spicy:1}),F("🍢","Seekh kebab",10,340,{w:1,flee:1})],
   boss:{e:"🍲",name:"The Phaal Pot",hp:160,fill:12.5,kc:525,reward:80000,mv:"wander",spd:60,mi:4,fire:1},
   hz:{fire:5},
-  tasks:[{k:"eat",f:"Samosa",n:40,r:100000},{k:"combo",n:30,r:200000},{k:"gold",n:3,r:400000}]},
+  tasks:[{k:"eat",f:"Samosa",pl:"Samosas",n:40,r:100000},{k:"combo",n:30,r:200000},{k:"gold",n:3,r:400000}]},
  {id:"street",name:"Street Food",e:"🌮",cost:5000000,at:32,
   th:{floor:["#38473b","#324035"],wall:"#26342b",awn:[COL.green,COL.white],glow:"255,210,140"},
   foods:[F("🌮","Taco",8,600,{w:3}),F("🍡","Dango",6,500,{w:2.5}),F("🍜","Ramen",16,1550,{w:1.5,bites:2,size:1.2}),F("🌯","Burrito",22,2250,{w:1,bites:3,size:1.25}),F("🍩","Doughnut",8,1100,{w:1,flee:1})],
   boss:{e:"🥙",name:"Doner Mountain",hp:250,fill:16,kc:2400,reward:2000000,mv:"dart",spd:230,mi:3},
   hz:{scooter:1,puddle:2},
-  tasks:[{k:"eat",f:"Taco",n:60,r:5000000},{k:"run",n:20000000,r:10000000},{k:"combo",n:50,r:20000000}]},
+  tasks:[{k:"eat",f:"Taco",pl:"Tacos",n:60,r:5000000},{k:"run",n:20000000,r:10000000},{k:"combo",n:50,r:20000000}]},
  {id:"buffet",name:"The Buffet",e:"🍽️",cost:120000000,at:36,
   th:{floor:["#584830","#4f412b"],wall:"#4a2c22",awn:["#c9a227","#7a1f2b"],glow:"255,215,150",carpet:1},
   foods:[F("🍕","Pizza slice",10,3200,{w:3}),F("🍗","Chicken leg",12,4200,{w:2}),F("🍤","Prawn",5,2400,{w:2,flee:1}),F("🍰","Gateau",18,7600,{w:1,bites:2,size:1.2}),F("🍖","Rib",16,6800,{w:1})],
   boss:{e:"🦃",name:"The Sunday Roast",hp:350,fill:20,kc:10000,reward:50000000,mv:"still",spd:0,mi:2.5},
   hz:{waiter:1,rival:1},
-  tasks:[{k:"eat",f:"Gateau",n:25,r:100000000},{k:"gold",n:6,r:200000000},{k:"run",n:300000000,r:400000000}]},
+  tasks:[{k:"eat",f:"Gateau",pl:"slices of Gateau",n:25,r:100000000},{k:"gold",n:6,r:200000000},{k:"run",n:300000000,r:400000000}]},
 ];
 const ZI=Object.fromEntries(ZONES.map((z,i)=>[z.id,i]));
 
@@ -389,10 +433,11 @@ const SKILLS=[
 /* ---------- SAVE ---------- */
 const KEY="bulkSeason.v2";
 const fresh=()=>({kcal:0,total:0,best:0,runs:0,lv:{start:1},zones:["shop"],zone:"shop",bhp:{},beaten:{},task:{},eat:{},shoo:0,
-  season:1,medals:0,seasonKcal:0,won:false,muted:false,seen:false});
+  season:1,medals:0,seasonKcal:0,won:false,muted:false,music:true,seen:false});
 let S=fresh();
 try{const raw=localStorage.getItem(KEY);if(raw)S=Object.assign(fresh(),JSON.parse(raw));}catch(e){}
 const save=()=>{if(DEBUG&&SIM)return;try{localStorage.setItem(KEY,JSON.stringify(S));}catch(e){}};
+try{navigator.storage&&navigator.storage.persist&&navigator.storage.persist();}catch(e){}
 const lv=id=>S.lv[id]||0;
 const stat=id=>NI[id].v(lv(id));
 const cost=n=>Math.round(n.base*Math.pow(n.k,lv(n.id)));
@@ -413,7 +458,10 @@ const fmt=n=>{n=Math.floor(n);if(n<1e4)return n.toLocaleString("en-GB");
 
 /* ---------- SOUND ---------- */
 let AC=null,NB=null;
-function ac(){if(S.muted||SIM)return null;try{AC=AC||new (window.AudioContext||window.webkitAudioContext)();if(AC.state==="suspended")AC.resume();return AC;}catch(e){return null;}}
+function audio(){if(SIM)return null;try{AC=AC||new (window.AudioContext||window.webkitAudioContext)();if(AC.state==="suspended")AC.resume();return AC;}catch(e){return null;}}
+function ac(){return S.muted?null:audio();}
+// browsers only allow audio after a click or key press
+for(const ev of["pointerdown","keydown"])addEventListener(ev,()=>{audio();},{once:true,capture:true});
 function tone(f,dur=.08,type="square",vol=.05,slide=.6,delay=0){
   const a=ac();if(!a)return;
   const o=a.createOscillator(),g=a.createGain(),t=a.currentTime+delay;
@@ -429,6 +477,41 @@ function noise(dur=.08,vol=.08,freq=1200,q=1,sweep=1){
   g.gain.setValueAtTime(vol,t);g.gain.exponentialRampToValueAtTime(.0001,t+dur);
   s.connect(f).connect(g).connect(a.destination);s.start(t);s.stop(t+dur+.02);
 }
+/* Music: a tiny step sequencer. 64 steps (4 bars of 16ths) per loop; notes are MIDI numbers. */
+const _=null;
+const SONGS={
+  hub:{bpm:96,roots:[48,45,41,43],minor:[0,1,0,0],chord:[4,12],len:1.8,
+    bass:[0,_,_,_,_,_,0,_,7,_,_,_,12,_,_,_],
+    lead:[72,_,76,_,79,_,76,_,74,_,72,_,_,_,_,_, 69,_,72,_,76,_,74,_,72,_,69,_,_,_,_,_, 65,_,69,_,72,_,74,_,76,_,74,_,72,_,_,_, 67,_,71,_,74,_,79,_,77,_,74,_,71,_,_,_]},
+  run:{bpm:138,roots:[48,45,41,43],minor:[0,1,0,0],chord:[4,12],len:.9,hat:1,kick:1,
+    bass:[0,_,12,_,0,_,12,_,0,_,12,_,7,_,12,_],
+    lead:[72,76,79,76,84,_,79,_,76,79,76,72,74,_,72,_, 69,72,76,72,81,_,76,_,72,76,72,69,71,_,69,_, 65,69,72,69,77,_,72,_,69,72,69,65,67,_,69,_, 67,71,74,71,79,_,74,_,71,74,77,74,71,_,67,_]},
+};
+const MUS={song:"hub",step:0,next:0,g:null};
+const hz=m=>440*Math.pow(2,(m-69)/12);
+function mVoice(type,m,t,dur,vol){const a=AC,o=a.createOscillator(),g=a.createGain();o.type=type;o.frequency.setValueAtTime(hz(m),t);
+  g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(vol,t+.01);g.gain.exponentialRampToValueAtTime(.0001,t+dur);o.connect(g).connect(MUS.g);o.start(t);o.stop(t+dur+.02);}
+function mStep(sg,i,t,sp){
+  const bar=i>>4,st=i&15,root=sg.roots[bar];
+  if(sg.bass[st]!=null)mVoice("triangle",root+sg.bass[st],t,sp*1.7,.11);
+  if(sg.chord.includes(st))for(const iv of[24,sg.minor[bar]?27:28,31])mVoice("square",root+iv,t,sp*1.1,.012);
+  const n=sg.lead[i];if(n!=null)mVoice("square",n,t,sp*sg.len,.022);
+  if(sg.kick&&st%4===0){const a=AC,o=a.createOscillator(),g=a.createGain();o.frequency.setValueAtTime(130,t);o.frequency.exponentialRampToValueAtTime(40,t+.12);g.gain.setValueAtTime(.16,t);g.gain.exponentialRampToValueAtTime(.0001,t+.14);o.connect(g).connect(MUS.g);o.start(t);o.stop(t+.16);}
+  if(sg.hat&&st%4===2&&NB){const a=AC,b=a.createBufferSource(),f=a.createBiquadFilter(),g=a.createGain();b.buffer=NB;f.type="highpass";f.frequency.value=6000;g.gain.setValueAtTime(.035,t);g.gain.exponentialRampToValueAtTime(.0001,t+.04);b.connect(f).connect(g).connect(MUS.g);b.start(t);b.stop(t+.05);}
+}
+function musicTick(){
+  const a=AC;if(!a||a.state!=="running"||SIM)return;
+  if(!MUS.g){MUS.g=a.createGain();MUS.g.gain.value=0;MUS.g.connect(a.destination);
+    NB=NB||(()=>{const b=a.createBuffer(1,a.sampleRate*.5,a.sampleRate),d=b.getChannelData(0);for(let i=0;i<d.length;i++)d[i]=Math.random()*2-1;return b;})();}
+  const want=S.music&&!document.hidden?(paused?.22:.5):0;
+  MUS.g.gain.setTargetAtTime(want,a.currentTime,.15);
+  if(!want){MUS.next=0;return;}
+  const sg=SONGS[MUS.song],sp=60/sg.bpm/4;
+  if(MUS.next<a.currentTime)MUS.next=a.currentTime+.06;
+  while(MUS.next<a.currentTime+.25){mStep(sg,MUS.step%64,MUS.next,sp);MUS.step++;MUS.next+=sp;}
+}
+setInterval(musicTick,50);
+function setSong(id){if(MUS.song!==id){MUS.song=id;MUS.step=0;MUS.next=0;}}
 const SFX={
   chomp:c=>{noise(.06,.1,700+Math.random()*300,1.5,.5);tone(220+Math.min(c,40)*9,.06,"square",.035);},
   gold:()=>{[660,880,1320].forEach((f,i)=>tone(f,.09,"triangle",.05,1,i*.05));},
@@ -602,7 +685,7 @@ ZONES.forEach((z,i)=>{
 
 function taskOf(z){const i=S.task[z.id]||0;return z.tasks[i]?{t:z.tasks[i],i}:null;}
 function taskText(t,z){
-  if(t.k==="eat")return `Eat ${t.n} ${t.f.endsWith("s")||t.f.endsWith("y")&&false?t.f:t.f+(t.n>1&&!/s$/.test(t.f)?"s":"")}`;
+  if(t.k==="eat")return `Eat ${t.n} ${t.pl||t.f}`;
   if(t.k==="run")return `Eat ${fmt(t.n)} kcal in one run here`;
   if(t.k==="combo")return `Reach a ${t.n}× combo here`;
   if(t.k==="gold")return `Eat ${t.n} golden foods in one run here`;
@@ -624,13 +707,14 @@ function renderGym(){
   $("#stBest").textContent=fmt(S.best);
   $("#stTro").textContent=trophies()+" / 5";$("#stTroB").textContent=`+${trophies()*10}% kcal`;
   for(const s of [$("#muteBtn"),$("#muteBtn2")])s.textContent="Sound: "+(S.muted?"off":"on");
+  for(const s of [$("#musicBtn"),$("#musicBtn2")])s.textContent="Music: "+(S.music?"on":"off");
   ZONES.forEach((z,i)=>{
     const b=zoneEls[z.id],owned=S.zones.includes(z.id),prev=ZONES[i-1],gate=prev&&!S.beaten[prev.id];
     b.setAttribute("aria-pressed",String(S.zone===z.id));
     b.classList.toggle("locked",!owned&&(gate||S.kcal<z.cost));
     b.classList.toggle("buy",!owned&&!gate&&S.kcal>=z.cost);
     const sm=b.querySelector("small"),st=b.querySelector(".zs");
-    if(owned){sm.textContent=S.beaten[z.id]?`${z.boss.name} beaten`:`Boss: ${z.boss.name} ${z.boss.e}`;st.textContent=S.beaten[z.id]?"🏆":"";}
+    if(owned){const hp=S.bhp[z.id];sm.textContent=S.beaten[z.id]?`${z.boss.name} beaten`:hp!=null&&hp<bossHp(z)?`${z.boss.e} ${z.boss.name}: ${Math.ceil(hp)}/${bossHp(z)} bites left`:`Boss: ${z.boss.name} ${z.boss.e}`;st.textContent=S.beaten[z.id]?"🏆":"";}
     else if(gate){sm.textContent=`Beat ${prev.boss.name} to open`;st.textContent="🔒";}
     else{sm.textContent=`Unlock for ${fmt(z.cost)} kcal`;st.textContent=S.kcal>=z.cost?"✅":"🔒";}
   });
@@ -660,6 +744,25 @@ $("#resetBtn").onclick=e=>{
 };
 const toggleMute=()=>{S.muted=!S.muted;save();renderGym();};
 $("#muteBtn").onclick=toggleMute;$("#muteBtn2").onclick=toggleMute;
+const toggleMusic=()=>{S.music=!S.music;save();audio();renderGym();};
+$("#musicBtn").onclick=toggleMusic;$("#musicBtn2").onclick=toggleMusic;
+function openModal(id,focus){$("#"+id).hidden=false;$(focus).focus();}
+$("#helpBtn").onclick=()=>openModal("helpModal","#helpClose");
+$("#helpClose").onclick=()=>{$("#helpModal").hidden=true;$("#goBtn").focus();};
+// Save transfer: the whole save as a copy-pasteable code
+const SAVEP="BULK1:";
+const saveCode=()=>SAVEP+btoa(unescape(encodeURIComponent(JSON.stringify(S))));
+$("#saveBtn").onclick=()=>{$("#saveOut").value=saveCode();$("#saveIn").value="";$("#saveLoad").textContent="Load code";openModal("saveModal","#saveCopy");};
+$("#saveClose").onclick=()=>{$("#saveModal").hidden=true;$("#saveBtn").focus();};
+$("#saveCopy").onclick=async()=>{const t=$("#saveOut");try{await navigator.clipboard.writeText(t.value);toast("Save code copied");}catch(e){t.select();document.execCommand&&document.execCommand("copy");toast("Save code copied");}};
+$("#saveFile").onclick=()=>{const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([saveCode()],{type:"text/plain"}));a.download="bulk-season-save.txt";a.click();setTimeout(()=>URL.revokeObjectURL(a.href),2000);};
+let loadArm=0;
+$("#saveLoad").onclick=()=>{
+  const raw=$("#saveIn").value.trim();
+  let data=null;try{if(!raw.startsWith(SAVEP))throw 0;data=JSON.parse(decodeURIComponent(escape(atob(raw.slice(SAVEP.length)))));if(!data||typeof data!=="object"||!data.lv)throw 0;}catch(e){toast("That code doesn't look right");SFX.no();return;}
+  if(Date.now()-loadArm>4000){loadArm=Date.now();$("#saveLoad").textContent="Press again to replace this save";return;}
+  S=Object.assign(fresh(),data);save();renderGym();$("#saveModal").hidden=true;toast(`Save loaded: ${fmt(S.kcal)} kcal, season ${S.season}`);SFX.win();$("#goBtn").focus();
+};
 function toggleFS(){try{if(document.fullscreenElement)document.exitFullscreen();else document.documentElement.requestFullscreen({navigationUI:"hide"}).catch(()=>toast("Fullscreen isn't available here"));}catch(e){toast("Fullscreen isn't available here");}}
 $("#fsBtn").onclick=toggleFS;$("#fsBtn2").onclick=toggleFS;
 document.addEventListener("fullscreenchange",()=>{$("#fsBtn").firstChild.textContent=document.fullscreenElement?"Exit fullscreen ":"Fullscreen ";});
@@ -698,8 +801,7 @@ function drawHub(t){
   const cyc=(t%2.4)/2.4,press=cyc<.35?cyc/.35:cyc<.6?1:1-(cyc-.6)/.4,eased=press*press*(3-2*press);
   const s=62,fx=W/2,fy=H*.88;
   c.fillStyle="rgba(0,0,0,.35)";ell(c,fx,fy+6,110,18);c.fill();
-  drawLifter(c,fx,fy,s,{bulk:bulk(),press:eased,strain:press>.3&&press<.95,fill:.1,blink:(t%3.7)<.12});
-  // barbell
+  // barbell first so it sits behind the head; the hands are drawn over it
   const by=fy+s*(-1.5-eased*.75);
   c.lineWidth=10;c.strokeStyle=OUT;c.lineCap="round";c.beginPath();c.moveTo(fx-230,by);c.lineTo(fx+230,by);c.stroke();
   c.lineWidth=5;c.strokeStyle="#b9bccb";c.stroke();
@@ -708,9 +810,8 @@ function drawHub(t){
   const use=plates.length?plates.slice(0,per):["#555"];
   use.forEach((col,i)=>{const h=78-i*7,xo=150+i*17;for(const sgn of[-1,1]){rr(c,fx+sgn*xo-8,by-h/2,16,h,4);fs(c,col,4);}});
   for(const sgn of[-1,1]){rr(c,fx+sgn*(146+use.length*17)-5,by-12,10,24,3);fs(c,"#8a8d9c",3);}
+  drawLifter(c,fx,fy,s,{bulk:bulk(),press:eased,strain:press>.3&&press<.95,fill:.1,blink:(t%3.7)<.12});
   if(press>.98&&!RM){c.fillStyle="#9fd3ff";ell(c,fx+52,fy-s*2.2,6,9);c.fill();}
-  // kg label
-  c.font=`900 30px ${DISP}`;c.textAlign="center";c.lineWidth=6;c.strokeStyle=OUT;c.strokeText(bench()+" kg",fx,52);c.fillStyle=COL.gold;c.fillText(bench()+" kg",fx,52);
 }
 
 /* ---------- RUN ---------- */
@@ -799,7 +900,7 @@ const LAMPS=()=>WW<1000?[WW*.07,WW*.93]:[WW*.12,WW*.36,WW*.64,WW*.88];
 
 let R=null,paused=false;
 function startRun(){
-  if(!SIM){$("#gym").hidden=true;$("#run").hidden=false;$("#results").hidden=true;$("#pause").hidden=true;paused=false;buildSkillbar();}
+  if(!SIM){setSong("run");$("#gym").hidden=true;$("#run").hidden=false;$("#results").hidden=true;$("#pause").hidden=true;paused=false;buildSkillbar();}
   const zone=ZONES[ZI[S.zone]];
   R={zone,t:stat("appetite"),T:stat("appetite"),cap:stat("stomach"),dig:stat("digest"),mult:kcalMult(),
      cd:stat("chew"),jaw:stat("jaw"),dmg:dmgMult(),spd:stat("speed"),reach:stat("reach"),max:stat("crowd"),gold:stat("lucky"),
@@ -851,15 +952,17 @@ function setupHazards(){
 const KEYS={};
 function toWorld(cx,cy){return[(cx-OX)/SCL,(cy-OY)/SCL];}
 cv.addEventListener("pointerdown",e=>{if(!R||paused)return;cv.setPointerCapture(e.pointerId);[R.tx,R.ty]=toWorld(e.clientX,e.clientY);ac();if(e.pointerType==="touch")setMode("touch");});
-cv.addEventListener("pointermove",e=>{if(R&&R.tx!==null)[R.tx,R.ty]=toWorld(e.clientX,e.clientY);});
+const MOUSE={x:0,y:0,t:-1e9};
+cv.addEventListener("pointermove",e=>{if(e.pointerType==="mouse"){[MOUSE.x,MOUSE.y]=toWorld(e.clientX,e.clientY);MOUSE.t=performance.now();}if(R&&R.tx!==null)[R.tx,R.ty]=toWorld(e.clientX,e.clientY);});
 const pUp=()=>{if(R)R.tx=R.ty=null;};
 cv.addEventListener("pointerup",pUp);cv.addEventListener("pointercancel",pUp);
 addEventListener("keydown",e=>{
   const k=e.key.toLowerCase();setMode("kb");
-  if(k==="f"&&!e.repeat&&document.activeElement.tagName!=="INPUT"){toggleFS();return;}
+  if(/INPUT|TEXTAREA/.test(document.activeElement.tagName)){if(k==="escape")navBack();return;}
+  if(k==="f"&&!e.repeat){toggleFS();return;}
   if(R&&!R.done){
     if(k==="escape"||k==="p"){if(!e.repeat)togglePause();e.preventDefault();return;}
-    if(paused)return;
+    if(paused){if(k.startsWith("arrow")){const d={arrowup:[0,-1],arrowdown:[0,1],arrowleft:[-1,0],arrowright:[1,0]}[k];navMove(d);e.preventDefault();}return;}
     KEYS[k]=1;
     if(k.startsWith("arrow")||k===" ")e.preventDefault();
     if(!e.repeat){if(k===" "||k==="shift")useSkill("dash");if(k==="q"||k==="j")useSkill("inhale");if(k==="e"||k==="k")useSkill("toss");if(k==="r"||k==="l")useSkill("cheat");}
@@ -875,11 +978,14 @@ function setMode(m){const b=document.body.classList;if(m==="pad"&&!b.contains("p
 addEventListener("pointerdown",e=>{if(e.pointerType==="touch")setMode("touch");else if(e.pointerType==="mouse")setMode("kb");},true);
 
 /* ---------- GAMEPAD ---------- */
-const PB={};let padRep={dir:null,t:0};
+const PB={};let padRep={dir:null,t:0},PADGP=null;
+function rumble(ms,strong,weak){try{const v=PADGP&&PADGP.vibrationActuator;if(v&&v.playEffect)v.playEffect("dual-rumble",{duration:ms,strongMagnitude:strong,weakMagnitude:weak});}catch(e){}}
+addEventListener("gamepadconnected",e=>{setMode("pad");toast(`🎮 Controller connected`);});
+addEventListener("gamepaddisconnected",()=>toast("Controller disconnected"));
 function pollPad(dt){
   const gps=navigator.getGamepads?navigator.getGamepads():[];let gp=null;
   for(const g of gps)if(g&&g.connected){gp=g;break;}
-  if(!gp)return null;
+  PADGP=gp;if(!gp)return null;
   const btn=i=>!!(gp.buttons[i]&&gp.buttons[i].pressed);
   const pressed=i=>{const now=btn(i),was=PB[i];PB[i]=now;return now&&!was;};
   let ax=gp.axes[0]||0,ay=gp.axes[1]||0;const mag=Math.hypot(ax,ay);
@@ -887,11 +993,12 @@ function pollPad(dt){
   if(btn(14))ax=-1;if(btn(15))ax=1;if(btn(12))ay=-1;if(btn(13))ay=1;
   const any=gp.buttons.some(b=>b.pressed)||Math.abs(ax)>.5||Math.abs(ay)>.5;
   if(any)setMode("pad");
-  const st={ax,ay,A:pressed(0),B:pressed(1),X:pressed(2),Y:pressed(3),LB:pressed(4),RB:pressed(5),Start:pressed(9),Back:pressed(8)};
+  let rx=gp.axes[2]||0,ry=gp.axes[3]||0;if(Math.hypot(rx,ry)<.4){rx=0;ry=0;}
+  const st={ax,ay,rx,ry,A:pressed(0),B:pressed(1),X:pressed(2),Y:pressed(3),LB:pressed(4),RB:pressed(5),Start:pressed(9),Back:pressed(8)};
   if(R&&!R.done){
     if(st.Start){togglePause();}
     else if(paused){padMenu(st,dt);}
-    else{R.pax=ax;R.pay=ay;if(st.A||st.RB)useSkill("dash");if(st.B||st.LB)useSkill("inhale");if(st.X)useSkill("toss");if(st.Y)useSkill("cheat");}
+    else{R.pax=ax;R.pay=ay;R.prx=rx;R.pry=ry;if(st.A||st.RB)useSkill("dash");if(st.B||st.LB)useSkill("inhale");if(st.X)useSkill("toss");if(st.Y)useSkill("cheat");}
   }else padMenu(st,dt);
   return st;
 }
@@ -904,9 +1011,9 @@ function padMenu(st,dt){
   if(st.A){const a=document.activeElement;if(a&&a!==document.body&&a.click){a.click();}else navMove([0,1]);}
   if(st.B)navBack();
   if(st.Start&&!R&&!$("#gym").hidden&&$("#seasonModal").hidden)startRun();
-  if(st.Y&&!R&&!$("#gym").hidden&&$("#seasonModal").hidden)toggleMute();
+  if((st.LB||st.RB)&&!R&&navLayer()===$("#gym")){const own=ZONES.filter(z=>S.zones.includes(z.id));const i=own.findIndex(z=>z.id===S.zone);const nz=own[(i+(st.RB?1:-1)+own.length)%own.length];if(nz.id!==S.zone){S.zone=nz.id;save();renderGym();SFX.buy(0);}}
 }
-function navLayer(){for(const id of["seasonModal","results","pause"])if(!$("#"+id).hidden)return $("#"+id);return R?null:$("#gym");}
+function navLayer(){for(const id of["helpModal","saveModal","seasonModal","results","pause"])if(!$("#"+id).hidden)return $("#"+id);return R?null:$("#gym");}
 function navMove(d){
   const layer=navLayer();if(!layer)return false;
   const els=[...layer.querySelectorAll("button")].filter(b=>!b.disabled&&b.offsetParent!==null);
@@ -922,6 +1029,8 @@ function navMove(d){
   return false;
 }
 function navBack(){
+  if(!$("#helpModal").hidden){$("#helpClose").click();return;}
+  if(!$("#saveModal").hidden){$("#saveClose").click();return;}
   if(!$("#seasonModal").hidden){$("#seasonNo").click();return;}
   if(!$("#pause").hidden){togglePause();return;}
   if(!$("#results").hidden){$("#backBtn").click();return;}
@@ -935,7 +1044,10 @@ function useSkill(id){
   const sk=SKILLS.find(s=>s.id===id);R.cds[id]=sk.cd();
   if(id==="dash"){R.dashT=.2;R.dashId++;R.inv=Math.max(R.inv,.3);SFX.dash();for(let i=0;i<8;i++)puff(R.x,R.y+20,"#d8c7a8");}
   if(id==="inhale"){R.inhT=1.3;SFX.inhale();}
-  if(id==="toss"){const s=950;R.plates.push({x:R.x+R.fx*30,y:R.y-10+R.fy*30,vx:R.fx*s,vy:R.fy*s,hits:stat("tossN"),life:2.6,rot:0,hit:new Map(),col:[COL.red,COL.blue,COL.yellow,COL.green][Math.floor(Math.random()*4)]});SFX.toss();}
+  if(id==="toss"){const s=950;let ax=R.fx,ay=R.fy;
+    if(R.prx||R.pry){const l=Math.hypot(R.prx,R.pry);ax=R.prx/l;ay=R.pry/l;}
+    else if(!R.bot&&!document.body.classList.contains("pad")&&performance.now()-MOUSE.t<4000){const dx=MOUSE.x-R.x,dy=MOUSE.y-(R.y-10),l=Math.hypot(dx,dy);if(l>20){ax=dx/l;ay=dy/l;}}
+    R.plates.push({x:R.x+ax*30,y:R.y-10+ay*30,vx:ax*s,vy:ay*s,hits:stat("tossN"),life:2.6,rot:0,hit:new Map(),col:[COL.red,COL.blue,COL.yellow,COL.green][Math.floor(Math.random()*4)]});SFX.toss();}
   if(id==="cheat"){R.cheatT=stat("cheatT");SFX.gold();floatText(R.x,R.y-90,"CHEAT MEAL!",COL.gold,2);}
 }
 function buildSkillbar(){
@@ -1111,6 +1223,7 @@ function hazards(dt){
 }
 function knock(msg,stun,timeLoss,kx,ky){
   if(R.inv>0||R.dashT>0||R.stun>0)return;
+  rumble(220,.8,.4);
   R.stun=stun*R.pad;R.inv=R.stun+.8;R.t-=timeLoss;R.vx=kx;R.vy=ky;R.shake=.5;R.combo=0;R.comboT=0;
   floatText(R.x,R.y-100,msg,COL.red,1);if(timeLoss)floatText(R.x,R.y-70,`-${timeLoss}s`,COL.red);SFX.hit();burst(R.x,R.y,"#fff",6);
 }
@@ -1146,7 +1259,7 @@ function eaten(f){
   if(f.boss){bossDown(f);return;}
   R.ate[def.name]=(R.ate[def.name]||0)+1;S.eat[def.name]=(S.eat[def.name]||0)+1;
   burst(f.x,f.y,f.gold?COL.gold:"#f5e6c4",12,1.2);
-  if(f.gold){R.golds++;if(!RM)R.shake=Math.max(R.shake,.4);const w=Math.min(R.wind,R.windLeft);if(w>0){R.windLeft-=w;R.t+=w;floatText(R.x,R.y-120,`+${w.toFixed(1)}s`,COL.gold,1);}}
+  if(f.gold){R.golds++;rumble(80,0,.5);if(!RM)R.shake=Math.max(R.shake,.4);const w=Math.min(R.wind,R.windLeft);if(w>0){R.windLeft-=w;R.t+=w;floatText(R.x,R.y-120,`+${w.toFixed(1)}s`,COL.gold,1);}}
   if(def.spicy){R.boost=3;floatText(R.x,R.y-110,"Spicy! Speed up",COL.red,1);}
   R.prog++;
   const z=R.zone;
@@ -1161,12 +1274,12 @@ function spawnBoss(){
   if(S.bhp[z.id]==null)S.bhp[z.id]=bossHp(z);
   const r=64;
   R.foods.push({def:b,boss:true,x:WW/2,y:-120,ty:FY0()+r+40,enter:.8,r,hp:S.bhp[z.id],max:bossHp(z),gold:false,pop:1,vx:0,vy:0,hit:0,sq:0,blink:2,step:0,wob:0});
-  R.shake=.8;SFX.boss();banner(b.e,b.name,`${Math.ceil(S.bhp[z.id])} bites to go`,"boss");
+  R.shake=.8;SFX.boss();rumble(450,1,.5);banner(b.e,b.name,`${Math.ceil(S.bhp[z.id])} bites to go`,"boss");
 }
 function bossDown(f){
   const z=R.zone,b=z.boss,rew=b.reward;
   S.beaten[z.id]=true;S.bhp[z.id]=0;R.kcal+=rew;R.bossKill=b;R.prog=0;
-  burst(f.x,f.y,COL.gold,40,2);R.shake=1;
+  burst(f.x,f.y,COL.gold,40,2);R.shake=1;rumble(600,1,1);
   floatText(f.x,f.y-20,"+"+fmt(rew),COL.gold,2);
   if(z.id==="buffet"){S.won=true;R.wonNow=true;banner("🏆","Champion!","You ate the whole Sunday Roast","gold");}
   else banner(b.e,`${b.name} demolished!`,`+${fmt(rew)} kcal · Trophy: +10% kcal`,"gold");
@@ -1355,7 +1468,7 @@ function endRun(){
   for(const b of[$("#backBtn"),$("#againBtn")])b.disabled=true;
   setTimeout(()=>{for(const b of[$("#backBtn"),$("#againBtn")])b.disabled=false;$("#backBtn").focus();},700);
 }
-function toGym(){R=null;paused=false;$("#results").hidden=true;$("#run").hidden=true;$("#gym").hidden=false;renderGym();$("#goBtn").focus();}
+function toGym(){setSong("hub");R=null;paused=false;$("#results").hidden=true;$("#run").hidden=true;$("#gym").hidden=false;renderGym();$("#goBtn").focus();}
 $("#backBtn").onclick=toGym;
 $("#againBtn").onclick=()=>{R=null;startRun();};
 $("#goBtn").onclick=()=>startRun();
@@ -1372,6 +1485,8 @@ function frame(now){
   requestAnimationFrame(frame);
 }
 renderGym();
+if(!S.runs&&!DEBUG)openModal("helpModal","#helpClose");
+{const ts=document.querySelector(".treeScroll");ts.scrollLeft=(ts.scrollWidth-ts.clientWidth)/2;} // small screens: start the tree on its root
 if(document.fonts&&document.fonts.ready)document.fonts.ready.then(()=>{SPR.clear();renderGym();});
 requestAnimationFrame(frame);
 
@@ -1400,8 +1515,8 @@ function simBuy(){
   }
   const best=[...S.zones].reverse().find(id=>true);S.zone=best;
 }
-function sim(maxRuns=400){
-  SIM=true;S=fresh();let time=0;const log=[],ms={};
+function sim(maxRuns=400,start={}){
+  SIM=true;S=Object.assign(fresh(),start);let time=0;const log=[],ms={};
   for(let r=0;r<maxRuns;r++){
     startRun();R.bot=true;let steps=0;
     while(!R.done&&steps<20000){update(1/30);steps++;}
@@ -1411,9 +1526,9 @@ function sim(maxRuns=400){
     R=null;simBuy();
     if(S.beaten.buffet)break;
   }
-  SIM=false;const out={ms,log,lv:{...S.lv}};S=fresh();return out;
+  SIM=false;const out={ms,log,lv:{...S.lv},medals:medalsFor(S.seasonKcal),seasonKcal:S.seasonKcal};S=fresh();return out;
 }
-if(DEBUG)window.BS={sim,NODES,ZONES,NI,get R(){return R;},startRun,get S(){return S;},set S(v){S=v;},renderGym};
+if(DEBUG)window.BS={sim,medalsFor,get seasonKcal(){return S.seasonKcal;},NODES,ZONES,NI,get R(){return R;},startRun,get S(){return S;},set S(v){S=v;},renderGym};
 })();
 </script>
 </html>

@@ -28,4 +28,8 @@ Each market has its own hazards. None of them can kill you, but they knock you a
 
 ## Running it
 
-It's one file with no build step. Open `index.html` in any browser, or host the repo with GitHub Pages. Progress saves in the browser's local storage.
+It's one file with no build step. Open `index.html` in any browser, or host the repo with GitHub Pages.
+
+Progress saves by itself in your browser after every run and purchase. To play on another device, open **Save & devices** in the gym, copy the code, and load it on the other device.
+
+Using an Xbox controller? Press any button once so the browser picks it up. Plate Toss aims with the right stick, and LB/RB switch markets in the gym.
