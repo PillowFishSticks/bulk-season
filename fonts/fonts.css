@@ -1,0 +1,57 @@
+/* Alegreya + Alegreya Sans (SIL Open Font License), bundled so the game works offline */
+@font-face {
+  font-family: 'Alegreya';
+  font-style: italic;
+  font-weight: 800;
+  font-display: swap;
+  src: url(Alegreya-800i.woff2) format('woff2');
+  
+}
+@font-face {
+  font-family: 'Alegreya';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url(Alegreya.woff2) format('woff2');
+  
+}
+@font-face {
+  font-family: 'Alegreya';
+  font-style: normal;
+  font-weight: 800;
+  font-display: swap;
+  src: url(Alegreya.woff2) format('woff2');
+  
+}
+@font-face {
+  font-family: 'Alegreya';
+  font-style: normal;
+  font-weight: 900;
+  font-display: swap;
+  src: url(Alegreya.woff2) format('woff2');
+  
+}
+@font-face {
+  font-family: 'Alegreya Sans';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url(AlegreyaSans-500.woff2) format('woff2');
+  
+}
+@font-face {
+  font-family: 'Alegreya Sans';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url(AlegreyaSans-700.woff2) format('woff2');
+  
+}
+@font-face {
+  font-family: 'Alegreya Sans';
+  font-style: normal;
+  font-weight: 800;
+  font-display: swap;
+  src: url(AlegreyaSans-800.woff2) format('woff2');
+  
+}

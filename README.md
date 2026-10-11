@@ -33,3 +33,11 @@ It's one file with no build step. Open `index.html` in any browser, or host the 
 Progress saves by itself in your browser after every run and purchase. To play on another device, open **Save & devices** in the gym, copy the code, and load it on the other device.
 
 Using an Xbox controller? Press any button once so the browser picks it up. Plate Toss aims with the right stick, and LB/RB switch markets in the gym.
+
+## Desktop version (Windows)
+
+The same game also ships as a desktop app built with Electron. It runs fullscreen, uncapped, at 144 FPS on a 144 Hz screen.
+
+- `npm install` once, then `npm start` to play.
+- `npm run dist` builds `dist/BulkSeason-<version>-portable.exe` (a single exe, no install) and `dist/BulkSeason-<version>-setup.exe` (an installer).
+- On desktop the save is a real file at `%APPDATA%\Bulk Season\save.json`. A `save.backup.json` copy is made every time the game starts.

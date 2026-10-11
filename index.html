@@ -4,9 +4,7 @@
 <title>Bulk Season</title>
 <meta name="theme-color" content="#120d0a">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%8D%94%3C/text%3E%3C/svg%3E">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Alegreya:ital,wght@0,700;0,800;0,900;1,800&family=Alegreya+Sans:wght@500;700;800&display=swap">
+<link rel="stylesheet" href="fonts/fonts.css">
 <style>
 /* Look: hand-drawn cartoon — thick dark outlines, dark brick dungeon, wooden plaques, parchment panels. */
 :root{
@@ -268,7 +266,7 @@ body.staged .info{margin-top:6px}
 .port canvas{position:static!important;width:100%!important;height:100%!important}
 .bars{display:grid;gap:5px;width:clamp(150px,30vw,420px)}
 .hbar{position:relative;height:22px;border-radius:12px;background:#15171d;border:3px solid #0b0c10;box-shadow:inset 0 0 0 2px #3a4150,0 3px 0 rgba(0,0,0,.45);overflow:hidden}
-.hbar i{position:absolute;inset:2px auto 2px 2px;border-radius:8px;background:var(--c);box-shadow:inset 0 3px 0 rgba(255,255,255,.25),inset 0 -3px 0 rgba(0,0,0,.2)}
+.hbar i{position:absolute;inset:2px;transform-origin:0 50%;will-change:transform;border-radius:8px;background:var(--c);box-shadow:inset 0 3px 0 rgba(255,255,255,.25),inset 0 -3px 0 rgba(0,0,0,.2)}
 .hbar span{position:absolute;inset:0;padding:0 10px;display:flex;justify-content:space-between;align-items:center;font:800 13px/1 var(--ui);letter-spacing:.05em;color:#fff;text-shadow:1px 1px 0 #000,-1px 1px 0 #000,1px -1px 0 #000,-1px -1px 0 #000,0 0 4px #000}
 .hbar.full i{animation:flash .35s infinite alternate}
 @keyframes flash{to{filter:brightness(1.7)}}
@@ -345,6 +343,7 @@ body.touch .hnote .kbt{display:none} body.touch .hnote .tct{display:inline}
 .charc:focus-visible,body.pad .charc:focus{outline:4px solid #fff;outline-offset:2px;transform:scale(1.05)}
 .mcard textarea{width:100%;resize:vertical;border:3px solid #6b4f2c;border-radius:8px;background:#f7ecd2;color:var(--pink);font:600 13px/1.35 ui-monospace,Consolas,monospace;padding:8px}
 .mcard p{margin:0}
+#fps{position:fixed;left:8px;bottom:8px;z-index:20;font:800 13px/1 ui-monospace,Consolas,monospace;color:#8fe07a;background:rgba(0,0,0,.6);padding:4px 7px;border-radius:6px;pointer-events:none}
 .toast{position:absolute;left:50%;top:18px;transform:translateX(-50%);padding:9px 16px;border-radius:10px;border:3px solid var(--out);background:var(--parch);color:var(--pink);font:800 16px/1.2 var(--disp);z-index:9;pointer-events:none;box-shadow:0 4px 0 rgba(0,0,0,.45);text-align:center;max-width:calc(100vw - 32px)}
 
 
@@ -404,6 +403,7 @@ body.touch .hnote .kbt{display:none} body.touch .hnote .tct{display:inline}
         <button class="btn small" id="muteBtn">Sound: on</button>
         <button class="btn small" id="musicBtn">Music: on</button>
         <button class="btn small" id="fsBtn">Fullscreen <span class="glyph kb">F</span></button>
+        <button class="btn small" id="quitGame" hidden>Quit</button>
       </div>
     </header>
     <main class="hub">
@@ -509,6 +509,7 @@ body.touch .hnote .kbt{display:none} body.touch .hnote .tct{display:inline}
         <button class="btn" id="muteBtn2">Sound: on</button>
         <button class="btn" id="musicBtn2">Music: on</button>
         <button class="btn" id="quitBtn">End run (keep kcal)</button>
+        <button class="btn" id="quitGame2" hidden>Quit to desktop</button>
       </div>
     </div>
   </div>
@@ -565,6 +566,7 @@ body.touch .hnote .kbt{display:none} body.touch .hnote .tct{display:inline}
     </div>
     <button class="btn small credSkip" id="credSkip">Skip <span class="glyph kb">Enter</span><span class="glyph pd pA">A</span></button>
   </section>
+  <div id="fps" hidden></div>
   <div id="banner" hidden><div class="bwrap"><div class="rays"></div><div class="bico" id="bIco"></div><div class="bt" id="bTitle"></div><div class="bs" id="bSub"></div></div></div>
 </div>
 
@@ -718,7 +720,9 @@ const fresh=()=>({kcal:0,total:0,best:0,runs:0,lv:{start:1},v5:1,zones:["shop"],
   season:1,medals:0,seasonKcal:0,cash:0,cashT:0,g:{},sp:{},won:false,muted:false,music:true,seen:false});
 let S=fresh();
 // Every load keeps a backup of the save it found, so nothing is ever lost to an update (Save & devices → Restore backup)
-try{const raw=localStorage.getItem(KEY);if(raw){try{localStorage.setItem(KEY+".backup",raw);}catch(e){}const p=JSON.parse(raw);p.v5=p.v5||0;S=migrate(Object.assign(fresh(),p));}}catch(e){console.error("Save failed to load (kept as backup):",e);S=fresh();S.loadFailed=1;}
+// Desktop app: the save is a real file (via the preload bridge); the web version uses browser storage
+const DESK=!!(window.desktop&&window.desktop.load);
+try{const raw=(DESK&&window.desktop.load())||localStorage.getItem(KEY);if(raw){try{localStorage.setItem(KEY+".backup",raw);}catch(e){}const p=JSON.parse(raw);p.v5=p.v5||0;S=migrate(Object.assign(fresh(),p));}}catch(e){console.error("Save failed to load (kept as backup):",e);S=fresh();S.loadFailed=1;}
 // older saves tracked "boss index per market"; turn that into unlocked/cleared sections
 function migrate(x){
   if(x.bi){for(const id of x.zones){const n=x.beaten[id]?3:Math.min(2,x.bi[id]||0);x.sec[id]=Math.max(x.sec[id]||0,Math.min(3,n+1));for(let k=0;k<n;k++)x.cleared[id+":"+k]=true;
@@ -733,7 +737,7 @@ function migrate(x){
   return x;
 }
 let readOnly=false;   // set when the game is saving from another tab, so an old tab can't overwrite newer progress
-const save=()=>{if(DEBUG&&SIM)return;if(S.loadFailed||readOnly)return;try{localStorage.setItem(KEY,JSON.stringify(S));}catch(e){}};
+const save=()=>{if(DEBUG&&SIM)return;if(S.loadFailed||readOnly)return;const t=JSON.stringify(S);if(DESK){window.desktop.save(t);return;}try{localStorage.setItem(KEY,t);}catch(e){}};
 try{navigator.storage&&navigator.storage.persist&&navigator.storage.persist();}catch(e){}
 const lv=id=>S.lv[id]||0;
 const stat=id=>NI[id].v(lv(id));
@@ -1638,7 +1642,7 @@ let R=null,paused=false;
 const MAXRUN=25;
 const runLen=()=>Math.min(MAXRUN,stat("appetite")+stat("appetite2")+.5*sl("pre"));
 function addTime(x){const room=MAXRUN-R.el-R.t;const a=Math.max(0,Math.min(x,room));R.t+=a;return a;}
-function startRun(){
+function startRun(){HC.clear();
   if(!SIM){setSong("run");$("#gym").hidden=true;$("#run").hidden=false;$("#results").hidden=true;$("#pause").hidden=true;paused=false;buildSkillbar();}
   const zone=selZone(),si=selSec();
   R={zone,si,sk:secKey(zone,si),secK:SECK[si],boss:zone.bosses[si],shots:[],slams:[],t:runLen(),T:runLen(),el:0,will:stat("appetite3"),clockT:6,crit:.05+stat("crit"),slamP:.04+stat("bslam"),slamR:150+25*lv("bslam"),pounds:[],goldX:stat("gold2"),comboW:stat("combo2"),helps:stat("digest"),helpLeft:15,miniT:4,dropT:3,drops:[],zaps:[],buds:[],hitT:(1-.08*sl("tea"))*stat("armor"),mult:kcalMult(),
@@ -2356,10 +2360,10 @@ function draw(){
     else{circ(ctx,p.x,p.y,p.r*(p.k==="f"?a:1));ctx.fillStyle=p.col;ctx.fill();if(p.k==="c"){ctx.lineWidth=1.5;ctx.strokeStyle=OUT;ctx.stroke();}}}
   ctx.globalAlpha=1;
   // lamps flicker + light pools
-  ctx.globalCompositeOperation="lighter";
+  ctx.globalCompositeOperation="lighter";{
   const glow=R.zone.th.glow;
   for(const lx of LAMPS()){const fl=.85+.15*Math.sin(tm*11+lx)*Math.sin(tm*7.3+lx*.3);const g=ctx.createRadialGradient(lx,40,6,lx,WALL+60,320);g.addColorStop(0,`rgba(${glow},${.22*fl})`);g.addColorStop(1,`rgba(${glow},0)`);ctx.fillStyle=g;ctx.fillRect(lx-300,0,600,WALL+360);}
-  ctx.globalCompositeOperation="source-over";
+  ctx.globalCompositeOperation="source-over";}
   if(VIG)ctx.drawImage(VIG,0,0,WW,WH);
   if(R.ending){ctx.fillStyle=`rgba(0,0,0,${.35*Math.min(1,(R.endA||0)/.8)})`;ctx.fillRect(-WW,-WH,WW*3,WH*3);}
   if(R.hurt>0){const g=ctx.createRadialGradient(WW/2,WH/2,Math.min(WW,WH)*.3,WW/2,WH/2,Math.max(WW,WH)*.7);g.addColorStop(0,"rgba(220,30,30,0)");g.addColorStop(1,`rgba(220,30,30,${R.hurt})`);ctx.fillStyle=g;ctx.fillRect(0,0,WW,WH);}
@@ -2372,25 +2376,33 @@ function draw(){
   drawHud();
 }
 let lastCombo=0;
+// HUD writes only touch the page when a value actually changes; bars use transform (no layout), so the browser
+// doesn't re-layout and repaint the HUD every frame (that alone was costing ~25 FPS at 144Hz).
+const HC=new Map();
+function hset(sel,prop,val){const k=sel+"|"+prop;if(HC.get(k)===val)return;HC.set(k,val);const el=$(sel);
+  if(prop==="text")el.textContent=val;else if(prop==="bar")el.style.transform=`scaleX(${val})`;else if(prop==="cls")el.classList.toggle(val[0],val[1]);else el.style[prop]=val;}
+let hudN=0;
 function drawHud(){
-  $("#hKcal").textContent=fmt(R.kcal);
+  hudN++;
+  hset("#hKcal","text",fmt(R.kcal));
   const hc=$("#hCombo");
-  if(R.combo>=3){hc.textContent=`Combo ${R.combo} · ×${(1+.02*Math.min(R.combo,R.comboCap)).toFixed(2)}`;hc.classList.add("on");if(R.combo!==lastCombo&&R.combo%5===0){hc.classList.remove("pop");void hc.offsetWidth;hc.classList.add("pop");}}
-  else hc.classList.remove("on");
+  hset("#hCombo","cls",["on",R.combo>=3]);
+  if(R.combo>=3){hset("#hCombo","text",`Combo ${R.combo} · ×${(1+.02*Math.min(R.combo,R.comboCap)).toFixed(2)}`);if(R.combo!==lastCombo&&R.combo%5===0){hc.classList.remove("pop");void hc.offsetWidth;hc.classList.add("pop");}}
   lastCombo=R.combo;
-  $("#hTime").style.width=`calc(${clamp(R.t/R.T,0,1)*100}% - 4px)`;
-  $("#hTimeTxt").textContent=Math.max(0,R.t).toFixed(1)+"s";
-  $("#hStom").style.width=`calc(${clamp(R.comboT/R.comboW,0,1)*100}% - 4px)`;
-  $("#hStomTxt").textContent=R.cheatT>0?"CHEAT MEAL ×3":R.combo?`${R.combo} · ×${(1+.02*Math.min(R.combo,R.comboCap)).toFixed(2)}`:"–";
-  $("#stomBar").classList.toggle("full",R.cheatT>0);
+  const q=v=>Math.round(clamp(v,0,1)*200)/200;   // bar steps of 0.5%
+  hset("#hTime","bar",q(R.t/R.T));
+  hset("#hTimeTxt","text",Math.max(0,R.t).toFixed(1)+"s");
+  hset("#hStom","bar",q(R.comboT/R.comboW));
+  hset("#hStomTxt","text",R.cheatT>0?"CHEAT MEAL ×3":R.combo?`${R.combo} · ×${(1+.02*Math.min(R.combo,R.comboCap)).toFixed(2)}`:"–");
+  hset("#stomBar","cls",["full",R.cheatT>0]);
   const z=R.zone,boss=R.foods.find(f=>f.boss);
-  if(boss){$("#hProg").style.width=`calc(${boss.hp/boss.max*100}% - 4px)`;$("#hProg").style.background="var(--red)";$("#hProgL").textContent=(boss.encore?"Encore: ":"")+boss.def.name;$("#hProgTxt").textContent=Math.ceil(boss.hp);}
-  else{const at=secAt(z,R.si);$("#hProg").style.width=`calc(${clamp(R.prog/at,0,1)*100}% - 4px)`;$("#hProg").style.background="";$("#hProgL").textContent=secDone(z,R.si)?"🎉 Golden feast":`Boss: ${R.boss.name}`;$("#hProgTxt").textContent=`${R.prog}/${at}`;}
-  for(const b of $("#skillbar").children){const id=b.dataset.id,on=skillOn(id),cd=R.cds[id],sk=SKILLS.find(s=>s.id===id);
-    b.classList.toggle("off",!on);b.classList.toggle("ready",on&&cd<=0);
-    b.classList.toggle("active",id==="cheat"&&R.cheatT>0||id==="inhale"&&R.inhT>0);
-    b.querySelector(".cd").style.setProperty("--p",on?(cd/sk.cd()*100)+"%":"0%");}
-  if(Math.random()<.2)drawPort();
+  if(boss){hset("#hProg","bar",q(boss.hp/boss.max));hset("#hProg","background","var(--red)");hset("#hProgL","text",(boss.encore?"Encore: ":"")+boss.def.name);hset("#hProgTxt","text",String(Math.ceil(boss.hp)));}
+  else{const at=secAt(z,R.si);hset("#hProg","bar",q(R.prog/at));hset("#hProg","background","");hset("#hProgL","text",secDone(z,R.si)?"🎉 Golden feast":`Boss: ${R.boss.name}`);hset("#hProgTxt","text",`${R.prog}/${at}`);}
+  if(hudN%3===0)for(const b of $("#skillbar").children){const id=b.dataset.id,on=skillOn(id),cd=R.cds[id],sk=SKILLS.find(s=>s.id===id),k="sk"+id;
+    const st=(on?1:0)+(on&&cd<=0?2:0)+((id==="cheat"&&R.cheatT>0||id==="inhale"&&R.inhT>0)?4:0),p=on?Math.round(cd/sk.cd()*40)*2.5:0;
+    if(HC.get(k)!==st){HC.set(k,st);b.classList.toggle("off",!on);b.classList.toggle("ready",!!(st&2));b.classList.toggle("active",!!(st&4));}
+    if(HC.get(k+"p")!==p){HC.set(k+"p",p);b.querySelector(".cd").style.setProperty("--p",p+"%");}}
+  if(hudN%8===0)drawPort();
 }
 function drawPort(){const c=pctx;c.clearRect(0,0,120,120);drawLifter(c,60,175,44,{...charOpts(),fill:R?R.belly||0:0,bulk:bulk(),mouth:R?R.mouth:0,dizzy:R&&R.stun>0,blink:R&&R.blink<0});}
 
@@ -2454,17 +2466,24 @@ $("#goBtn").onclick=()=>startRun();
 addEventListener("keydown",e=>{if(e.key==="Enter"&&!R&&!$("#gym").hidden&&document.activeElement===document.body)startRun();});
 
 /* ---------- MAIN LOOP ---------- */
-let lastT=performance.now(),bizT=0,saveT=10;
+let lastT=performance.now(),bizT=0,saveT=10,fpsN=0,fpsT=0;
+// Desktop (Electron) build: a Quit button; F3 shows an FPS counter anywhere
+if(window.desktop){for(const id of["#quitGame","#quitGame2"]){$(id).hidden=false;$(id).onclick=()=>{save();window.desktop.quit();};}}
+addEventListener("keydown",e=>{if(e.key==="F3"){e.preventDefault();$("#fps").hidden=!$("#fps").hidden;}});
 // money earned while the game was closed (half rate, up to 8 hours) or while the tab was hidden (full rate)
 function catchUp(rate,maxH){if(!S.cashT)return 0;const secs=Math.min(maxH*3600,Math.max(0,(Date.now()-S.cashT)/1000)),earned=income()*secs*rate;S.cash+=earned;S.cashT=Date.now();return earned;}
 const awayEarned=catchUp(.5,8);
 document.addEventListener("visibilitychange",()=>{if(document.hidden){S.cashT=Date.now();save();}else catchUp(1,8);});
 function frame(now){
-  const dt=Math.min(.05,(now-lastT)/1000);lastT=now;
+  const rdt=(now-lastT)/1000,dt=Math.min(.05,rdt);lastT=now;
+  fpsN++;fpsT+=rdt;if(fpsT>=.5){if(!$("#fps").hidden)$("#fps").textContent=Math.round(fpsN/fpsT)+" FPS";fpsN=0;fpsT=0;}
   pollPad(dt);
   if(!SIM){S.cash+=income()*dt;bizT-=dt;if(bizT<=0){bizT=.25;if(!$("#gym").hidden)renderBiz();if((saveT-=.25)<=0){saveT=10;S.cashT=Date.now();save();}}}
+  const p0=performance.now();
   if(R&&!R.done&&!paused)update(dt);
+  const p1=performance.now();
   if(R)draw();
+  if(DEBUG){const p2=performance.now();(window.__perf=window.__perf||[]).push([p1-p0,p2-p1]);if(window.__perf.length>2000)window.__perf.shift();}
   else if(!$("#gym").hidden&&TAB==="gym")drawGym(now/1000,dt);
   else if(!$("#title").hidden)drawHub(now/1000,$("#titleCv"));
   document.body.classList.toggle("nocur",document.body.classList.contains("pad")||(!!R&&!paused&&!R.done&&now-lastMouse>1500));

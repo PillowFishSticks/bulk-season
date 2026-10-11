@@ -1,6 +1,6 @@
 # Bulk Season: notes for Claude
 
-The owner (PillowFishSticks) isn't a developer and wants Claude to own the code. Keep it simple and cheap to maintain: no frameworks, no build step, no dependencies.
+The owner (PillowFishSticks) isn't a developer and wants Claude to own the code. Keep it simple and cheap to maintain: no frameworks and no runtime dependencies. The web version has no build step. Electron is only used for the desktop wrapper (see Desktop).
 
 ## What it is
 An active incremental web game modelled on **Chef Knight** (Steam). The loop is: short timed run → collect a resource → spend it at a hub on a skill tree → go deeper. It's themed on eating food and the gym. It is **desktop-first** (landscape, fullscreen, keyboard or Xbox controller), and it still works on a phone with touch drag.
@@ -14,6 +14,8 @@ An active incremental web game modelled on **Chef Knight** (Steam). The loop is:
 ## Files
 - `index.html` is the whole game: CSS, markup and JS in one file.
 - `README.md` is the player-facing description.
+- `fonts/` holds the self-hosted Alegreya fonts (OFL), so the game works offline. The page no longer uses Google Fonts.
+- `desktop/main.js` + `desktop/preload.js` + `desktop/icon.png` form the Electron wrapper. `package.json` holds electron-builder's config.
 
 ## Code map (inside `<script>`)
 - `ZONES`: five markets. Each has a `cost`, `at` (foods eaten in a run before its boss appears), a theme `th`, `foods`, a `boss` and hazards `hz`. It also has `tasks`, which are done in order and pay a flat kcal reward.
@@ -50,6 +52,15 @@ An active incremental web game modelled on **Chef Knight** (Steam). The loop is:
 
 ## Balance
 Open `index.html#debug` and run `BS.sim(900)` in the console. A bot plays full seasons headlessly and buys the cheapest upgrade each time, then returns milestones (run number and minutes at each market open and boss kill). Tuning targets as of 2026-10-11: the bot finishes season 1 in about 35 minutes (as of 2026-10-11: ~30 short runs; about one new section per run), so a person should take an hour or more. The sim also earns and spends gym money. `BS.sim(900,{season:2,medals:5})` checks later seasons: about 20 bot minutes each, earning 5–6 medals.
+
+## Desktop (Electron)
+- In the page, `window.desktop` (from preload) means the game is running on desktop. There, saves go through `desktop.load()`/`desktop.save()` to `%APPDATA%/Bulk Season/save.json` (an atomic tmp+rename write, with `save.backup.json` copied on every launch) instead of localStorage. A Quit button is shown (`#quitGame`, `#quitGame2`). A single-instance lock stops two copies from fighting over the save.
+- F3 toggles an FPS counter.
+- Benchmarks: `npm run fps` (uncapped, about 200 FPS) or `npx electron . --fps-vsync` (should hold 143–144 on a 144 Hz screen with about 2 dropped frames). They print `FPS TEST {...}` and use a temporary profile.
+- Build: `npm run dist` → `dist/*-portable.exe` and `*-setup.exe`. They're unsigned. Set `CSC_IDENTITY_AUTO_DISCOVERY=false`.
+- **In Claude's shell, `ELECTRON_RUN_AS_NODE=1` is set (VS Code)**, so always prefix electron/electron-builder commands with `env -u ELECTRON_RUN_AS_NODE`.
+- Performance rule: the run HUD must only touch the DOM when a value changes. Use `hset(sel,prop,val)`, which is cached in `HC` and cleared in `startRun`. Bars use a `transform: scaleX` (`bar` prop), never `width`. Per-frame DOM writes are what cost the frame rate (117 → 144 FPS).
+- Steam later: the plan is steamworks.js for achievements and Steam Cloud (point Cloud at save.json), a separate free Demo app, and real art in place of the emoji icon.
 
 ## Hosting
 - The repo is public, and GitHub Pages serves `main` at `/` (root): https://pillowfishsticks.github.io/bulk-season/

@@ -1,0 +1,39 @@
+{
+  "name": "bulk-season",
+  "version": "0.1.0",
+  "description": "Bulk Season: eat your way to a bigger bench.",
+  "main": "desktop/main.js",
+  "author": "PillowFishSticks",
+  "private": true,
+  "scripts": {
+    "start": "electron .",
+    "fps": "electron . --fps-test",
+    "dist": "electron-builder --win portable nsis"
+  },
+  "build": {
+    "appId": "com.pillowfishsticks.bulkseason",
+    "productName": "Bulk Season",
+    "files": [
+      "index.html",
+      "fonts/**",
+      "desktop/**"
+    ],
+    "directories": {
+      "output": "dist"
+    },
+    "win": {
+      "icon": "desktop/icon.png"
+    },
+    "portable": {
+      "artifactName": "BulkSeason-${version}-portable.exe"
+    },
+    "nsis": {
+      "artifactName": "BulkSeason-${version}-setup.exe",
+      "oneClick": true
+    }
+  },
+  "devDependencies": {
+    "electron": "^33.4.11",
+    "electron-builder": "^25.1.8"
+  }
+}
