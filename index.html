@@ -1110,10 +1110,19 @@ function homeTree(){TV.z=.85;centerOn(gpx(0),gpy(0));}
 $("#tzIn").onclick=()=>zoomBy(1.2);$("#tzOut").onclick=()=>zoomBy(1/1.2);$("#tzFit").onclick=fitTree;
 treeEl.addEventListener("wheel",e=>{e.preventDefault();const r=treeEl.getBoundingClientRect(),k=treeEl.clientWidth/r.width;zoomBy(e.deltaY<0?1.12:1/1.12,(e.clientX-r.left)*k,(e.clientY-r.top)*k);},{passive:false});
 let drag=null,dragMoved=false;
-treeEl.addEventListener("pointerdown",e=>{if(e.target.closest(".tzoom"))return;drag={x:e.clientX,y:e.clientY,tx:TV.x,ty:TV.y};dragMoved=false;});
-addEventListener("pointermove",e=>{if(!drag)return;const r=treeEl.getBoundingClientRect(),k=treeEl.clientWidth/r.width,dx=(e.clientX-drag.x)*k,dy=(e.clientY-drag.y)*k;if(Math.abs(dx)+Math.abs(dy)>6){dragMoved=true;treeEl.classList.add("drag");}if(dragMoved){TV.x=drag.tx+dx;TV.y=drag.ty+dy;applyTree();}});
+// two-finger pinch zooms around the fingers (and pans with them)
+const PT=new Map();let pinch=null;
+const pinchState=()=>{const[a,b]=[...PT.values()];return{d:Math.hypot(a.x-b.x,a.y-b.y)||1,mx:(a.x+b.x)/2,my:(a.y+b.y)/2};};
+treeEl.addEventListener("pointerdown",e=>{if(e.pointerType!=="touch")return;PT.set(e.pointerId,{x:e.clientX,y:e.clientY});if(PT.size===2){pinch=pinchState();drag=null;dragMoved=true;}},true);
+addEventListener("pointermove",e=>{if(!PT.has(e.pointerId))return;PT.set(e.pointerId,{x:e.clientX,y:e.clientY});if(!pinch||PT.size<2)return;
+  const p=pinchState(),r=treeEl.getBoundingClientRect(),k=treeEl.clientWidth/r.width;
+  zoomBy(p.d/pinch.d,(p.mx-r.left)*k,(p.my-r.top)*k);TV.x+=(p.mx-pinch.mx)*k;TV.y+=(p.my-pinch.my)*k;applyTree();pinch=p;});
+for(const ev of["pointerup","pointercancel"])addEventListener(ev,e=>{PT.delete(e.pointerId);if(PT.size<2)pinch=null;});
+treeEl.addEventListener("pointerdown",e=>{if(e.target.closest(".tzoom")||pinch)return;drag={x:e.clientX,y:e.clientY,tx:TV.x,ty:TV.y};dragMoved=false;});
+addEventListener("pointermove",e=>{if(!drag||pinch)return;const r=treeEl.getBoundingClientRect(),k=treeEl.clientWidth/r.width,dx=(e.clientX-drag.x)*k,dy=(e.clientY-drag.y)*k;if(Math.abs(dx)+Math.abs(dy)>6){dragMoved=true;treeEl.classList.add("drag");}if(dragMoved){TV.x=drag.tx+dx;TV.y=drag.ty+dy;applyTree();}});
 addEventListener("pointerup",()=>{drag=null;treeEl.classList.remove("drag");setTimeout(()=>dragMoved=false,0);});
-addEventListener("resize",()=>setTimeout(homeTree,50));
+// recentre whenever the tree area really changes size (fullscreen on a phone settles slowly, so a fixed delay missed it)
+let treeSz="";new ResizeObserver(()=>{const k=treeEl.clientWidth+"x"+treeEl.clientHeight;if(treeEl.clientWidth&&k!==treeSz){treeSz=k;homeTree();}}).observe(treeEl);
 function buyNode(n){
   const L=lv(n.id);
   if(L>=n.max){renderInfo();return;}
