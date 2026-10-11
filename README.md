@@ -7,7 +7,7 @@ Play: https://pillowfishsticks.github.io/bulk-season/
 ## The loop
 
 1. **Run.** Walk into food to eat it before your *Appetite* runs out. Chain bites quickly to build a combo.
-2. **Stomach.** Every bite fills you up and digestion slowly empties you. You can always keep eating, but the fuller you are, the slower you chew and walk.
+2. **Events.** Unlock things that happen on their own: plates crashing down on food, gym buddies who eat for you, and chomps that chain-zap nearby food.
 3. **Sections and bosses.** Each market has three sections (Corner Shop: Front Door, The Aisles, The Till), each with a boss that fights back with shots, slams and charges. Hits cost you appetite time. Beat a boss to open the next section; beat the third to open the next market.
 4. **Gym.** Spend kcal on the skill tree. Run your own gym too: equipment brings members, members pay you money even while you're away, and money buys more equipment and supplements that boost you.
 5. **New season.** Clear The Buffet and you can start again with medals that boost every kcal for good.

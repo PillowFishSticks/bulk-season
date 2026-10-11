@@ -416,7 +416,7 @@ body.touch .hnote .kbt{display:none} body.touch .hnote .tct{display:inline}
         <div class="port"><canvas id="portCv" width="120" height="120"></canvas></div>
         <div class="bars">
           <div class="hbar" id="timeBar" style="--c:var(--gold)"><i id="hTime"></i><span><b>⏱️ Appetite</b><b id="hTimeTxt"></b></span></div>
-          <div class="hbar" id="stomBar" style="--c:var(--red)"><i id="hStom"></i><span><b>🍔 Stomach</b><b id="hStomTxt"></b></span></div>
+          <div class="hbar" id="stomBar" style="--c:#e8833a"><i id="hStom"></i><span><b>🔥 Combo</b><b id="hStomTxt"></b></span></div>
         </div>
       </div>
       <div class="kcal"><b id="hKcal">0</b><span class="combo" id="hCombo"></span></div>
@@ -465,7 +465,7 @@ body.touch .hnote .kbt{display:none} body.touch .hnote .tct{display:inline}
     <div class="parch mcard help">
       <h2>How to play</h2>
       <div class="hsteps">
-        <div class="hstep"><span class="hi">🍔</span><b>Eat</b><p>Walk into food before your appetite runs out. A full stomach makes you slow, so digest as you go. Keep chomping for a combo.</p></div>
+        <div class="hstep"><span class="hi">🍔</span><b>Eat</b><p>Walk into food before your appetite runs out. Keep chomping without a break to build a combo for bonus kcal.</p></div>
         <div class="hstep"><span class="hi">👑</span><b>Beat the boss</b><p>Every market has 3 sections, each with a boss that fights back. Dodge its attacks. Beat it to open the next section.</p></div>
         <div class="hstep"><span class="hi">🏋️</span><b>Get stronger</b><p>Spend kcal on the Skill Tree. Run Your Gym too: equipment brings members, members pay £, and £ buys supplements.</p></div>
       </div>
@@ -501,7 +501,7 @@ const $=s=>document.querySelector(s);
 const RM=matchMedia("(prefers-reduced-motion: reduce)").matches;
 const DEBUG=/debug/.test(location.hash);
 const OUT="#2a1a12";
-const COL={red:"#d8423a",blue:"#3f7fd6",yellow:"#e9bf2f",green:"#5aa83a",white:"#e9e2cf",gold:"#f2c230",skin:"#f2c393",skinD:"#c98a5a",cream:"#fbf0d6"};
+const COL={purple:"#8e5bd0",red:"#d8423a",blue:"#3f7fd6",yellow:"#e9bf2f",green:"#5aa83a",white:"#e9e2cf",gold:"#f2c230",skin:"#f2c393",skinD:"#c98a5a",cream:"#fbf0d6"};
 const EMOJI='"Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",sans-serif';
 const UIF='"Alegreya Sans",system-ui,sans-serif',DISP='"Alegreya",Georgia,serif';
 const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
@@ -515,7 +515,7 @@ const ZONES=[
  {id:"shop",name:"Corner Shop",e:"🏪",cost:0,at:18,
   th:{glow:"220,235,255"},
   foods:[F("🍌","Banana",6,12,{w:3}),F("🍪","Cookie",5,18,{w:3}),F("🍫","Choc bar",8,32,{w:2}),F("🥪","Meal deal",14,60,{w:1.4,bites:2,size:1.15}),F("🥧","Pork pie",12,100,{w:.5})],
-  bb:{hp:120,kcb:6,reward:600},
+  bb:{hp:130,kcb:6,reward:600},
   secs:[{n:"Front Door",floor:"shop",wall:"shopDoor"},{n:"The Aisles",floor:"shop",wall:"shop"},{n:"The Till",floor:"wood",wall:"shopTill"}],
   bosses:[{e:"🥤",name:"Fizzy Pop",mv:"dart",spd:200,mi:6,atk:[{k:"spread",e:"💦",n:3,every:2.6,spd:290}]},{e:"🍞",name:"The Loaf",mv:"wander",spd:80,mi:5,atk:[{k:"ring",e:"🍞",n:8,every:3.4,spd:230}]},{e:"🧀",name:"The Big Cheese",mv:"wander",spd:70,mi:4,atk:[{k:"slam",every:3.4,r:110},{k:"spread",e:"🧀",n:5,every:4.2,spd:280}]}],
   hz:{puddle:3},
@@ -523,7 +523,7 @@ const ZONES=[
  {id:"chippy",name:"The Chippy",e:"🍟",cost:0,at:24,
   th:{glow:"255,236,190"},
   foods:[F("🍟","Chips",10,64,{w:3}),F("🥚","Pickled egg",5,36,{w:2}),F("🌭","Saveloy",9,74,{w:2}),F("🐟","Battered cod",16,180,{w:1,flee:1,size:1.2}),F("🍔","Chip butty",18,230,{w:.6,bites:2,size:1.2})],
-  bb:{hp:1200,kcb:25,reward:10000},
+  bb:{hp:4000,kcb:25,reward:10000},
   secs:[{n:"The Queue",floor:"chippy",wall:"chippy"},{n:"The Fryers",floor:"kitchen",wall:"chippyFry"},{n:"Back Alley",floor:"asphalt",wall:"chippyAlley"}],
   bosses:[{e:"🥫",name:"Mushy Peas",mv:"wander",spd:60,mi:5,atk:[{k:"spread",e:"🟢",n:5,every:2.4,spd:310}]},{e:"🌭",name:"Big Saveloy",mv:"dart",spd:220,mi:4,atk:[{k:"charge",every:3.6},{k:"spread",e:"🌭",n:3,every:3,spd:300}]},{e:"🐟",name:"Moby Cod",mv:"flee",spd:150,mi:4,atk:[{k:"ring",e:"💧",n:10,every:3,spd:260},{k:"spin",e:"💧",every:6,spd:280}]}],
   hz:{grease:2,gull:2},
@@ -531,7 +531,7 @@ const ZONES=[
  {id:"curry",name:"Curry House",e:"🍛",cost:0,at:28,
   th:{glow:"255,170,90"},
   foods:[F("🍚","Pilau rice",10,170,{w:3}),F("🥟","Samosa",8,190,{w:2.5}),F("🍛","Tikka masala",18,540,{w:1.2,bites:2,size:1.2}),F("🌶️","Vindaloo chilli",6,250,{w:.8,spicy:1}),F("🍢","Seekh kebab",10,340,{w:1,flee:1})],
-  bb:{hp:5000,kcb:100,reward:160000},
+  bb:{hp:25000,kcb:100,reward:160000},
   secs:[{n:"Dining Room",floor:"curry",wall:"curry"},{n:"The Kitchen",floor:"kitchen",wall:"curryKitchen"},{n:"The Tandoor",floor:"terracotta",wall:"curryTandoor"}],
   bosses:[{e:"🥘",name:"The Balti Bowl",mv:"wander",spd:70,mi:4,atk:[{k:"ring",e:"🔥",n:8,every:3,spd:240}],fire:1},{e:"🍢",name:"Kebab King",mv:"dart",spd:230,mi:4,atk:[{k:"spread",e:"🍢",n:3,every:1.8,spd:420},{k:"charge",every:4.5}]},{e:"🍲",name:"The Phaal Pot",mv:"wander",spd:60,mi:3.5,atk:[{k:"slam",every:2.8,r:130},{k:"ring",e:"🌶️",n:12,every:3.6,spd:260}],fire:1}],
   hz:{fire:5},
@@ -539,7 +539,7 @@ const ZONES=[
  {id:"street",name:"Street Food",e:"🌮",cost:0,at:32,
   th:{glow:"255,200,140"},
   foods:[F("🌮","Taco",8,600,{w:3}),F("🍡","Dango",6,500,{w:2.5}),F("🍜","Ramen",16,1550,{w:1.5,bites:2,size:1.2}),F("🌯","Burrito",22,2250,{w:1,bites:3,size:1.25}),F("🍩","Doughnut",8,1100,{w:1,flee:1})],
-  bb:{hp:22000,kcb:450,reward:2400000},
+  bb:{hp:80000,kcb:450,reward:2400000},
   secs:[{n:"Night Market",floor:"street",wall:"street"},{n:"Food Trucks",floor:"asphalt",wall:"streetTrucks"},{n:"Neon Alley",floor:"neon",wall:"streetNeon"}],
   bosses:[{e:"🍙",name:"Onigiri Ollie",mv:"dart",spd:240,mi:4,atk:[{k:"spread",e:"🍙",n:5,every:2,spd:380},{k:"charge",every:4}]},{e:"🌯",name:"Mega Burrito",mv:"flee",spd:160,mi:3.5,atk:[{k:"ring",e:"🌶️",n:12,every:2.6,spd:300},{k:"spin",e:"🌽",every:5.5,spd:300}]},{e:"🥙",name:"Doner Mountain",mv:"dart",spd:230,mi:3,atk:[{k:"spin",e:"🥩",every:4.5,spd:320},{k:"slam",every:3.2,r:120},{k:"charge",every:5}]}],
   hz:{scooter:1,puddle:2},
@@ -547,7 +547,7 @@ const ZONES=[
  {id:"buffet",name:"The Buffet",e:"🍽️",cost:0,at:36,
   th:{glow:"255,215,150"},
   foods:[F("🍕","Pizza slice",10,3200,{w:3}),F("🍗","Chicken leg",12,4200,{w:2}),F("🍤","Prawn",5,2400,{w:2,flee:1}),F("🍰","Gateau",18,7600,{w:1,bites:2,size:1.2}),F("🍖","Rib",16,6800,{w:1})],
-  bb:{hp:40000,kcb:2000,reward:48000000},
+  bb:{hp:90000,kcb:2000,reward:48000000},
   secs:[{n:"Dessert Table",floor:"buffet",wall:"buffetDessert"},{n:"Wedding Party",floor:"parquet",wall:"buffetWedding"},{n:"The Carvery",floor:"buffet",wall:"buffet"}],
   bosses:[{e:"🍮",name:"The Trifle",mv:"wander",spd:70,mi:3,atk:[{k:"ring",e:"🍒",n:12,every:2.6,spd:270},{k:"spread",e:"🍓",n:5,every:3.2,spd:330}]},{e:"🎂",name:"Wedding Cake",mv:"still",spd:0,mi:2,atk:[{k:"slam",every:2.2,r:140},{k:"spin",e:"🍰",every:5,spd:300}]},{e:"🦃",name:"The Sunday Roast",mv:"still",spd:0,mi:2.5,atk:[{k:"spread",e:"🥕",n:7,every:1.8,spd:380},{k:"slam",every:3,r:130},{k:"ring",e:"🥔",n:14,every:3.4,spd:280}]}],
   hz:{waiter:1,rival:1},
@@ -567,13 +567,17 @@ ZONES.forEach((z,zi)=>z.foods.forEach(f=>{const m=CHEWY[zi];f.bites=Math.round(f
 const NODES=[
  {id:"start",g:"gold",x:50,y:33,e:"🏋️",name:"Rookie Lifter",max:1,base:0,k:1,v:L=>L,f:()=>"Every bulk starts somewhere",d:"The root of the tree. Everything grows from here."},
  // red · belly
- {id:"stomach",p:"start",g:"red",x:40,y:33,e:"🍽️",name:"Stomach size",max:25,base:25,k:2,v:L=>100*(1+.3*L),f:v=>`${Math.round(v)} capacity`,d:"How much you can eat before you're stuffed and slow down."},
- {id:"digest",p:"stomach",g:"red",x:31,y:25,e:"🌀",name:"Digestion",max:25,base:40,k:2,v:L=>5*(1+.32*L),f:v=>`${v.toFixed(1)} digested / sec`,d:"Your stomach empties this fast."},
+ {id:"stomach",p:"start",g:"red",x:40,y:33,e:"🍽️",name:"Iron Stomach",max:25,base:25,k:2,v:L=>1+.06*L,f:v=>`×${v.toFixed(2)} kcal`,d:"A belly built for bulking. Every kcal you eat is worth more."},
+ {id:"digest",p:"stomach",g:"red",x:31,y:25,e:"🌀",name:"Second Helpings",max:25,base:40,k:2,v:L=>.04*L,f:v=>`+${v.toFixed(2)}s per food eaten`,d:"Every food you finish tops up your appetite timer, up to 15 extra seconds a run."},
  {id:"pad",p:"digest",g:"red",x:22,y:17,e:"🛡️",name:"Padding",max:5,base:1500,k:2.8,v:L=>1-.15*L,f:v=>`${Math.round(v*100)}% knock time`,d:"Hazards knock you about for less time."},
- {id:"cheat",p:"stomach",g:"red",x:31,y:43,e:"🍰",name:"Cheat Meal",skill:1,max:1,base:120000,k:1,v:L=>L,f:()=>"Skill: food doesn't fill you",d:"For a few seconds food doesn't fill your stomach and you chew faster. 22s cooldown."},
+ {id:"cheat",p:"stomach",g:"red",x:31,y:43,e:"🍰",name:"Cheat Meal",skill:1,max:1,base:120000,k:1,v:L=>L,f:()=>"Skill: food worth ×3",d:"For a few seconds every food is worth three times as much and you chew faster. 22s cooldown."},
  {id:"cheatT",p:"cheat",g:"red",x:21,y:50,e:"⏳",name:"Long Weekend",max:8,base:200000,k:2.2,v:L=>4+.75*L,f:v=>`${v.toFixed(1)}s cheat meal`,d:"Cheat Meal lasts longer."},
  // blue · engine
  {id:"appetite",p:"start",g:"blue",x:50,y:21,e:"⏱️",name:"Appetite",max:15,base:80,k:2.4,v:L=>25+3*L,f:v=>`${v}s per run`,d:"How long each run lasts."},
+ // purple · events: things that happen on their own
+ {id:"drop",p:"appetite",g:"purple",x:50,y:6,e:"⬇️",name:"Plate Drop",max:10,base:2000,k:2.1,v:L=>L?8*Math.pow(.88,L-1):0,f:v=>v?`a plate falls every ${v.toFixed(1)}s`:"locked",d:"Every few seconds a bumper plate crashes down on a cluster of food and smashes it all into kcal. Hits bosses too."},
+ {id:"buddy",p:"pad",g:"purple",x:11,y:33,e:"🤝",name:"Gym Buddy",max:6,base:3000,k:2.4,v:L=>L,f:v=>v?`${Math.ceil(v/2)} buddy · speed ${(1+.15*v).toFixed(2)}×`:"locked",d:"A friendly lifter joins your runs and eats food for you. More levels add buddies and make them faster."},
+ {id:"chain",p:"jaw",g:"purple",x:92,y:33,e:"⚡",name:"Gains Train",max:10,base:4000,k:2.2,v:L=>.05*L,f:v=>`${Math.round(v*100)}% chance to chain`,d:"Any chomp might zap onwards and take a bite out of up to 3 nearby foods."},
  {id:"metab",p:"appetite",g:"blue",x:42,y:11,e:"🔥",name:"Metabolism",max:30,base:150,k:2.3,v:L=>1+.25*L,f:v=>`×${v.toFixed(2)} kcal`,d:"Multiplies every kcal you eat."},
  {id:"wind",p:"appetite",g:"blue",x:58,y:11,e:"💨",name:"Second Wind",max:5,base:3000,k:2.8,v:L=>.6*L,f:v=>`+${v.toFixed(1)}s per golden food`,d:"Golden food tops up your appetite timer, up to 8 extra seconds a run."},
  // yellow · jaw
@@ -628,7 +632,7 @@ const bench=()=>20+2.5*levels();
 const dmgMult=()=>1+(bench()-20)/200;
 const bulk=()=>Math.min(1.7,1+levels()*.006);
 const trophies=()=>ZONES.filter(z=>S.beaten[z.id]).length;
-const kcalMult=()=>stat("metab")*(1+.1*trophies())*(1+.15*S.medals)*(1+.1*sl("shake"));
+const kcalMult=()=>stat("metab")*stat("stomach")*(1+.1*trophies())*(1+.15*S.medals)*(1+.1*sl("shake"));
 /* ---------- YOUR GYM: equipment brings members, members pay £, £ buys equipment and supplements ---------- */
 const EQUIP=[
  {id:"weights",e:"💪",name:"Free weights",max:10,base:15,k:1.55,add:3},
@@ -647,7 +651,7 @@ const SUPPS=[
  {id:"pre",e:"⚡",name:"Pre-workout",max:10,base:150,k:1.9,f:L=>`+${L}s appetite`},
  {id:"creatine",e:"💊",name:"Creatine",max:15,base:120,k:1.7,f:L=>`+${10*L}% boss damage`},
  {id:"coach",e:"📋",name:"Personal trainer",max:10,base:400,k:1.8,f:L=>`+${5*L}% speed`},
- {id:"tea",e:"🍵",name:"Digestive tea",max:10,base:300,k:1.8,f:L=>`+${10*L}% digestion`},
+ {id:"tea",e:"🍵",name:"Electrolytes",max:10,base:300,k:1.8,f:L=>`-${8*L}% time lost to hits`},
  {id:"socks",e:"🧦",name:"Lucky socks",max:10,base:1000,k:2,f:L=>`+${L}% golden food`},
 ];
 const gl=id=>S.g[id]||0,sl=id=>S.sp[id]||0;
@@ -1404,7 +1408,7 @@ function buildRoom(z,si=0){
   rr(c,WW/2-sw/2,10,sw,54,10);fs(c,frame,5);rr(c,WW/2-sw/2+8,17,sw-16,40,6);fs(c,face,3);
   c.fillStyle=ink;c.textAlign="center";c.textBaseline="middle";c.fillText(z.name,WW/2,38);
   // section plaque under the sign
-  c.font=`800 16px ${UIF}`;const pw=c.measureText(sec.n).width+30;rr(c,WW/2-pw/2,62,pw,24,6);fs(c,frame,3);c.fillStyle=face===ink?"#fff":face;c.fillText(sec.n,WW/2,74);
+  c.font=`800 16px ${UIF}`;const pw=c.measureText(sec.n).width+30;rr(c,WW/2-pw/2,62,pw,24,6);c.fillStyle=face;c.fill();c.lineWidth=3;c.strokeStyle=frame;c.stroke();c.fillStyle=ink;c.fillText(sec.n,WW/2,74);
   c.fillStyle=frame;c.fillRect(WW/2-sw/2+30,58,4,6);c.fillRect(WW/2+sw/2-34,58,4,6);
   // side + bottom walls
   c.fillStyle="#211612";c.fillRect(0,WALL-6,SIDE,WH);c.fillRect(WW-SIDE,WALL-6,SIDE,WH);c.fillRect(0,WH-BOT,WW,BOT);
@@ -1435,7 +1439,7 @@ let R=null,paused=false;
 function startRun(){
   if(!SIM){setSong("run");$("#gym").hidden=true;$("#run").hidden=false;$("#results").hidden=true;$("#pause").hidden=true;paused=false;buildSkillbar();}
   const zone=selZone(),si=selSec();
-  R={zone,si,sk:secKey(zone,si),secK:SECK[si],boss:zone.bosses[si],shots:[],slams:[],t:stat("appetite")+sl("pre"),T:stat("appetite")+sl("pre"),cap:stat("stomach"),dig:stat("digest")*(1+.1*sl("tea")),mult:kcalMult(),
+  R={zone,si,sk:secKey(zone,si),secK:SECK[si],boss:zone.bosses[si],shots:[],slams:[],t:stat("appetite")+sl("pre"),T:stat("appetite")+sl("pre"),helps:stat("digest"),helpLeft:15,dropT:3,drops:[],zaps:[],buds:[],hitT:1-.08*sl("tea"),mult:kcalMult(),
      cd:stat("chew"),jaw:stat("jaw"),dmg:dmgMult()*(1+.1*sl("creatine")),spd:stat("speed")*(1+.05*sl("coach")),reach:stat("reach"),max:stat("crowd"),gold:stat("lucky")+.01*sl("socks"),
      comboCap:stat("combo"),wind:stat("wind"),windLeft:8,pad:stat("pad"),
      fill:0,kcal:0,chew:0,mouth:0,boost:0,spawn:0,shake:0,fullMsg:0,stun:0,inv:0,
@@ -1450,6 +1454,7 @@ function startRun(){
   if(!SIM){buildRoom(zone,si);}
   SKILLS.forEach(s=>R.cds[s.id]=0);
   setupHazards();
+  for(let i=0;i<Math.ceil(lv("buddy")/2);i++)R.buds.push({x:WW*(.3+.4*i),y:FY1()-60,vx:0,vy:0,tgt:null,chew:0,walk:0,face:1,mouth:0});
   for(let i=0;i<Math.ceil(R.max*.75);i++)spawnFood(true);
   // a boss you've already damaged is waiting at the start of the run
   if(!secDone(zone,si)&&S.bhp[R.sk]!=null)R.bossWait=1.2;
@@ -1616,12 +1621,9 @@ function puff(x,y,col){if(SIM)return;R.parts.push({x:x+rnd(-14,14),y:y+rnd(-6,6)
 
 /* ---------- UPDATE ---------- */
 function update(dt){
-  R.t-=dt;R.fill=Math.max(0,R.fill-R.dig*dt);
+  R.t-=dt;
   if(R.bossWait>0){R.bossWait-=dt;if(R.bossWait<=0&&!R.bossOut)spawnBoss();}
-  // You can always keep eating, but past full you're "overstuffed" (up to 150%) and get steadily slower
-  const full=clamp(R.fill/R.cap,0,1.5);R.full=full;
-  R.chew-=dt*(R.cheatT>0?1.6:1)*(R.inhT>0?2:1)/(1+1.5*full*full*full);
-  if(full>1&&R.fullMsg<=0){floatText(R.x,R.y-100,"Overstuffed!",COL.red);R.fullMsg=4;}
+  R.chew-=dt*(R.cheatT>0?1.6:1)*(R.inhT>0?2:1);
   R.mouth=Math.max(0,R.mouth-dt*6);R.boost-=dt;R.shake=Math.max(0,R.shake-dt*3);R.fullMsg-=dt;
   R.stun=Math.max(0,R.stun-dt);R.inv=Math.max(0,R.inv-dt);R.inhT-=dt;R.cheatT-=dt;R.comboT-=dt;
   if(R.comboT<=0&&R.combo>0){if(R.combo>=10)floatText(R.x,R.y-100,`Combo ${R.combo}`,COL.cream);R.combo=0;}
@@ -1637,7 +1639,7 @@ function update(dt){
   }
   let accel=16,slow=1;
   for(const p of R.puddles)if(Math.hypot((R.x-p.x)/p.rx,(R.y+18-p.y)/p.ry)<1){if(p.kind==="water"){accel=2;}else{accel=4;slow=.55;}}
-  const sp=255*R.spd*(R.boost>0?1.5:1)*slow/(1+.6*R.full*R.full*R.full);   // and slower walking
+  const sp=255*R.spd*(R.boost>0?1.5:1)*slow;
   if(R.stun>0){mx=my=0;accel=Math.min(accel,6);}
   if(R.dashT>0){R.dashT-=dt;R.vx=R.fx*1150;R.vy=R.fy*1150;R.trail.push({x:R.x,y:R.y,life:.25});}
   else{const a=Math.min(1,accel*dt);R.vx+=(mx*sp-R.vx)*a;R.vy+=(my*sp-R.vy)*a;}
@@ -1668,7 +1670,6 @@ function update(dt){
       if(best)chomp(best);
     }
   }
-  for(const p of R.shots){drawSpr(ctx,p.e,p.x,p.y,p.r,{rot:p.rot});}
   // plates
   for(const p of R.plates){
     p.x+=p.vx*dt;p.y+=p.vy*dt;p.rot+=dt*18;p.life-=dt;
@@ -1685,6 +1686,7 @@ function update(dt){
   if(n<R.max&&R.spawn<=0){spawnFood(false);R.spawn=.45*Math.pow(.92,lv("crowd"));}
   hazards(dt);
   bossAttacks(dt);
+  events(dt);
   // fx
   for(const p of R.parts){p.x+=p.vx*dt;p.y+=p.vy*dt;p.vy+=p.g*dt;p.vx*=Math.pow(.2,dt);p.life-=dt;}
   R.parts=R.parts.filter(p=>p.life>0);
@@ -1771,20 +1773,53 @@ function knock(msg,stun,timeLoss,kx,ky){
   if(R.inv>0||R.dashT>0||R.stun>0)return;
   R.hits=(R.hits||0)+1;
   rumble(220,.8,.4);
-  R.stun=stun*R.pad;R.inv=R.stun+.8;R.t-=timeLoss;R.vx=kx;R.vy=ky;R.shake=.5;R.combo=0;R.comboT=0;
+  timeLoss=Math.round(timeLoss*R.hitT*100)/100;R.stun=stun*R.pad;R.inv=R.stun+.8;R.t-=timeLoss;R.vx=kx;R.vy=ky;R.shake=.5;R.combo=0;R.comboT=0;
   floatText(R.x,R.y-100,msg,COL.red,1);if(timeLoss)floatText(R.x,R.y-70,`-${timeLoss}s`,COL.red);SFX.hit();burst(R.x,R.y,"#fff",6);
 }
 
+// eat a whole food in one go (plate drops), worth a bit less than chewing it yourself
+function smashFood(f,mult){
+  if(f.boss){chomp(f,{plate:1,chain:1});return;}
+  const kc=f.def.kcal/f.def.bites*f.left*R.secK*R.mult*(f.gold?5:1)*mult;R.kcal+=kc;f.left=0;
+  floatText(f.x,f.y-f.r-8,"+"+fmt(kc),f.gold?COL.gold:COL.cream);burst(f.x,f.y,"#f5e6c4",8);eaten(f);
+}
+function events(dt){
+  // Plate Drop: pick the busiest spot near a random food and drop a plate on it
+  if(lv("drop")){R.dropT-=dt;if(R.dropT<=0&&R.foods.length){R.dropT=stat("drop");
+      let best=null,bn=-1;for(let k=0;k<6;k++){const f=R.foods[Math.floor(Math.random()*R.foods.length)];const n=R.foods.filter(g=>Math.hypot(g.x-f.x,g.y-f.y)<110).length;if(n>bn){bn=n;best=f;}}
+      R.drops.push({x:best.x,y:best.y,r:90+8*lv("drop"),t:.7,col:[COL.red,COL.blue,COL.yellow,COL.green][Math.floor(Math.random()*4)]});}}
+  for(const d of R.drops){d.t-=dt;if(d.t<=0&&!d.hit){d.hit=1;R.shake=Math.max(R.shake,.5);if(!SIM){SFX.smash();tone(80,.25,"sawtooth",.06,.5);}burst(d.x,d.y,"#fff",16,1.5);
+      for(const f of R.foods.slice())if(Math.hypot(f.x-d.x,f.y-d.y)<d.r+f.r*.5)smashFood(f,.8);}}
+  R.drops=R.drops.filter(d=>d.t>-.4);
+  for(const z of R.zaps)z.life-=dt;R.zaps=R.zaps.filter(z=>z.life>0);
+  // Gym Buddies: friendly lifters who eat food and hand you the kcal
+  const bs=(150+20*lv("buddy"))*(R.boost>0?1.2:1);
+  for(const b of R.buds){b.chew-=dt;b.mouth=Math.max(0,b.mouth-dt*6);
+    if(!b.tgt||!R.foods.includes(b.tgt)||b.tgt.boss){let best=null,bd=1e9;for(const f of R.foods){if(f.boss)continue;const d=Math.hypot(f.x-b.x,f.y-b.y)+Math.hypot(f.x-R.x,f.y-R.y)*.6;if(d<bd){bd=d;best=f;}}b.tgt=best;}
+    const t=b.tgt;if(t){const dx=t.x-b.x,dy=t.y-b.y,d=Math.hypot(dx,dy)||1;
+      if(d>t.r+PR-6){b.vx=dx/d*bs;b.vy=dy/d*bs;b.face=dx<0?-1:1;}else{b.vx=b.vy=0;
+        if(b.chew<=0){b.chew=.5;b.mouth=1;const bites=Math.min(t.left,Math.max(1,Math.round(R.jaw*.5)));const kc=t.def.kcal/t.def.bites*bites*R.secK*R.mult*(t.gold?5:1)*.7;R.kcal+=kc;t.left-=bites;t.hit=1;t.sq=1;
+          floatText(t.x,t.y-t.r-8,"+"+fmt(kc),"#bfe8a6");if(t.left<=0)eaten(t);}}}
+    else b.vx=b.vy=0;
+    b.x+=b.vx*dt;b.y+=b.vy*dt;b.walk+=Math.hypot(b.vx,b.vy)*dt/22;keepIn(b,PR);}
+}
+function drawEvents(tm){
+  for(const d of R.drops){const p=clamp(1-d.t/.7,0,1);
+    if(d.t>0){ell(ctx,d.x,d.y+10,d.r*p,d.r*.5*p);ctx.fillStyle="rgba(0,0,0,.28)";ctx.fill();ctx.strokeStyle="rgba(255,255,255,.5)";ctx.lineWidth=3;ctx.setLineDash([10,8]);ell(ctx,d.x,d.y+10,d.r,d.r*.5);ctx.stroke();ctx.setLineDash([]);
+      const py=d.y-420*(1-p*p);ctx.save();ctx.translate(d.x,py);ctx.scale(1,.5+.5*p);circ(ctx,0,0,34);fs(ctx,d.col,5);circ(ctx,0,0,10);fs(ctx,"#1a120e",4);txt(ctx,"20",0,-20,13,"#fff");ctx.restore();}
+    else{ctx.globalAlpha=clamp(1+d.t/.4,0,1);ell(ctx,d.x,d.y+10,d.r,d.r*.5);ctx.fillStyle="rgba(255,255,255,.35)";ctx.fill();ctx.globalAlpha=1;}}
+  ctx.lineCap="round";
+  for(const z of R.zaps){ctx.globalAlpha=z.life/.3;ctx.strokeStyle="#ffe48a";ctx.lineWidth=5;ctx.beginPath();ctx.moveTo(z.x1,z.y1);const n=5;for(let k=1;k<n;k++){const u=k/n;ctx.lineTo(z.x1+(z.x2-z.x1)*u+rnd(-14,14),z.y1+(z.y2-z.y1)*u+rnd(-14,14));}ctx.lineTo(z.x2,z.y2);ctx.stroke();ctx.strokeStyle="#fff";ctx.lineWidth=2;ctx.stroke();}
+  ctx.globalAlpha=1;
+}
 function chomp(f,o={}){
   const def=f.def,boss=!!f.boss,cheat=R.cheatT>0;
-  const fpb=boss?0:def.fill/def.bites;               // bosses never fill you up
   const bites=boss?Math.min(f.hp,o.plate?R.jaw*.5:R.jaw*R.dmg):Math.min(R.jaw,f.left);
   if(bites<=0)return false;
   if(R.comboT>0)R.combo++;else R.combo=1;R.comboT=1.6;R.maxCombo=Math.max(R.maxCombo,R.combo);
   const cm=1+.02*Math.min(R.combo,R.comboCap);
   const per=boss?def.kc:def.kcal/def.bites*R.secK;
-  const kc=per*bites*R.mult*cm*(f.gold?5:1)*(o.plate?.8:1);
-  if(!o.noFill&&!cheat&&fpb)R.fill=Math.min(R.cap*1.5,R.fill+fpb*bites);
+  const kc=per*bites*R.mult*cm*(f.gold?5:1)*(o.plate?.8:1)*(cheat&&!boss?3:1);
   R.kcal+=kc;
   if(!o.plate){R.chew=R.cd;R.mouth=1;}
   f.hit=1;f.sq=1;
@@ -1793,6 +1828,10 @@ function chomp(f,o={}){
   burst(f.x,f.y,f.gold?COL.gold:"#f5e6c4",boss?6:7);sparkle(f.x,f.y-4,boss);
   floatText(f.x+rnd(-10,10),f.y-f.r-8,"+"+fmt(kc),f.gold?COL.gold:COL.cream,f.gold||boss?1:0);
   if(!SIM){if(f.gold)SFX.gold();else SFX.chomp(R.combo);}
+  if(!o.chain&&!o.plate&&lv("chain")&&Math.random()<stat("chain")){
+    const near=R.foods.filter(g=>g!==f&&!g.boss&&Math.hypot(g.x-f.x,g.y-f.y)<240).sort((a,b)=>Math.hypot(a.x-f.x,a.y-f.y)-Math.hypot(b.x-f.x,b.y-f.y)).slice(0,3);
+    let px=f.x,py=f.y;for(const g of near){R.zaps.push({x1:px,y1:py,x2:g.x,y2:g.y,life:.3});px=g.x;py=g.y;chomp(g,{chain:1,plate:1});}
+    if(near.length&&!SIM)tone(1200,.08,"square",.03,.5);}
   if(boss?f.hp<=.01:f.left<=0)eaten(f);
   return true;
 }
@@ -1802,6 +1841,7 @@ function eaten(f){
   R.ate[def.name]=(R.ate[def.name]||0)+1;S.eat[def.name]=(S.eat[def.name]||0)+1;
   burst(f.x,f.y,f.gold?COL.gold:"#f5e6c4",12,1.2);
   if(f.gold){R.golds++;rumble(80,0,.5);if(!RM)R.shake=Math.max(R.shake,.4);const w=Math.min(R.wind,R.windLeft);if(w>0){R.windLeft-=w;R.t+=w;floatText(R.x,R.y-120,`+${w.toFixed(1)}s`,COL.gold,1);}}
+  if(R.helps&&R.helpLeft>0){const h=Math.min(R.helps,R.helpLeft);R.helpLeft-=h;R.t+=h;}
   if(def.spicy){R.boost=3;floatText(R.x,R.y-110,"Spicy! Speed up",COL.red,1);}
   R.prog++;
   const z=R.zone;
@@ -1932,11 +1972,12 @@ function drawPlayer(tm){
   if(R.inhT>0&&!SIM){const rad=stat("inhaleR");ctx.strokeStyle="rgba(255,255,255,.35)";ctx.lineWidth=3;ctx.setLineDash([10,14]);ctx.lineDashOffset=tm*120;circ(ctx,R.x,R.y,rad*(1-(R.inhT%0.4)/0.4*.15));ctx.stroke();ctx.setLineDash([]);}
   if(R.cheatT>0){ctx.fillStyle=`rgba(242,194,48,${.18+.08*Math.sin(tm*10)})`;circ(ctx,R.x,R.y-10,70);ctx.fill();}
   if(R.boost>0){ctx.fillStyle="rgba(216,66,58,.22)";circ(ctx,R.x,R.y-10,62);ctx.fill();}
-  for(const t of R.trail){ctx.globalAlpha=t.life*1.6;drawLifter(ctx,t.x,t.y+PR,s,{fill:R.fill/R.cap,bulk:bulk(),face,top:"#f7d27a",band:"#f7d27a"});}
+  for(const t of R.trail){ctx.globalAlpha=t.life*1.6;drawLifter(ctx,t.x,t.y+PR,s,{fill:R.belly,bulk:bulk(),face,top:"#f7d27a",band:"#f7d27a"});}
   ctx.globalAlpha=R.inv>0&&R.stun<=0&&Math.floor(tm*20)%2?.55:1;
   drawShadow(R.x,R.y+PR,30);
   R.blink-=1/60;if(R.blink<-.12)R.blink=rnd(2,5);
-  drawLifter(ctx,R.x,R.y+PR,s,{fill:R.fill/R.cap,bulk:bulk(),mouth:R.mouth,walk:R.walk,moving,face,sx:1+squash,sy:1-squash,
+  R.belly=Math.min(1,Object.values(R.ate).reduce((a,b)=>a+b,0)/60);
+  drawLifter(ctx,R.x,R.y+PR,s,{fill:R.belly,bulk:bulk(),mouth:R.mouth,walk:R.walk,moving,face,sx:1+squash,sy:1-squash,
     lx:Math.abs(R.fx)*1,ly:R.fy,blink:R.blink<0,dizzy:R.stun>0,bob:moving?-Math.abs(Math.sin(R.walk))*.08:Math.sin(tm*3)*.02});
   ctx.globalAlpha=1;
   if(R.stun>0){for(let i=0;i<3;i++){const a=tm*5+i*2.1;star4(ctx,R.x+Math.cos(a)*30,R.y-92+Math.sin(a)*8,9);ctx.fillStyle=COL.gold;ctx.fill();ctx.lineWidth=2;ctx.strokeStyle=OUT;ctx.stroke();}}
@@ -1975,9 +2016,13 @@ function draw(){
   for(const f of R.foods)actors.push([f.y+f.r*.8,()=>drawFood(f,tm)]);
   actors.push([R.y+PR,()=>drawPlayer(tm)]);
   if(R.rival)actors.push([R.rival.y+PR,()=>drawRival(R.rival,tm)]);
+  for(const b of R.buds)actors.push([b.y+PR,()=>{drawShadow(b.x,b.y+PR,26);drawLifter(ctx,b.x,b.y+PR,28,{mouth:b.mouth,walk:b.walk,moving:Math.hypot(b.vx,b.vy)>20,face:b.face,top:"#3f7fd6",band:"#ffffff",shorts:"#22303f",lx:b.face,ly:0,fill:.3});
+    ctx.font=`800 14px ${UIF}`;ctx.textAlign="center";ctx.lineWidth=4;ctx.strokeStyle=OUT;ctx.strokeText("Buddy",b.x,b.y-58);ctx.fillStyle="#bfe1ff";ctx.fillText("Buddy",b.x,b.y-58);}]);
   for(const w of R.waiters)actors.push([w.y+30,()=>{drawShadow(w.x,w.y+30,26);drawSpr(ctx,"🤵",w.x,w.y-8+Math.abs(Math.sin(w.walk))*-4,30,{flip:w.dir<0});if(w.tray){rr(ctx,w.x-30+w.dir*16,w.y-62,60,10,5);fs(ctx,"#c9ccd6",3);drawSpr(ctx,R.zone.foods[0].e,w.x+w.dir*16-12,w.y-74,13);drawSpr(ctx,R.zone.foods[3].e,w.x+w.dir*16+12,w.y-74,13);}}]);
   for(const s of R.scoots)if(s.warn<=0)actors.push([s.y+26,()=>{drawShadow(s.x,s.y+26,38);drawSpr(ctx,"🛵",s.x,s.y-6,40,{flip:s.dir<0});}]);
   actors.sort((a,b)=>a[0]-b[0]);for(const a of actors)a[1]();
+  for(const p of R.shots){drawSpr(ctx,p.e,p.x,p.y,p.r,{rot:p.rot});}
+  drawEvents(tm);
   // plates
   for(const p of R.plates){ctx.save();ctx.translate(p.x,p.y);ctx.rotate(p.rot);circ(ctx,0,0,18);fs(ctx,p.col,4);circ(ctx,0,0,6);fs(ctx,"#1a120e",3);ctx.fillStyle="rgba(255,255,255,.3)";ctx.fillRect(-12,-3,8,6);ctx.restore();}
   ctx.restore();
@@ -2012,9 +2057,9 @@ function drawHud(){
   lastCombo=R.combo;
   $("#hTime").style.width=`calc(${clamp(R.t/R.T,0,1)*100}% - 4px)`;
   $("#hTimeTxt").textContent=Math.max(0,R.t).toFixed(1)+"s";
-  $("#hStom").style.width=`calc(${clamp(R.fill/R.cap,0,1)*100}% - 4px)`;
-  $("#hStomTxt").textContent=R.cheatT>0?"CHEAT MEAL":R.full>1?"OVERSTUFFED · slow":Math.round(R.fill)+" / "+Math.round(R.cap);
-  $("#stomBar").classList.toggle("full",R.full>1);
+  $("#hStom").style.width=`calc(${clamp(R.comboT/1.6,0,1)*100}% - 4px)`;
+  $("#hStomTxt").textContent=R.cheatT>0?"CHEAT MEAL ×3":R.combo?`${R.combo} · ×${(1+.02*Math.min(R.combo,R.comboCap)).toFixed(2)}`:"–";
+  $("#stomBar").classList.toggle("full",R.cheatT>0);
   const z=R.zone,boss=R.foods.find(f=>f.boss);
   if(boss){$("#hProg").style.width=`calc(${boss.hp/boss.max*100}% - 4px)`;$("#hProg").style.background="var(--red)";$("#hProgL").textContent=(boss.encore?"Encore: ":"")+boss.def.name;$("#hProgTxt").textContent=Math.ceil(boss.hp);}
   else{const at=secAt(z,R.si);$("#hProg").style.width=`calc(${clamp(R.prog/at,0,1)*100}% - 4px)`;$("#hProg").style.background="";$("#hProgL").textContent=secDone(z,R.si)?"Encore boss":`Boss: ${R.boss.name}`;$("#hProgTxt").textContent=`${R.prog}/${at}`;}
@@ -2024,7 +2069,7 @@ function drawHud(){
     b.querySelector(".cd").style.setProperty("--p",on?(cd/sk.cd()*100)+"%":"0%");}
   if(Math.random()<.2)drawPort();
 }
-function drawPort(){const c=pctx;c.clearRect(0,0,120,120);drawLifter(c,60,175,44,{fill:R?R.fill/R.cap:0,bulk:bulk(),mouth:R?R.mouth:0,dizzy:R&&R.stun>0,blink:R&&R.blink<0});}
+function drawPort(){const c=pctx;c.clearRect(0,0,120,120);drawLifter(c,60,175,44,{fill:R?R.belly||0:0,bulk:bulk(),mouth:R?R.mouth:0,dizzy:R&&R.stun>0,blink:R&&R.blink<0});}
 
 function endRun(){
   if(R.done)return;
@@ -2034,7 +2079,7 @@ function endRun(){
   checkTasks(true);save();
   if(SIM)return;
   $("#pause").hidden=true;
-  $("#rTitle").textContent=R.wonNow?"Champion of Bulk Season":R.bossKill?"Boss demolished!":(R.full>1?"Stuffed!":"Time's up");
+  $("#rTitle").textContent=R.wonNow?"Champion of Bulk Season":R.bossKill?"Boss demolished!":"Time's up";
   $("#rKcal").textContent=fmt(kc)+" kcal";
   const list=Object.entries(R.ate).sort((a,b)=>b[1]-a[1]);
   const emo=n=>(R.zone.foods.find(f=>f.name===n)||{e:"🍽️"}).e;
@@ -2119,7 +2164,7 @@ function botThink(dt){
   if(d>200)useSkill("dash");
   if(R.foods.filter(f=>Math.hypot(f.x-R.x,f.y-R.y)<stat("inhaleR")).length>=4)useSkill("inhale");
   if(d<500)useSkill("toss");
-  if(R.fill>R.cap*.7)useSkill("cheat");
+  if(R.foods.filter(f=>!f.boss&&Math.hypot(f.x-R.x,f.y-R.y)<300).length>=5)useSkill("cheat");
   return d<10?[0,0]:[dx/d*.8,dy/d*.8]; // ~human: slower, late retargeting
 }
 function simBuy(){
