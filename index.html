@@ -258,6 +258,35 @@ body.staged .foot{padding:4px 28px 16px;justify-content:space-between}
 body.staged .info{margin-top:6px}
 body.touch .ctlhint{visibility:hidden}
 body.touch .jumpHint,body.touch .jumpHint2{display:none}
+/* phone hub: one full-width panel with Markets / Skill Tree / Your Gym tabs; the play button and a menu live in the top bar */
+#tabMk,#menuBtn{display:none}
+body.phone #tabMk{display:inline-block}
+body.phone .hubtop .logo,body.phone .tools>.btn,body.phone .foot,body.phone .side,body.phone .tabs .glyph{display:none}
+body.phone .tools>#menuBtn{display:inline-block;font-size:24px;padding:14px 22px}
+body.phone .hubtop{gap:16px;padding:14px 22px 8px}
+body.phone .hubtop>.go{flex:1;margin:0;padding:16px;font-size:30px}
+body.phone .hub{grid-template-columns:minmax(0,1fr);padding:6px 22px 14px}
+body.phone .tab{font-size:28px;padding:12px 28px}
+body.phone .treeBody{grid-template-columns:minmax(0,1fr)}
+body.phone #paneMk{display:grid;grid-template-columns:minmax(0,1fr) 340px;gap:22px;align-items:start;align-content:start;padding-top:10px;min-height:0}
+body.phone #paneMk[hidden]{display:none}
+body.phone #paneMk .card{margin:0}
+body.phone #paneMk .zone{padding:8px 14px}
+body.phone #paneMk .zone .ze{font-size:30px}
+body.phone #gymCv{display:none}
+body.phone #paneMk .card{color:var(--cream)}
+body.phone .glists{grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:18px}
+body.phone .supgrid{grid-template-columns:repeat(2,minmax(0,1fr))}
+body.phone .gitem{padding:8px 10px;grid-template-columns:40px minmax(0,1fr) auto}
+body.phone .gitem .gi{font-size:30px}
+body.phone .gitem b{font-size:19px}
+body.phone .gitem small{font-size:15px}
+body.phone .gitem .gc{font-size:16px;padding:8px 10px}
+body.phone .info{grid-template-columns:64px minmax(0,1fr) auto;padding:10px 16px}
+body.phone .info h4{font-size:26px}
+body.phone .info p{font-size:18px}
+body.phone .info .btn{font-size:24px;padding:14px 22px}
+.menuList .btn{font-size:20px}
 /* landscape phones: nothing scrolls. Hub side panel drops the stats card; menus scale to fit (fitCards) */
 body.phone .side>.card:first-child{display:none}
 body.phone .modal{overflow:hidden;padding:6px}
@@ -282,7 +311,6 @@ body.phone #saveModal textarea{height:96px}
 @media (orientation:portrait) and (pointer:coarse){#rotate{display:grid}}
 body.phone .plaques,body.phone .tools{flex-wrap:nowrap}
 body.phone .tools .btn{white-space:nowrap}
-body.phone .treeBody{grid-template-columns:210px minmax(0,1fr);gap:10px}
 body.phone .stage{grid-template-rows:auto minmax(0,1fr) auto}
 .notes{display:grid;gap:14px;align-content:center}
 .note{position:relative;background:#f6ebcd;border:3px solid #7a5a32;border-radius:6px;padding:16px 14px 14px;box-shadow:0 5px 0 rgba(80,50,20,.35);transform:rotate(-1.2deg)}
@@ -452,6 +480,7 @@ body.touch .hnote .kbt{display:none} body.touch .hnote .tct{display:inline}
         <button class="btn small" id="musicBtn">Music: on</button>
         <button class="btn small" id="fsBtn">Fullscreen <span class="glyph kb">F</span></button>
         <button class="btn small" id="quitGame" hidden>Quit</button>
+        <button class="btn" id="menuBtn">☰ Menu</button>
       </div>
     </header>
     <main class="hub">
@@ -472,7 +501,7 @@ body.touch .hnote .kbt{display:none} body.touch .hnote .tct{display:inline}
         </div>
       </aside>
       <section class="parch treeWrap">
-        <div class="tabs" role="tablist"><button class="tab" id="tabTree" role="tab">🌳 Skill Tree</button><button class="tab" id="tabGym" role="tab">🏋️ Your Gym</button><span class="glyph pd pY">Y</span></div>
+        <div class="tabs" role="tablist"><button class="tab" id="tabMk" role="tab">🍔 Markets</button><button class="tab" id="tabTree" role="tab">🌳 Skill Tree</button><button class="tab" id="tabGym" role="tab">🏋️ Your Gym</button><span class="glyph pd pY">Y</span></div>
         <div class="pane" id="paneTree">
         <div class="treeBody">
           <div class="notes">
@@ -498,6 +527,7 @@ body.touch .hnote .kbt{display:none} body.touch .hnote .tct{display:inline}
           <button class="btn gold" id="iBuy">Buy</button>
         </div>
         </div>
+        <div class="pane" id="paneMk" hidden></div>
         <div class="pane" id="paneGym" hidden>
           <canvas id="gymCv" width="1200" height="300" aria-label="Your gym"></canvas>
           <div class="gstats"><span>💷 <b id="gCash">£0</b></span><span>👥 <b id="gMem">0</b> members</span><span>📈 <b id="gInc">£0/s</b></span><span>⭐ Fame ×<b id="gFame">1.0</b></span></div>
@@ -596,6 +626,9 @@ body.touch .hnote .kbt{display:none} body.touch .hnote .tct{display:inline}
       <div class="chars" id="charList"></div>
       <div class="mbtns"><button class="btn gold" id="charClose">Done</button></div>
     </div>
+  </div>
+  <div class="modal" id="menuModal" hidden>
+    <div class="parch mcard"><h2>Menu</h2><div class="mlist menuList" id="menuList"></div><button class="btn gold" id="menuClose">Back</button></div>
   </div>
   <div class="modal" id="saveModal" hidden>
     <div class="parch mcard">
@@ -1035,7 +1068,7 @@ function nextBanner(){const b=BQ.shift(),el=$("#banner");if(!b){el.hidden=true;b
 
 // Build the tree once; renderGym just updates classes and text (so controller focus survives a purchase)
 const treeEl=$("#tree"),treeIn=$("#treeInner"),svg=$("#treeSvg"),nodeEls={},lineEls={};
-let infoId="start";
+let infoId="start",touchSel=null;
 // The tree sits on a grid: every link is one step up/down/left/right. CELL px per grid step.
 const CELL=124,GX=[Math.min(...NODES.map(n=>n.x))-1,Math.max(...NODES.map(n=>n.x))+1],GY=[Math.min(...NODES.map(n=>n.y))-1,Math.max(...NODES.map(n=>n.y))+1];
 const TW=(GX[1]-GX[0])*CELL,TH=(GY[1]-GY[0])*CELL;
@@ -1053,7 +1086,8 @@ NODES.forEach(n=>{
   b.innerHTML=`<span>${n.e}</span>${n.id==="start"?"":`<span class="gem"></span><span class="lv"></span>`}`;
   b.onmouseenter=()=>{infoId=n.id;renderInfo();};
   b.onfocus=()=>{infoId=n.id;renderInfo();followNode(n);};
-  b.onclick=()=>{if(dragMoved)return;infoId=n.id;buyNode(n);};
+  // touch: the first tap selects (shows the details + Buy), a second tap on the same node buys
+  b.onclick=()=>{if(dragMoved)return;if(document.body.classList.contains("touch")&&touchSel!==n.id){touchSel=n.id;infoId=n.id;renderInfo();return;}infoId=n.id;buyNode(n);};
   treeIn.appendChild(b);nodeEls[n.id]=b;
 });
 /* pan + zoom */
@@ -1139,8 +1173,21 @@ function taskProg(t){
 }
 
 let TAB="tree";
-function setTab(t){TAB=t;if(t==="tree")setTimeout(homeTree,30);document.querySelector(".treeWrap").classList.toggle("dark",t==="gym");$("#paneTree").hidden=t!=="tree";$("#paneGym").hidden=t!=="gym";$("#tabTree").setAttribute("aria-selected",t==="tree");$("#tabGym").setAttribute("aria-selected",t==="gym");renderBiz();}
-$("#tabTree").onclick=()=>setTab("tree");$("#tabGym").onclick=()=>setTab("gym");
+function setTab(t){if(t==="markets"&&!document.body.classList.contains("phone"))t="tree";TAB=t;$("#paneMk").hidden=t!=="markets";$("#tabMk").setAttribute("aria-selected",t==="markets");if(t==="tree")setTimeout(homeTree,30);document.querySelector(".treeWrap").classList.toggle("dark",t==="gym");$("#paneTree").hidden=t!=="tree";$("#paneGym").hidden=t!=="gym";$("#tabTree").setAttribute("aria-selected",t==="tree");$("#tabGym").setAttribute("aria-selected",t==="gym");renderBiz();}
+$("#tabTree").onclick=()=>setTab("tree");$("#tabMk").onclick=()=>setTab("markets");
+// Phone layout moves the play button into the top bar and the market list + tasks into the Markets tab
+function phoneDom(on){
+  const go=$("#goBtn"),top=$(".hubtop"),side=$(".side"),mk=$("#zones").closest(".card"),notes=$(".notes"),tb=$(".treeBody");
+  if(on&&go.parentNode!==top){top.insertBefore(go,$(".tools"));$("#paneMk").append(mk,notes);}
+  else if(!on&&go.parentNode===top){side.append(go,mk);tb.insertBefore(notes,tb.firstChild);if(TAB==="markets")setTab("tree");}
+}
+// Phone menu: the hub's tool buttons, gathered into one list
+$("#menuBtn").onclick=()=>{const L=$("#menuList");L.innerHTML="";
+  for(const id of["charBtn","helpBtn","muteBtn","musicBtn","fsBtn","saveBtn","resetBtn","quitGame"]){const o=$("#"+id);if(!o||o.hidden||getComputedStyle(o).display==="none"&&!o.closest(".tools,.foot"))continue;
+    if(id==="fsBtn"&&document.body.classList.contains("nofs"))continue;
+    const b=document.createElement("button");b.className="btn";b.textContent=o.firstChild.textContent.trim();b.onclick=()=>{$("#menuModal").hidden=true;o.click();};L.appendChild(b);}
+  openModal("menuModal","#menuList .btn");};
+$("#menuClose").onclick=()=>{$("#menuModal").hidden=true;};$("#tabGym").onclick=()=>setTab("gym");
 const eqEls={},supEls={};
 function bizItem(list,it,isEq){
   const b=document.createElement("button");b.className="gitem";
@@ -1874,6 +1921,7 @@ function navMove(d){
   return false;
 }
 function navBack(){
+  if(!$("#menuModal").hidden){$("#menuClose").click();return;}
   if(!$("#charModal").hidden){$("#charClose").click();return;}
   if(!$("#helpModal").hidden){$("#helpClose").click();return;}
   if(!$("#saveModal").hidden){$("#saveClose").click();return;}
@@ -2572,7 +2620,7 @@ function fitScreen(){
   if(phone)k=clamp(Math.min(vh/620,vw/1150),k,1);
   b.style.setProperty("--sw",phone?(vw/k).toFixed(1)+"px":"1600px");
   b.style.setProperty("--sh",phone?(vh/k).toFixed(1)+"px":"900px");
-  b.classList.toggle("phone",phone);
+  b.classList.toggle("phone",phone);phoneDom(phone);
   b.classList.toggle("staged",land);
   b.style.setProperty("--k",k.toFixed(4));
   b.style.setProperty("--hk",land?clamp(Math.min(vw/1500,vh/840),1,1.9).toFixed(3):1);
