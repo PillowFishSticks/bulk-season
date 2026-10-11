@@ -157,20 +157,30 @@ body.touch .glyph{display:none!important}
 .plaque small{display:block;font:800 11px/1 var(--ui);color:#e9f7c9;margin-top:2px;text-align:right}
 .statrow{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
 .treeWrap h2{font-size:34px;text-decoration:underline;text-decoration-thickness:2px;text-underline-offset:6px}
-.treeScroll{overflow-x:auto;overflow-y:hidden;margin:6px -6px 0;padding:6px}
-.tree{position:relative;width:100%;min-width:640px;aspect-ratio:100/64}
-.tree svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
-.tlab{position:absolute;transform:translate(-50%,-50%);font:900 15px/1 var(--disp);letter-spacing:.12em;color:rgba(59,42,28,.55);white-space:nowrap;pointer-events:none}
-.node{position:absolute;transform:translate(-50%,-50%);width:5%;aspect-ratio:1;border-radius:50%;border:3px solid var(--out);padding:0;background:#b9a57c;display:grid;place-items:center;font-size:clamp(14px,1.7vw,26px);line-height:1;box-shadow:0 3px 0 rgba(60,35,10,.45);transition:transform .12s}
+.treeScroll{margin:6px 0 0}
+.tree{position:relative;width:100%;height:460px;overflow:hidden;border-radius:14px;background:rgba(120,80,30,.07);box-shadow:inset 0 0 0 2px rgba(122,90,50,.25);cursor:grab;touch-action:none}
+.tree.drag{cursor:grabbing}.tree.drag .treeInner{transition:none}
+.treeInner{position:absolute;left:0;top:0;transform-origin:0 0;transition:transform .28s cubic-bezier(.2,.8,.3,1)}
+.treeInner svg{position:absolute;left:0;top:0;overflow:visible;pointer-events:none}
+.tzoom{position:absolute;right:10px;top:10px;display:flex;gap:6px;align-items:center;z-index:5}
+.tzoom .btn{min-width:40px;font-size:18px;padding:6px 10px}
+.jumpHint,.jumpHint2{position:absolute;left:12px;bottom:10px;font:800 13px/1 var(--ui);color:rgba(59,42,28,.7);z-index:5;pointer-events:none}
+.jumpHint2{position:static;margin-top:8px;color:var(--muted)}
+.node.peek{background:#cdbf9f;filter:none;opacity:.8;border-style:dashed}
+.node.peek>span:first-child{filter:none;color:#7a6a50;font:900 30px/1 var(--disp)}
+.node.peek .lv,.node.peek .gem,.node.peek::after{display:none}
+.tlab{position:absolute;transform:translate(-50%,-50%);font:900 22px/1 var(--disp);letter-spacing:.12em;color:rgba(59,42,28,.55);white-space:nowrap;pointer-events:none}
+.node{position:absolute;transform:translate(-50%,-50%);width:72px;height:72px;aspect-ratio:auto;border-radius:50%;border:3px solid var(--out);padding:0;background:#b9a57c;display:grid;place-items:center;font-size:clamp(14px,1.7vw,26px);line-height:1;box-shadow:0 3px 0 rgba(60,35,10,.45);transition:transform .12s}
 @media (hover:hover){.node:hover{transform:translate(-50%,-50%) scale(1.1)}}
-.node.skill{width:6.4%;border-width:4px;font-size:clamp(18px,2.3vw,34px)}
-.node.root{width:7%}
+.node{font-size:34px}
+.node.skill{width:84px;height:84px;border-width:4px;font-size:40px}
+.node.root{width:92px;height:92px;font-size:44px}
 .node.own{background:#fff7e3;box-shadow:inset 0 0 0 4px #e3a91f,0 3px 0 rgba(60,35,10,.45)}
 .node.max{background:#fffdf5;box-shadow:inset 0 0 0 5px #f2c230,0 0 0 3px #fff4c9,0 0 14px rgba(242,194,48,.7)}
 .node.can{background:#f1fae6;box-shadow:inset 0 0 0 4px #4f9a2c,0 3px 0 rgba(60,35,10,.45);animation:pulse 1.4s ease-in-out infinite}
 .node.lock{background:#8f8a7d;filter:grayscale(.9);opacity:.75}
 .node.lock::after{content:"🔒";position:absolute;font-size:.6em;right:-8%;top:-8%}
-.node .lv{position:absolute;bottom:-20%;left:50%;transform:translateX(-50%);font:800 11px/1 var(--ui);background:var(--out);color:#fbe7b0;border-radius:6px;padding:2px 5px;white-space:nowrap;pointer-events:none}
+.node .lv{position:absolute;bottom:-14px;left:50%;transform:translateX(-50%);font:800 14px/1 var(--ui);background:var(--out);color:#fbe7b0;border-radius:6px;padding:2px 5px;white-space:nowrap;pointer-events:none}
 .node .gem{position:absolute;top:-6%;left:-6%;width:28%;height:28%;border-radius:50%;background:var(--c);border:2px solid var(--out)}
 /* selected node (controller/keyboard focus or mouse hover): big, ringed, glowing, with a name tag */
 .node::before{content:attr(data-tip);position:absolute;bottom:calc(100% + 16px);left:50%;transform:translateX(-50%) scale(.8);transform-origin:50% 100%;opacity:0;pointer-events:none;white-space:nowrap;background:var(--out);color:#fff3cf;font:800 17px/1 var(--disp);padding:8px 12px;border-radius:9px;border:2px solid #f2c230;box-shadow:0 4px 0 rgba(0,0,0,.35);transition:opacity .12s;z-index:5}
@@ -237,8 +247,9 @@ body.staged #paneTree{display:grid;grid-template-rows:minmax(0,1fr) auto;min-hei
 body.staged #paneTree[hidden],body.staged #paneGym[hidden]{display:none}
 body.staged #gymCv{height:250px;object-fit:cover}
 body.staged .treeBody{display:grid;grid-template-columns:250px minmax(0,1fr);gap:16px;min-height:0;align-items:center}
-body.staged .treeScroll{overflow:visible;margin:0;padding:0}
-body.staged .tree{min-width:0}
+body.staged .treeScroll{margin:0;height:100%;min-height:0}
+body.staged .tree{height:100%}
+body.staged .treeBody{height:100%;align-items:stretch}
 body.staged .foot{padding:4px 28px 16px;justify-content:space-between}
 body.staged .info{margin-top:6px}
 .notes{display:grid;gap:14px;align-content:center}
@@ -398,13 +409,14 @@ body.touch .hnote .kbt{display:none} body.touch .hnote .tct{display:inline}
         </div>
         <button class="btn gold go" id="goBtn">Hit the market</button>
         <div class="card">
-          <div class="lbl">Where to eat <span class="glyph kb">Q</span><span class="glyph pd pS">LT</span> <span class="glyph pd pS">LB</span><span class="glyph pd pS">RB</span></div>
+          <div class="lbl">Where to eat <span class="glyph pd pS">LB</span><span class="glyph pd pS">RB</span></div>
           <div class="zones" id="zones"></div>
           <div class="secInfo" id="secInfo"></div>
+          <div class="jumpHint2"><span class="glyph kb">Q</span><span class="glyph pd pS">LT</span> jump here</div>
         </div>
       </aside>
       <section class="parch treeWrap">
-        <div class="tabs" role="tablist"><button class="tab" id="tabTree" role="tab">🌳 Skill Tree</button><button class="tab" id="tabGym" role="tab">🏋️ Your Gym</button><span class="glyph kb">E</span><span class="glyph pd pS">RT</span><span class="glyph pd pY">Y</span></div>
+        <div class="tabs" role="tablist"><button class="tab" id="tabTree" role="tab">🌳 Skill Tree</button><button class="tab" id="tabGym" role="tab">🏋️ Your Gym</button><span class="glyph pd pY">Y</span></div>
         <div class="pane" id="paneTree">
         <div class="treeBody">
           <div class="notes">
@@ -420,7 +432,9 @@ body.touch .hnote .kbt{display:none} body.touch .hnote .tct{display:inline}
               <button class="btn gold" id="seasonBtn">New season</button>
             </div>
           </div>
-          <div class="treeScroll"><div class="tree" id="tree"><svg id="treeSvg" viewBox="0 0 100 64" preserveAspectRatio="none"></svg></div></div>
+          <div class="treeScroll"><div class="tree" id="tree"><div class="treeInner" id="treeInner"><svg id="treeSvg"></svg></div>
+            <div class="tzoom"><button class="btn small" id="tzIn" aria-label="Zoom in">+</button><button class="btn small" id="tzOut" aria-label="Zoom out">−</button><button class="btn small" id="tzFit">Fit</button><span class="glyph kb">+/−</span><span class="glyph pd pS">R stick</span></div>
+            <div class="jumpHint"><span class="glyph kb">E</span><span class="glyph pd pS">RT</span> jump here</div></div></div>
         </div>
         <div class="info" id="info">
           <div class="ie" id="iE">🏋️</div>
@@ -617,52 +631,52 @@ ZONES.forEach((z,zi)=>{const avg=z.foods.reduce((a,f)=>a+f.kcal,0)/z.foods.lengt
 // Nodes have a few levels each; getting a node to level 3 (or maxing a 1-2 level node) opens the next ones.
 const pct=v=>Math.round(v*100)+"%";
 const NODES=[
- {id:"start",g:"gold",x:50,y:32,e:"🏋️",name:"Rookie Lifter",max:1,base:0,k:1,v:L=>L,f:()=>"Every bulk starts somewhere",d:"The root of the tree. Up is time, right is damage, left is kcal gains, down is abilities."},
+ {id:"start",g:"gold",x:0,y:0,e:"🏋️",name:"Rookie Lifter",max:1,base:0,k:1,v:L=>L,f:()=>"Every bulk starts somewhere",d:"The root of the tree. Up is time, right is damage, left is kcal gains, down is abilities."},
  // ⬆ TIME (blue)
- {id:"appetite",p:"start",g:"blue",x:50,y:24,e:"⏱️",name:"Appetite",max:5,base:40,k:2.3,v:L=>15+1.2*L,f:v=>`${v.toFixed(1)}s per run`,d:"How long each run lasts. Runs top out at 25 seconds."},
- {id:"digest",p:"appetite",g:"blue",x:42,y:20,e:"🍽️",name:"Second Helpings",max:5,base:400,k:2.3,v:L=>.04*L,f:v=>`+${v.toFixed(2)}s per food`,d:"Every food you finish wins back a little of the time you've lost to hits."},
- {id:"clock",p:"appetite",g:"blue",x:58,y:20,e:"⏰",name:"Time Drops",max:5,base:600,k:2.3,v:L=>L?15-1.6*L:0,f:v=>v?`a clock every ${v.toFixed(1)}s`:"locked",d:"Alarm clocks turn up on the floor. Grab one to win back time lost to hits (or for bonus kcal if you haven't lost any)."},
- {id:"appetite2",p:"appetite",g:"blue",x:50,y:15,e:"⌛",name:"Bottomless",max:5,base:15000,k:2.3,v:L=>.8*L,f:v=>`+${v.toFixed(1)}s per run`,d:"Longer runs, up to the 25 second maximum."},
- {id:"clockV",p:"clock",g:"blue",x:65,y:13,e:"🕰️",name:"Big Clocks",max:4,base:300000,k:2.3,v:L=>1.5+.6*L,f:v=>`+${v.toFixed(1)}s per clock`,d:"Each time drop gives more time."},
- {id:"wind",p:"clock",g:"blue",x:58,y:9,e:"💨",name:"Second Wind",max:3,base:20000000,k:2.3,v:L=>.6*L,f:v=>`+${v.toFixed(1)}s per golden food`,d:"Golden food wins back lost time too."},
- {id:"pad",p:"digest",g:"blue",x:36,y:12,e:"🛡️",name:"Padding",max:3,base:200000,k:2.3,v:L=>1-.15*L,f:v=>`${pct(v)} stun time`,d:"Hits and hazards stun you for less time."},
- {id:"armor",p:"pad",g:"blue",x:29,y:5,e:"🦺",name:"Thick Skin",max:5,base:30000000,k:2.3,v:L=>1-.09*L,f:v=>`${pct(v)} time lost to hits`,d:"Boss hits and hazards cost you less appetite time."},
- {id:"appetite3",p:"appetite2",g:"blue",x:46,y:6,e:"🧠",name:"Iron Will",max:5,base:60000000,k:2.3,v:L=>.1*L,f:v=>`${pct(v)} chance to shrug off a hit`,d:"Sometimes a hit just bounces off you: no time lost."},
+ {id:"appetite",p:"start",g:"blue",x:0,y:-1,e:"⏱️",name:"Appetite",max:5,base:40,k:2.3,v:L=>15+1.2*L,f:v=>`${v.toFixed(1)}s per run`,d:"How long each run lasts. Runs top out at 25 seconds."},
+ {id:"digest",p:"appetite2",g:"blue",x:-1,y:-2,e:"🍽️",name:"Second Helpings",max:5,base:1500,k:2.3,v:L=>.04*L,f:v=>`+${v.toFixed(2)}s per food`,d:"Every food you finish wins back a little of the time you've lost to hits."},
+ {id:"clock",p:"appetite2",g:"blue",x:0,y:-3,e:"⏰",name:"Time Drops",max:5,base:1500,k:2.3,v:L=>L?15-1.6*L:0,f:v=>v?`a clock every ${v.toFixed(1)}s`:"locked",d:"Alarm clocks turn up on the floor. Grab one to win back time lost to hits (or for bonus kcal if you haven't lost any)."},
+ {id:"appetite2",p:"appetite",g:"blue",x:0,y:-2,e:"⌛",name:"Bottomless",max:5,base:400,k:2.3,v:L=>.8*L,f:v=>`+${v.toFixed(1)}s per run`,d:"Longer runs, up to the 25 second maximum."},
+ {id:"clockV",p:"clock",g:"blue",x:0,y:-4,e:"🕰️",name:"Big Clocks",max:4,base:40000,k:2.3,v:L=>1.5+.6*L,f:v=>`+${v.toFixed(1)}s per clock`,d:"Each time drop gives more time."},
+ {id:"wind",p:"appetite2",g:"blue",x:1,y:-2,e:"💨",name:"Second Wind",max:3,base:30000,k:2.3,v:L=>.6*L,f:v=>`+${v.toFixed(1)}s per golden food`,d:"Golden food wins back lost time too."},
+ {id:"pad",p:"clock",g:"blue",x:-1,y:-3,e:"🛡️",name:"Padding",max:3,base:30000,k:2.3,v:L=>1-.15*L,f:v=>`${pct(v)} stun time`,d:"Hits and hazards stun you for less time."},
+ {id:"armor",p:"pad",g:"blue",x:-2,y:-3,e:"🦺",name:"Thick Skin",max:5,base:30000000,k:2.3,v:L=>1-.09*L,f:v=>`${pct(v)} time lost to hits`,d:"Boss hits and hazards cost you less appetite time."},
+ {id:"appetite3",p:"clock",g:"blue",x:1,y:-3,e:"🧠",name:"Iron Will",max:5,base:5000000,k:2.3,v:L=>.1*L,f:v=>`${pct(v)} chance to shrug off a hit`,d:"Sometimes a hit just bounces off you: no time lost."},
  // ➡ DAMAGE (yellow)
- {id:"chew",p:"start",g:"yellow",x:60,y:32,e:"🦷",name:"Chew speed",max:5,base:50,k:2.3,v:L=>.36*Math.pow(.86,L),f:v=>`${(1/v).toFixed(1)} chomps / sec`,d:"How often you take a bite."},
- {id:"jaw",p:"chew",g:"yellow",x:67,y:25,e:"👄",name:"Jaw strength",max:5,base:300,k:2.3,v:L=>1+L,f:v=>`${v} bites per chomp`,d:"Chewy foods and bosses go down quicker."},
- {id:"chew2",p:"chew",g:"yellow",x:69,y:32,e:"⚙️",name:"Fast Jaws",max:5,base:5000,k:2.3,v:L=>Math.pow(.88,L),f:v=>`chew ${pct(1/v-1)} faster`,d:"Chew even faster."},
- {id:"combo",p:"chew",g:"yellow",x:67,y:39,e:"🎵",name:"Rhythm",max:5,base:500,k:2.3,v:L=>10+8*L,f:v=>`combo up to ×${(1+.02*v).toFixed(1)}`,d:"Keep chomping without a break. Each chomp adds 2% kcal, up to a cap."},
- {id:"bslam",p:"jaw",g:"yellow",x:81,y:26,e:"🌀",name:"Belly Slam",max:5,base:8000,k:2.3,v:L=>.03*L,f:v=>`${pct(.04+v)} slam chance · bigger ring`,d:"Any chomp might set off a shockwave that bites every food around you and hits bosses too."},
- {id:"jaw2",p:"jaw",g:"yellow",x:75,y:20,e:"🦈",name:"Mega Jaw",max:5,base:600000,k:2.3,v:L=>L,f:v=>`+${v} bites per chomp`,d:"Even bigger bites."},
- {id:"power",p:"chew2",g:"yellow",x:78,y:32,e:"💪",name:"Power Bites",max:5,base:20000,k:2.3,v:L=>1+.2*L,f:v=>`×${v.toFixed(1)} boss damage`,d:"Hit bosses harder."},
- {id:"combo2",p:"combo",g:"yellow",x:75,y:44,e:"🎶",name:"In the Zone",max:3,base:400000,k:2.3,v:L=>1.6+.35*L,f:v=>`${v.toFixed(2)}s combo window`,d:"Your combo lasts longer between chomps."},
- {id:"crit",p:"jaw2",g:"yellow",x:84,y:15,e:"💥",name:"Big Bite",max:5,base:40000000,k:2.3,v:L=>.05*L,f:v=>`${pct(.05+v)} crit chance`,d:"Every chomp has a 5% chance to crit for ×3. This adds more."},
- {id:"power2",p:"power",g:"yellow",x:87,y:32,e:"🔨",name:"Crushing Bites",max:5,base:1000000000,k:2.3,v:L=>1+.25*L,f:v=>`×${v.toFixed(2)} boss damage`,d:"Bosses crumble."},
+ {id:"chew",p:"start",g:"yellow",x:1,y:0,e:"🦷",name:"Chew speed",max:5,base:50,k:2.3,v:L=>.36*Math.pow(.86,L),f:v=>`${(1/v).toFixed(1)} chomps / sec`,d:"How often you take a bite."},
+ {id:"jaw",p:"chew2",g:"yellow",x:2,y:-1,e:"👄",name:"Jaw strength",max:5,base:1500,k:2.3,v:L=>1+L,f:v=>`${v} bites per chomp`,d:"Chewy foods and bosses go down quicker."},
+ {id:"chew2",p:"chew",g:"yellow",x:2,y:0,e:"⚙️",name:"Fast Jaws",max:5,base:400,k:2.3,v:L=>Math.pow(.88,L),f:v=>`chew ${pct(1/v-1)} faster`,d:"Chew even faster."},
+ {id:"combo",p:"chew2",g:"yellow",x:2,y:1,e:"🎵",name:"Rhythm",max:5,base:1500,k:2.3,v:L=>10+8*L,f:v=>`combo up to ×${(1+.02*v).toFixed(1)}`,d:"Keep chomping without a break. Each chomp adds 2% kcal, up to a cap."},
+ {id:"bslam",p:"jaw",g:"yellow",x:2,y:-2,e:"🌀",name:"Belly Slam",max:5,base:20000,k:2.3,v:L=>.03*L,f:v=>`${pct(.04+v)} slam chance · bigger ring`,d:"Any chomp might set off a shockwave that bites every food around you and hits bosses too."},
+ {id:"jaw2",p:"jaw",g:"yellow",x:3,y:-1,e:"🦈",name:"Mega Jaw",max:5,base:60000,k:2.3,v:L=>L,f:v=>`+${v} bites per chomp`,d:"Even bigger bites."},
+ {id:"power",p:"chew2",g:"yellow",x:3,y:0,e:"💪",name:"Power Bites",max:5,base:5000,k:2.3,v:L=>1+.2*L,f:v=>`×${v.toFixed(1)} boss damage`,d:"Hit bosses harder."},
+ {id:"combo2",p:"combo",g:"yellow",x:3,y:1,e:"🎶",name:"In the Zone",max:3,base:50000,k:2.3,v:L=>1.6+.35*L,f:v=>`${v.toFixed(2)}s combo window`,d:"Your combo lasts longer between chomps."},
+ {id:"crit",p:"jaw2",g:"yellow",x:4,y:-1,e:"💥",name:"Big Bite",max:5,base:4000000,k:2.3,v:L=>.05*L,f:v=>`${pct(.05+v)} crit chance`,d:"Every chomp has a 5% chance to crit for ×3. This adds more."},
+ {id:"power2",p:"power",g:"yellow",x:4,y:0,e:"🔨",name:"Crushing Bites",max:5,base:50000000,k:2.3,v:L=>1+.25*L,f:v=>`×${v.toFixed(2)} boss damage`,d:"Bosses crumble."},
  // ⬅ GAINS (red)
- {id:"stomach",p:"start",g:"red",x:40,y:32,e:"🍔",name:"Iron Stomach",max:5,base:40,k:2.3,v:L=>1+.06*L,f:v=>`×${v.toFixed(2)} kcal`,d:"Every kcal you eat is worth more."},
- {id:"metab",p:"stomach",g:"red",x:31,y:32,e:"🔥",name:"Metabolism",max:5,base:8000,k:2.3,v:L=>1+.2*L,f:v=>`×${v.toFixed(2)} kcal`,d:"Multiplies every kcal you eat."},
- {id:"lucky",p:"stomach",g:"red",x:34,y:25,e:"⭐",name:"Chef's favourite",max:5,base:6000,k:2.3,v:L=>.02+.02*L,f:v=>`${pct(v)} golden food`,d:"Chance for food to be golden and worth much more."},
- {id:"crowd",p:"stomach",g:"red",x:34,y:39,e:"🛒",name:"Busy stalls",max:5,base:300,k:2.3,v:L=>8+2*L,f:v=>`${v} foods out at once`,d:"More food on the floor."},
- {id:"metab2",p:"metab",g:"red",x:22,y:32,e:"🌋",name:"Furnace",max:5,base:1000000,k:2.3,v:L=>1+.2*L,f:v=>`×${v.toFixed(2)} kcal`,d:"Your metabolism runs red hot."},
- {id:"gold2",p:"lucky",g:"red",x:26,y:20,e:"👑",name:"Midas Mouth",max:5,base:500000,k:2.3,v:L=>5+L,f:v=>`golden food ×${v}`,d:"Golden food is worth even more."},
- {id:"feast",p:"gold2",g:"red",x:17,y:15,e:"🎉",name:"Feast Bell",max:4,base:30000000,k:2.3,v:L=>6+3*L,f:v=>`${v} golden foods per feast`,d:"Every boss you beat drops a feast of golden food."},
- {id:"crowd2",p:"crowd",g:"red",x:26,y:44,e:"🏪",name:"Rush Hour",max:5,base:400000,k:2.3,v:L=>3*L,f:v=>`+${v} foods out at once`,d:"The market is heaving."},
- {id:"metab3",p:"metab2",g:"red",x:13,y:32,e:"☄️",name:"Meteor Metabolism",max:5,base:2000000000,k:2.3,v:L=>1+.25*L,f:v=>`×${v.toFixed(2)} kcal`,d:"The final word in burning calories."},
+ {id:"stomach",p:"start",g:"red",x:-1,y:0,e:"🍔",name:"Iron Stomach",max:5,base:40,k:2.3,v:L=>1+.06*L,f:v=>`×${v.toFixed(2)} kcal`,d:"Every kcal you eat is worth more."},
+ {id:"metab",p:"stomach",g:"red",x:-2,y:0,e:"🔥",name:"Metabolism",max:5,base:500,k:2.3,v:L=>1+.2*L,f:v=>`×${v.toFixed(2)} kcal`,d:"Multiplies every kcal you eat."},
+ {id:"lucky",p:"metab",g:"red",x:-2,y:-1,e:"⭐",name:"Chef's favourite",max:5,base:2000,k:2.3,v:L=>.02+.02*L,f:v=>`${pct(v)} golden food`,d:"Chance for food to be golden and worth much more."},
+ {id:"crowd",p:"metab",g:"red",x:-2,y:1,e:"🛒",name:"Busy stalls",max:5,base:1500,k:2.3,v:L=>8+2*L,f:v=>`${v} foods out at once`,d:"More food on the floor."},
+ {id:"metab2",p:"metab",g:"red",x:-3,y:0,e:"🌋",name:"Furnace",max:5,base:50000,k:2.3,v:L=>1+.2*L,f:v=>`×${v.toFixed(2)} kcal`,d:"Your metabolism runs red hot."},
+ {id:"gold2",p:"lucky",g:"red",x:-3,y:-1,e:"👑",name:"Midas Mouth",max:5,base:200000,k:2.3,v:L=>5+L,f:v=>`golden food ×${v}`,d:"Golden food is worth even more."},
+ {id:"feast",p:"gold2",g:"red",x:-4,y:-1,e:"🎉",name:"Feast Bell",max:4,base:3000000,k:2.3,v:L=>6+3*L,f:v=>`${v} golden foods per feast`,d:"Every boss you beat drops a feast of golden food."},
+ {id:"crowd2",p:"crowd",g:"red",x:-3,y:1,e:"🏪",name:"Rush Hour",max:5,base:100000,k:2.3,v:L=>3*L,f:v=>`+${v} foods out at once`,d:"The market is heaving."},
+ {id:"metab3",p:"metab2",g:"red",x:-4,y:0,e:"☄️",name:"Meteor Metabolism",max:5,base:1000000000,k:2.3,v:L=>1+.25*L,f:v=>`×${v.toFixed(2)} kcal`,d:"The final word in burning calories."},
  // ⬇ ABILITIES (green skills, purple events)
- {id:"speed",p:"start",g:"green",x:50,y:41,e:"👟",name:"Footwork",max:5,base:40,k:2.3,v:L=>1+.12*L,f:v=>`×${v.toFixed(2)} speed`,d:"Walk faster."},
- {id:"dash",p:"speed",g:"green",x:57,y:47,e:"⚡",name:"Dash",skill:1,max:1,base:300,k:1,v:L=>L,f:()=>"Skill: burst forward",d:"Dash forward, chomping everything you touch. You can't be hit during a dash."},
- {id:"reach",p:"speed",g:"green",x:43,y:47,e:"🤲",name:"Long arms",max:5,base:200,k:2.3,v:L=>6+8*L,f:v=>`+${v} reach`,d:"Grab food from further away."},
- {id:"dashCD",p:"dash",g:"green",x:55,y:56,e:"🔋",name:"Quick Feet",max:4,base:10000,k:2.3,v:L=>4.5*Math.pow(.84,L),f:v=>`${v.toFixed(1)}s dash cooldown`,d:"Dash comes back sooner."},
- {id:"inhale",p:"dash",g:"green",x:65,y:51,e:"🌪️",name:"Big Inhale",skill:1,max:1,base:25000,k:1,v:L=>L,f:()=>"Skill: suck nearby food in",d:"Hoover up the food around you and chew twice as fast while you do. 9s cooldown."},
- {id:"inhaleR",p:"inhale",g:"green",x:64,y:60,e:"🧲",name:"Big Lungs",max:4,base:800000,k:2.3,v:L=>230*(1+.15*L),f:v=>`${Math.round(v)} inhale range`,d:"Big Inhale reaches further."},
- {id:"toss",p:"inhale",g:"green",x:74,y:54,e:"🥏",name:"Plate Toss",skill:1,max:1,base:1000000,k:1,v:L=>L,f:()=>"Skill: throw a bumper plate",d:"Throw a spinning plate that bounces around smashing food into kcal. 7s cooldown."},
- {id:"tossN",p:"toss",g:"green",x:73,y:62,e:"🎯",name:"Heavier Plates",max:4,base:40000000,k:2.3,v:L=>4+3*L,f:v=>`${v} hits per plate`,d:"Each plate hits more food before it stops."},
- {id:"cheat",p:"toss",g:"green",x:83,y:56,e:"🍰",name:"Cheat Meal",skill:1,max:1,base:1500000000,k:1,v:L=>L,f:()=>"Skill: food worth ×3",d:"For a few seconds every food is worth three times as much and you chew faster. 22s cooldown."},
- {id:"cheatT",p:"cheat",g:"green",x:90,y:62,e:"📅",name:"Long Weekend",max:4,base:3000000000,k:2.3,v:L=>4+L,f:v=>`${v}s cheat meal`,d:"Cheat Meal lasts longer."},
- {id:"drop",p:"reach",g:"purple",x:36,y:53,e:"⬇️",name:"Plate Drop",max:5,base:15000,k:2.3,v:L=>L?8*Math.pow(.85,L-1):0,f:v=>v?`a plate falls every ${v.toFixed(1)}s`:"locked",d:"Every few seconds a bumper plate crashes down on a cluster of food and smashes it into kcal. Hits bosses too."},
- {id:"buddy",p:"reach",g:"purple",x:45,y:57,e:"🤝",name:"Gym Buddy",max:5,base:500000,k:2.3,v:L=>L,f:v=>v?`${Math.ceil(v/2)} buddy · speed ${(1+.15*v).toFixed(2)}×`:"locked",d:"Friendly lifters join your runs and eat food for you. More levels add buddies and make them faster."},
- {id:"chain",p:"drop",g:"purple",x:28,y:58,e:"🌩️",name:"Gains Train",max:5,base:25000000,k:2.3,v:L=>.06*L,f:v=>`${pct(v)} chance to chain`,d:"Any chomp might zap onwards and take a bite out of up to 3 nearby foods."},
+ {id:"speed",p:"start",g:"green",x:0,y:1,e:"👟",name:"Footwork",max:5,base:40,k:2.3,v:L=>1+.12*L,f:v=>`×${v.toFixed(2)} speed`,d:"Walk faster."},
+ {id:"dash",p:"speed",g:"green",x:0,y:2,e:"⚡",name:"Dash",skill:1,max:1,base:300,k:1,v:L=>L,f:()=>"Skill: burst forward",d:"Dash forward, chomping everything you touch. You can't be hit during a dash."},
+ {id:"reach",p:"speed",g:"green",x:-1,y:1,e:"🤲",name:"Long arms",max:5,base:200,k:2.3,v:L=>6+8*L,f:v=>`+${v} reach`,d:"Grab food from further away."},
+ {id:"dashCD",p:"dash",g:"green",x:1,y:2,e:"🔋",name:"Quick Feet",max:4,base:4000,k:2.3,v:L=>4.5*Math.pow(.84,L),f:v=>`${v.toFixed(1)}s dash cooldown`,d:"Dash comes back sooner."},
+ {id:"inhale",p:"dash",g:"green",x:0,y:3,e:"🌪️",name:"Big Inhale",skill:1,max:1,base:8000,k:1,v:L=>L,f:()=>"Skill: suck nearby food in",d:"Hoover up the food around you and chew twice as fast while you do. 9s cooldown."},
+ {id:"inhaleR",p:"inhale",g:"green",x:1,y:3,e:"🧲",name:"Big Lungs",max:4,base:100000,k:2.3,v:L=>230*(1+.15*L),f:v=>`${Math.round(v)} inhale range`,d:"Big Inhale reaches further."},
+ {id:"toss",p:"inhale",g:"green",x:0,y:4,e:"🥏",name:"Plate Toss",skill:1,max:1,base:200000,k:1,v:L=>L,f:()=>"Skill: throw a bumper plate",d:"Throw a spinning plate that bounces around smashing food into kcal. 7s cooldown."},
+ {id:"tossN",p:"toss",g:"green",x:1,y:4,e:"🎯",name:"Heavier Plates",max:4,base:4000000,k:2.3,v:L=>4+3*L,f:v=>`${v} hits per plate`,d:"Each plate hits more food before it stops."},
+ {id:"cheat",p:"toss",g:"green",x:0,y:5,e:"🍰",name:"Cheat Meal",skill:1,max:1,base:100000000,k:1,v:L=>L,f:()=>"Skill: food worth ×3",d:"For a few seconds every food is worth three times as much and you chew faster. 22s cooldown."},
+ {id:"cheatT",p:"cheat",g:"green",x:1,y:5,e:"📅",name:"Long Weekend",max:4,base:1000000000,k:2.3,v:L=>4+L,f:v=>`${v}s cheat meal`,d:"Cheat Meal lasts longer."},
+ {id:"drop",p:"reach",g:"purple",x:-1,y:2,e:"⬇️",name:"Plate Drop",max:5,base:6000,k:2.3,v:L=>L?8*Math.pow(.85,L-1):0,f:v=>v?`a plate falls every ${v.toFixed(1)}s`:"locked",d:"Every few seconds a bumper plate crashes down on a cluster of food and smashes it into kcal. Hits bosses too."},
+ {id:"buddy",p:"drop",g:"purple",x:-1,y:3,e:"🤝",name:"Gym Buddy",max:5,base:100000,k:2.3,v:L=>L,f:v=>v?`${Math.ceil(v/2)} buddy · speed ${(1+.15*v).toFixed(2)}×`:"locked",d:"Friendly lifters join your runs and eat food for you. More levels add buddies and make them faster."},
+ {id:"chain",p:"buddy",g:"purple",x:-1,y:4,e:"🌩️",name:"Gains Train",max:5,base:2000000,k:2.3,v:L=>.06*L,f:v=>`${pct(v)} chance to chain`,d:"Any chomp might zap onwards and take a bite out of up to 3 nearby foods."},
 ];
 const need=p=>Math.min(3,NI[p].max);   // parent level needed to open a node
 const NI=Object.fromEntries(NODES.map(n=>[n.id,n]));
@@ -918,22 +932,44 @@ function nextBanner(){const b=BQ.shift(),el=$("#banner");if(!b){el.hidden=true;b
   bT=setTimeout(nextBanner,2100);}
 
 // Build the tree once; renderGym just updates classes and text (so controller focus survives a purchase)
-const treeEl=$("#tree"),svg=$("#treeSvg"),nodeEls={},lineEls={};
+const treeEl=$("#tree"),treeIn=$("#treeInner"),svg=$("#treeSvg"),nodeEls={},lineEls={};
 let infoId="start";
+// The tree sits on a grid: every link is one step up/down/left/right. CELL px per grid step.
+const CELL=124,GX=[Math.min(...NODES.map(n=>n.x))-1,Math.max(...NODES.map(n=>n.x))+1],GY=[Math.min(...NODES.map(n=>n.y))-1,Math.max(...NODES.map(n=>n.y))+1];
+const TW=(GX[1]-GX[0])*CELL,TH=(GY[1]-GY[0])*CELL;
+const gpx=x=>(x-GX[0])*CELL,gpy=y=>(y-GY[0])*CELL;
+treeIn.style.width=TW+"px";treeIn.style.height=TH+"px";svg.setAttribute("width",TW);svg.setAttribute("height",TH);
 NODES.forEach(n=>{
   if(n.p){const p=NI[n.p],l=document.createElementNS("http://www.w3.org/2000/svg","line");
-    l.setAttribute("x1",p.x);l.setAttribute("y1",p.y);l.setAttribute("x2",n.x);l.setAttribute("y2",n.y);
-    l.setAttribute("vector-effect","non-scaling-stroke");l.setAttribute("stroke-linecap","round");svg.appendChild(l);lineEls[n.id]=l;}
+    l.setAttribute("x1",gpx(p.x));l.setAttribute("y1",gpy(p.y));l.setAttribute("x2",gpx(n.x));l.setAttribute("y2",gpy(n.y));
+    l.setAttribute("stroke-linecap","round");svg.appendChild(l);lineEls[n.id]=l;}
 });
-for(const [t,x,y] of [["⏱ TIME",72,3],["DAMAGE 💪",94,24],["🔥 GAINS",7,24],["⚡ ABILITIES",50,64]]){const l=document.createElement("div");l.className="tlab";l.textContent=t;l.style.left=x+"%";l.style.top=(y/64*100)+"%";treeEl.appendChild(l);}
+for(const [t,x,y] of [["⏱ TIME",0,GY[0]+.35],["DAMAGE 💪",GX[1]-.45,-.55],["🔥 GAINS",GX[0]+.45,-.55],["⚡ ABILITIES",0,GY[1]-.35]]){const l=document.createElement("div");l.className="tlab";l.textContent=t;l.style.left=gpx(x)+"px";l.style.top=gpy(y)+"px";treeIn.appendChild(l);}
 NODES.forEach(n=>{
   const b=document.createElement("button");b.className="node"+(n.skill?" skill":"")+(n.id==="start"?" root":"");
-  b.style.left=n.x+"%";b.style.top=(n.y/64*100)+"%";b.style.setProperty("--c",COL[n.g]);
+  b.style.left=gpx(n.x)+"px";b.style.top=gpy(n.y)+"px";b.style.setProperty("--c",COL[n.g]);
   b.innerHTML=`<span>${n.e}</span>${n.id==="start"?"":`<span class="gem"></span><span class="lv"></span>`}`;
-  b.onmouseenter=b.onfocus=()=>{infoId=n.id;renderInfo();};
-  b.onclick=()=>{infoId=n.id;buyNode(n);};
-  treeEl.appendChild(b);nodeEls[n.id]=b;
+  b.onmouseenter=()=>{infoId=n.id;renderInfo();};
+  b.onfocus=()=>{infoId=n.id;renderInfo();followNode(n);};
+  b.onclick=()=>{if(dragMoved)return;infoId=n.id;buyNode(n);};
+  treeIn.appendChild(b);nodeEls[n.id]=b;
 });
+/* pan + zoom */
+const TV={z:.85,x:0,y:0};
+const vw=()=>treeEl.clientWidth,vh=()=>treeEl.clientHeight;
+function applyTree(){TV.z=clamp(TV.z,.35,1.6);treeIn.style.transform=`translate(${TV.x}px,${TV.y}px) scale(${TV.z})`;}
+function centerOn(px,py){TV.x=vw()/2-px*TV.z;TV.y=vh()/2-py*TV.z;applyTree();}
+function followNode(n){const sx=TV.x+gpx(n.x)*TV.z,sy=TV.y+gpy(n.y)*TV.z,m=90*TV.z+30;if(sx<m||sx>vw()-m||sy<m||sy>vh()-m)centerOn(gpx(n.x),gpy(n.y));}
+function zoomBy(f,cx=vw()/2,cy=vh()/2){const z0=TV.z;TV.z=clamp(TV.z*f,.35,1.6);const k=TV.z/z0;TV.x=cx-(cx-TV.x)*k;TV.y=cy-(cy-TV.y)*k;applyTree();}
+function fitTree(){TV.z=clamp(Math.min(vw()/TW,vh()/TH)*.98,.35,1.6);TV.x=(vw()-TW*TV.z)/2;TV.y=(vh()-TH*TV.z)/2;applyTree();}
+function homeTree(){TV.z=.85;centerOn(gpx(0),gpy(0));}
+$("#tzIn").onclick=()=>zoomBy(1.2);$("#tzOut").onclick=()=>zoomBy(1/1.2);$("#tzFit").onclick=fitTree;
+treeEl.addEventListener("wheel",e=>{e.preventDefault();const r=treeEl.getBoundingClientRect(),k=treeEl.clientWidth/r.width;zoomBy(e.deltaY<0?1.12:1/1.12,(e.clientX-r.left)*k,(e.clientY-r.top)*k);},{passive:false});
+let drag=null,dragMoved=false;
+treeEl.addEventListener("pointerdown",e=>{if(e.target.closest(".tzoom"))return;drag={x:e.clientX,y:e.clientY,tx:TV.x,ty:TV.y};dragMoved=false;});
+addEventListener("pointermove",e=>{if(!drag)return;const r=treeEl.getBoundingClientRect(),k=treeEl.clientWidth/r.width,dx=(e.clientX-drag.x)*k,dy=(e.clientY-drag.y)*k;if(Math.abs(dx)+Math.abs(dy)>6){dragMoved=true;treeEl.classList.add("drag");}if(dragMoved){TV.x=drag.tx+dx;TV.y=drag.ty+dy;applyTree();}});
+addEventListener("pointerup",()=>{drag=null;treeEl.classList.remove("drag");setTimeout(()=>dragMoved=false,0);});
+addEventListener("resize",()=>setTimeout(homeTree,50));
 function buyNode(n){
   const L=lv(n.id);
   if(L>=n.max){renderInfo();return;}
@@ -946,6 +982,8 @@ function buyNode(n){
 }
 function renderInfo(){
   const n=NI[infoId],L=lv(n.id),max=L>=n.max,c=cost(n);
+  if(!avail(n)){$("#iE").textContent="❔";$("#iName").textContent="Something new…";$("#iDesc").textContent=`Get ${NI[n.p].name} to level ${need(n.p)} to reveal this upgrade.`;$("#iVal").textContent="";$("#iBuy").hidden=true;return;}
+  $("#iBuy").hidden=false;
   $("#iE").textContent=n.e;$("#iName").textContent=n.name+(n.max>1?`  ·  ${L}/${n.max}`:"");
   $("#iDesc").textContent=n.d;
   const b=$("#iBuy");
@@ -999,7 +1037,7 @@ function taskProg(t){
 }
 
 let TAB="tree";
-function setTab(t){TAB=t;document.querySelector(".treeWrap").classList.toggle("dark",t==="gym");$("#paneTree").hidden=t!=="tree";$("#paneGym").hidden=t!=="gym";$("#tabTree").setAttribute("aria-selected",t==="tree");$("#tabGym").setAttribute("aria-selected",t==="gym");renderBiz();}
+function setTab(t){TAB=t;if(t==="tree")setTimeout(homeTree,30);document.querySelector(".treeWrap").classList.toggle("dark",t==="gym");$("#paneTree").hidden=t!=="tree";$("#paneGym").hidden=t!=="gym";$("#tabTree").setAttribute("aria-selected",t==="tree");$("#tabGym").setAttribute("aria-selected",t==="gym");renderBiz();}
 $("#tabTree").onclick=()=>setTab("tree");$("#tabGym").onclick=()=>setTab("gym");
 const eqEls={},supEls={};
 function bizItem(list,it,isEq){
@@ -1057,12 +1095,14 @@ function renderGym(){
   $("#seasonCard").hidden=!S.beaten.buffet;
   NODES.forEach(n=>{
     const b=nodeEls[n.id],L=lv(n.id),max=L>=n.max,ok=avail(n),can=ok&&!max&&S.kcal>=cost(n);
-    b.className="node"+(n.skill?" skill":"")+(n.id==="start"?" root":"")+(L>0?" own":"")+(max?" max":"")+(can?" can":"")+(!ok?" lock":"");
+    const peek=!ok&&(!n.p||avail(NI[n.p]));   // parent is reachable: show a "?" so you know something's coming
+    b.className="node"+(n.skill?" skill":"")+(n.id==="start"?" root":"")+(L>0?" own":"")+(max?" max":"")+(can?" can":"")+(!ok?" lock":"")+(peek?" peek":"");
+    b.hidden=!ok&&!peek;b.firstElementChild.textContent=ok?n.e:"?";
     const l=b.querySelector(".lv");if(l)l.textContent=n.skill?(L?"✓":fmt(cost(n))):(max?"MAX":`${L}/${n.max}`);
     b.setAttribute("aria-label",`${n.name}, level ${L} of ${n.max}`);
-    b.dataset.tip=n.id==="start"?n.name:`${n.name}  ·  `+(max?(n.skill?"Unlocked":"MAX"):!ok?"🔒 Locked":`${fmt(cost(n))} kcal`);
+    b.dataset.tip=!ok?`??? · needs ${NI[n.p].name} ${need(n.p)}`:n.id==="start"?n.name:`${n.name}  ·  `+(max?(n.skill?"Unlocked":"MAX"):!ok?"🔒 Locked":`${fmt(cost(n))} kcal`);
     const ln=lineEls[n.id];
-    if(ln){const on=L>0,rd=ok;ln.setAttribute("stroke",on?"#3b2a1c":rd?"#4f9a2c":"#a8997c");ln.setAttribute("stroke-width",on?5:3.5);ln.setAttribute("stroke-dasharray",rd?"":"2 8");}
+    if(ln){ln.style.display=b.hidden?"none":"";const on=L>0,rd=ok;ln.setAttribute("stroke",on?"#3b2a1c":rd?"#4f9a2c":"#a8997c");ln.setAttribute("stroke-width",on?5:3.5);ln.setAttribute("stroke-dasharray",rd?"":"2 8");}
   });
   renderInfo();
 }
@@ -1621,6 +1661,7 @@ addEventListener("keydown",e=>{
   // menus: arrows do spatial navigation, Enter on hub starts a run
   if(k.startsWith("arrow")&&!e.altKey){const d={arrowup:[0,-1],arrowdown:[0,1],arrowleft:[-1,0],arrowright:[1,0]}[k];if(navMove(d))e.preventDefault();}
   if((k==="q"||k==="e")&&!R&&navLayer()===$("#gym"))jumpPanel(k==="e"?"tree":"markets");
+  if((k==="+"||k==="="||k==="-"||k==="_")&&!R&&TAB==="tree"){zoomBy(k==="-"||k==="_"?1/1.2:1.2);}
   if(k==="escape")navBack();
 });
 addEventListener("keyup",e=>{KEYS[e.key.toLowerCase()]=0;});
@@ -1664,6 +1705,7 @@ function padMenu(st,dt){
   // hold A on an upgrade to keep buying it
   {const a=document.activeElement;if(st.Ah&&a&&(a.classList.contains("node")||a.classList.contains("gitem"))){padHold+=dt;if(padHold>.45){padHoldRep-=dt;if(padHoldRep<=0){padHoldRep=.14;a.click();}}}else{padHold=0;padHoldRep=0;}}
   if((st.LT||st.RT)&&!R&&navLayer()===$("#gym"))jumpPanel(st.RT?"tree":"markets");
+  if(st.ry&&!R&&TAB==="tree"&&navLayer()===$("#gym")){zoomBy(1-st.ry*dt*.9);}
   if(st.B)navBack();
   if(st.Y&&!R&&navLayer()===$("#gym")){setTab(TAB==="tree"?"gym":"tree");SFX.buy(0);(TAB==="tree"?$("#tabTree"):$("#tabGym")).focus();}
   if(st.Start&&!R&&!$("#gym").hidden&&$("#seasonModal").hidden)startRun();
@@ -1680,11 +1722,12 @@ function jumpPanel(to){
 // d-pad around the skill tree follows its branches
 function treeMove(cur,d){
   const id=Object.keys(nodeEls).find(k=>nodeEls[k]===cur);if(!id)return null;const n=NI[id];
-  const pos=m=>[m.x,m.y*1.25];const [cx,cy]=pos(n);
+  const pos=m=>[m.x,m.y];const [cx,cy]=pos(n);
   const score=(m,cone)=>{const [mx,my]=pos(m),dx=mx-cx,dy=my-cy,dist=Math.hypot(dx,dy)||1;const ang=Math.acos(clamp((dx*d[0]+dy*d[1])/dist,-1,1));return ang<cone?dist*(1+ang*1.5):1e9;};
-  const nb=NODES.filter(m=>m.id===n.p||m.p===n.id);
+  const vis=m=>!nodeEls[m.id].hidden;
+  const nb=NODES.filter(m=>(m.id===n.p||m.p===n.id)&&vis(m));
   let best=null,bs=1e9;for(const m of nb){const v=score(m,1.2);if(v<bs){bs=v;best=m;}}
-  if(!best)for(const m of NODES){if(m===n)continue;const v=score(m,.8);if(v<bs){bs=v;best=m;}}
+  if(!best)for(const m of NODES){if(m===n||!vis(m))continue;const v=score(m,.8);if(v<bs){bs=v;best=m;}}
   return best?nodeEls[best.id]:null;
 }
 function navLayer(){for(const id of["helpModal","saveModal","seasonModal","credits","results","pause"])if(!$("#"+id).hidden)return $("#"+id);return R?null:$("#gym");}
@@ -2366,11 +2409,11 @@ function leaveTitle(goFS){
   if(goFS&&!document.fullscreenElement){try{document.documentElement.requestFullscreen({navigationUI:"hide"}).catch(()=>{});}catch(e){}}
   if(!S.runs)openModal("helpModal","#helpClose");else $("#goBtn").focus();
   if(awayEarned>=1)setTimeout(()=>banner("💷","Welcome back!",`Your gym earned ${money(awayEarned)} while you were away`,"gold"),400);
-  {const ts=document.querySelector(".treeScroll");ts.scrollLeft=(ts.scrollWidth-ts.clientWidth)/2;}
+  homeTree();
 }
 $("#title").addEventListener("pointerdown",e=>{if(e.pointerType==="touch")setMode("touch");leaveTitle(e.pointerType!=="touch");});
 if(DEBUG){$("#title").hidden=true;$("#gym").hidden=false;}
-{const ts=document.querySelector(".treeScroll");ts.scrollLeft=(ts.scrollWidth-ts.clientWidth)/2;} // small screens: start the tree on its root
+homeTree(); // small screens: start the tree on its root
 if(document.fonts&&document.fonts.ready)document.fonts.ready.then(()=>{SPR.clear();renderGym();});
 requestAnimationFrame(frame);
 
