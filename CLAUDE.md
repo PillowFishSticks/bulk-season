@@ -42,7 +42,7 @@ An active incremental web game modelled on **Chef Knight** (Steam). The loop is:
 - On keyboard, Plate Toss aims at the mouse cursor if the mouse has moved recently. Otherwise it throws the way you're facing. Glyph hints switch with the last input device (`body.pad` / `body.touch`).
 
 ## Balance
-Open `index.html#debug` and run `BS.sim(900)` in the console. A bot plays full seasons headlessly and buys the cheapest upgrade each time, then returns milestones (run number and minutes at each market open and boss kill). Tuning targets as of 2026-10-11: the bot finishes season 1 in about 35 minutes (sections ~2 runs each, as of the no-stomach + events version: ~43 min), so a person should take an hour or more. The sim also earns and spends gym money. `BS.sim(900,{season:2,medals:5})` checks later seasons: about 20 bot minutes each, earning 5–6 medals.
+Open `index.html#debug` and run `BS.sim(900)` in the console. A bot plays full seasons headlessly and buys the cheapest upgrade each time, then returns milestones (run number and minutes at each market open and boss kill). Tuning targets as of 2026-10-11: the bot finishes season 1 in about 35 minutes (sections ~2 runs each, as of 2026-10-11: ~26 bot min, tuned so a person beats each boss in about 2 runs at the damage they have on arrival; bot DPS on arrival is roughly shop 3, chippy 23, curry 150-220, street 600, buffet 640), so a person should take an hour or more. The sim also earns and spends gym money. `BS.sim(900,{season:2,medals:5})` checks later seasons: about 20 bot minutes each, earning 5–6 medals.
 
 ## Hosting
 - The repo is public, and GitHub Pages serves `main` at `/` (root): https://pillowfishsticks.github.io/bulk-season/

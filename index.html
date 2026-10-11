@@ -13,7 +13,7 @@
   --out:#2a1a12; --bg:#120d0a;
   --wood:#7a4d2b; --wood-d:#4e301b; --wood-l:#9a6538;
   --parch:#ecdcb4; --parch-d:#d6c08e; --pink:#3b2a1c;
-  --cream:#fbf0d6; --muted:#c9b48f;
+  --cream:#fbf0d6; --muted:#e6d6b2;
   --red:#d8423a; --blue:#3f7fd6; --yellow:#e9bf2f; --green:#5aa83a; --white:#e9e2cf; --gold:#f2c230;
   --disp:"Alegreya",Georgia,serif; --ui:"Alegreya Sans",system-ui,sans-serif;
   color-scheme:dark;
@@ -52,6 +52,8 @@ button{font:inherit;color:inherit;cursor:pointer}
 body.pad .glyph.kb{display:none} body.pad .glyph.pd{display:inline-grid}
 body.touch .glyph{display:none!important}
 .pA{background:#5aa83a}.pB{background:#d8423a}.pX{background:#3f7fd6}.pY{background:#d9a81f}.pS{background:#555;border-radius:6px!important;width:auto!important;padding:0 5px!important}
+.node>span:first-child,.sec .se,.gitem .gi,.mname .ze,.sk>span:first-child,.info .ie,.hstep .hi,.plaque .ico,.bossIco,.port{--o:#2a1a12}
+.node>span:first-child,.sec .se,.gitem .gi,.mname .ze,.sk>span:first-child,.info .ie,.plaque .ico,.bossIco{filter:drop-shadow(1.5px 0 0 var(--o)) drop-shadow(-1.5px 0 0 var(--o)) drop-shadow(0 1.5px 0 var(--o)) drop-shadow(0 -1.5px 0 var(--o))}
 .lbl{font:800 12px/1 var(--ui);letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
 
 /* ---------- GYM / HUB ---------- */
@@ -79,12 +81,12 @@ body.touch .glyph{display:none!important}
 .mname small{display:block;font-size:12px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .secs{display:flex;gap:6px}
 .sec{position:relative;width:50px;height:44px;padding:0;border:3px solid var(--out);border-radius:10px;background:#24170f;display:grid;place-items:center;font-size:22px;line-height:1;box-shadow:0 3px 0 rgba(0,0,0,.45)}
-.sec.open{background:linear-gradient(#8a5a33,#5c3820)}
-.sec.done{background:linear-gradient(#ffe48a,#d9a521)}
+.sec.open{background:linear-gradient(#6d4a2c,#4a2e19);border-color:#e9bf2f}
+.sec.done{background:linear-gradient(#2f5a34,#1f3d24);border-color:#7fd06b}
 .sec.lock{filter:grayscale(1);opacity:.55}
 .sec.sel{box-shadow:0 0 0 3px #fff7d6,0 3px 0 rgba(0,0,0,.45)}
 .sec .sn{position:absolute;left:3px;top:1px;font:800 10px/1 var(--ui);color:#fff3cf;text-shadow:0 1px 0 #000}
-.sec.done .sn{color:#3b2a1c;text-shadow:none}
+.sec.done .sn{color:#c9f2bd}
 .sec .ck{position:absolute;right:-7px;top:-8px;font-size:14px}
 .sec .sb{position:absolute;left:5px;right:5px;bottom:3px;height:5px;border-radius:3px;background:rgba(0,0,0,.55);overflow:hidden}
 .sec .sb i{display:block;height:100%;background:#e5383b}
@@ -143,10 +145,10 @@ body.touch .glyph{display:none!important}
 @media (hover:hover){.node:hover{transform:translate(-50%,-50%) scale(1.1)}}
 .node.skill{width:7.6%;border-width:4px;font-size:clamp(18px,2.3vw,34px)}
 .node.root{width:8%}
-.node.own{background:radial-gradient(circle at 40% 35%,#fff1b8,#f2c230 55%,#c98f17)}
-.node.max{background:radial-gradient(circle at 40% 35%,#fffbe8,#ffd85a 50%,#e0a91f);box-shadow:0 0 0 3px #fff4c9,0 3px 0 rgba(60,35,10,.45)}
-.node.can{background:radial-gradient(circle at 40% 35%,#e9f7c9,#a8d06b 60%,#6f9b3a);animation:pulse 1.4s ease-in-out infinite}
-.node.lock{background:#9c9584;filter:grayscale(.9);opacity:.7}
+.node.own{background:#fff7e3;box-shadow:inset 0 0 0 4px #e3a91f,0 3px 0 rgba(60,35,10,.45)}
+.node.max{background:#fffdf5;box-shadow:inset 0 0 0 5px #f2c230,0 0 0 3px #fff4c9,0 0 14px rgba(242,194,48,.7)}
+.node.can{background:#f1fae6;box-shadow:inset 0 0 0 4px #4f9a2c,0 3px 0 rgba(60,35,10,.45);animation:pulse 1.4s ease-in-out infinite}
+.node.lock{background:#8f8a7d;filter:grayscale(.9);opacity:.75}
 .node.lock::after{content:"🔒";position:absolute;font-size:.6em;right:-8%;top:-8%}
 .node .lv{position:absolute;bottom:-20%;left:50%;transform:translateX(-50%);font:800 11px/1 var(--ui);background:var(--out);color:#fbe7b0;border-radius:6px;padding:2px 5px;white-space:nowrap;pointer-events:none}
 .node .gem{position:absolute;top:-6%;left:-6%;width:28%;height:28%;border-radius:50%;background:var(--c);border:2px solid var(--out)}
@@ -162,7 +164,7 @@ body.touch .glyph{display:none!important}
 /* every other menu button: thick white ring + glow + slight grow */
 .sec:focus-visible,body.pad .sec:focus{outline:4px solid #fff;outline-offset:2px;transform:scale(1.12);z-index:2;box-shadow:0 0 0 9px rgba(255,226,120,.35),0 0 24px rgba(255,226,120,.6)}
 .btn:focus-visible,body.pad .btn:focus,.zone:focus-visible,body.pad .zone:focus{outline:4px solid #fff;outline-offset:3px;box-shadow:0 0 0 10px rgba(255,226,120,.35),0 0 30px rgba(255,226,120,.6);transform:scale(1.03);position:relative;z-index:2}
-@keyframes pulse{50%{box-shadow:0 0 0 5px rgba(120,170,60,.35),0 3px 0 rgba(60,35,10,.45)}}
+@keyframes pulse{50%{box-shadow:inset 0 0 0 4px #4f9a2c,0 0 0 6px rgba(90,170,50,.4),0 3px 0 rgba(60,35,10,.45)}}
 .info{display:grid;grid-template-columns:56px 1fr auto;gap:14px;align-items:center;margin-top:12px;padding:10px 14px;border-top:2px dashed #a58a5e}
 .info .ie{font-size:40px;text-align:center}
 .info h4{margin:0;font:900 21px/1.1 var(--disp)}
@@ -224,7 +226,7 @@ body.staged .info{margin-top:6px}
 .bars{display:grid;gap:5px;width:clamp(150px,30vw,420px)}
 .hbar{position:relative;height:22px;border-radius:12px;background:#24170f;border:3px solid var(--out);box-shadow:inset 0 0 0 2px #6b4426,0 3px 0 rgba(0,0,0,.45);overflow:hidden}
 .hbar i{position:absolute;inset:2px auto 2px 2px;border-radius:8px;background:var(--c);box-shadow:inset 0 3px 0 rgba(255,255,255,.25),inset 0 -3px 0 rgba(0,0,0,.2)}
-.hbar span{position:absolute;inset:0;padding:0 10px;display:flex;justify-content:space-between;align-items:center;font:800 12px/1 var(--ui);letter-spacing:.06em;color:#fff;text-shadow:0 1px 0 #000,0 0 3px #000}
+.hbar span{position:absolute;inset:0;padding:0 10px;display:flex;justify-content:space-between;align-items:center;font:800 13px/1 var(--ui);letter-spacing:.05em;color:#fff;text-shadow:1px 1px 0 #000,-1px 1px 0 #000,1px -1px 0 #000,-1px -1px 0 #000,0 0 4px #000}
 .hbar.full i{animation:flash .35s infinite alternate}
 @keyframes flash{to{filter:brightness(1.7)}}
 .kcal{display:flex;flex-direction:column;align-items:center;gap:2px;margin:0 auto;pointer-events:none}
@@ -415,8 +417,8 @@ body.touch .hnote .kbt{display:none} body.touch .hnote .tct{display:inline}
       <div class="hl">
         <div class="port"><canvas id="portCv" width="120" height="120"></canvas></div>
         <div class="bars">
-          <div class="hbar" id="timeBar" style="--c:var(--gold)"><i id="hTime"></i><span><b>⏱️ Appetite</b><b id="hTimeTxt"></b></span></div>
-          <div class="hbar" id="stomBar" style="--c:#e8833a"><i id="hStom"></i><span><b>🔥 Combo</b><b id="hStomTxt"></b></span></div>
+          <div class="hbar" id="timeBar" style="--c:linear-gradient(#f0b429,#c27c0e)"><i id="hTime"></i><span><b>⏱️ Appetite</b><b id="hTimeTxt"></b></span></div>
+          <div class="hbar" id="stomBar" style="--c:linear-gradient(#ee8a3c,#b4501a)"><i id="hStom"></i><span><b>🔥 Combo</b><b id="hStomTxt"></b></span></div>
         </div>
       </div>
       <div class="kcal"><b id="hKcal">0</b><span class="combo" id="hCombo"></span></div>
@@ -424,7 +426,7 @@ body.touch .hnote .kbt{display:none} body.touch .hnote .tct{display:inline}
         <div class="bossIco" id="hBossIco">👑</div>
         <div class="bars" style="width:clamp(140px,24vw,340px)">
           <div class="zname" id="hZone" style="text-align:right"></div>
-          <div class="hbar" style="--c:var(--green)"><i id="hProg"></i><span><b id="hProgL">Boss</b><b id="hProgTxt"></b></span></div>
+          <div class="hbar" style="--c:linear-gradient(#5aa83a,#2f6e1f)"><i id="hProg"></i><span><b id="hProgL">Boss</b><b id="hProgTxt"></b></span></div>
         </div>
       </div>
     </div>
@@ -515,7 +517,7 @@ const ZONES=[
  {id:"shop",name:"Corner Shop",e:"🏪",cost:0,at:18,
   th:{glow:"220,235,255"},
   foods:[F("🍌","Banana",6,12,{w:3}),F("🍪","Cookie",5,18,{w:3}),F("🍫","Choc bar",8,32,{w:2}),F("🥪","Meal deal",14,60,{w:1.4,bites:2,size:1.15}),F("🥧","Pork pie",12,100,{w:.5})],
-  bb:{hp:130,kcb:6,reward:600},
+  bb:{hp:90,kcb:6,reward:600},
   secs:[{n:"Front Door",floor:"shop",wall:"shopDoor"},{n:"The Aisles",floor:"shop",wall:"shop"},{n:"The Till",floor:"wood",wall:"shopTill"}],
   bosses:[{e:"🥤",name:"Fizzy Pop",mv:"dart",spd:200,mi:6,atk:[{k:"spread",e:"💦",n:3,every:2.6,spd:290}]},{e:"🍞",name:"The Loaf",mv:"wander",spd:80,mi:5,atk:[{k:"ring",e:"🍞",n:8,every:3.4,spd:230}]},{e:"🧀",name:"The Big Cheese",mv:"wander",spd:70,mi:4,atk:[{k:"slam",every:3.4,r:110},{k:"spread",e:"🧀",n:5,every:4.2,spd:280}]}],
   hz:{puddle:3},
@@ -523,7 +525,7 @@ const ZONES=[
  {id:"chippy",name:"The Chippy",e:"🍟",cost:0,at:24,
   th:{glow:"255,236,190"},
   foods:[F("🍟","Chips",10,64,{w:3}),F("🥚","Pickled egg",5,36,{w:2}),F("🌭","Saveloy",9,74,{w:2}),F("🐟","Battered cod",16,180,{w:1,flee:1,size:1.2}),F("🍔","Chip butty",18,230,{w:.6,bites:2,size:1.2})],
-  bb:{hp:4000,kcb:25,reward:10000},
+  bb:{hp:900,kcb:25,reward:10000},
   secs:[{n:"The Queue",floor:"chippy",wall:"chippy"},{n:"The Fryers",floor:"kitchen",wall:"chippyFry"},{n:"Back Alley",floor:"asphalt",wall:"chippyAlley"}],
   bosses:[{e:"🥫",name:"Mushy Peas",mv:"wander",spd:60,mi:5,atk:[{k:"spread",e:"🟢",n:5,every:2.4,spd:310}]},{e:"🌭",name:"Big Saveloy",mv:"dart",spd:220,mi:4,atk:[{k:"charge",every:3.6},{k:"spread",e:"🌭",n:3,every:3,spd:300}]},{e:"🐟",name:"Moby Cod",mv:"flee",spd:150,mi:4,atk:[{k:"ring",e:"💧",n:10,every:3,spd:260},{k:"spin",e:"💧",every:6,spd:280}]}],
   hz:{grease:2,gull:2},
@@ -531,7 +533,7 @@ const ZONES=[
  {id:"curry",name:"Curry House",e:"🍛",cost:0,at:28,
   th:{glow:"255,170,90"},
   foods:[F("🍚","Pilau rice",10,170,{w:3}),F("🥟","Samosa",8,190,{w:2.5}),F("🍛","Tikka masala",18,540,{w:1.2,bites:2,size:1.2}),F("🌶️","Vindaloo chilli",6,250,{w:.8,spicy:1}),F("🍢","Seekh kebab",10,340,{w:1,flee:1})],
-  bb:{hp:25000,kcb:100,reward:160000},
+  bb:{hp:6000,kcb:100,reward:160000},
   secs:[{n:"Dining Room",floor:"curry",wall:"curry"},{n:"The Kitchen",floor:"kitchen",wall:"curryKitchen"},{n:"The Tandoor",floor:"terracotta",wall:"curryTandoor"}],
   bosses:[{e:"🥘",name:"The Balti Bowl",mv:"wander",spd:70,mi:4,atk:[{k:"ring",e:"🔥",n:8,every:3,spd:240}],fire:1},{e:"🍢",name:"Kebab King",mv:"dart",spd:230,mi:4,atk:[{k:"spread",e:"🍢",n:3,every:1.8,spd:420},{k:"charge",every:4.5}]},{e:"🍲",name:"The Phaal Pot",mv:"wander",spd:60,mi:3.5,atk:[{k:"slam",every:2.8,r:130},{k:"ring",e:"🌶️",n:12,every:3.6,spd:260}],fire:1}],
   hz:{fire:5},
@@ -539,7 +541,7 @@ const ZONES=[
  {id:"street",name:"Street Food",e:"🌮",cost:0,at:32,
   th:{glow:"255,200,140"},
   foods:[F("🌮","Taco",8,600,{w:3}),F("🍡","Dango",6,500,{w:2.5}),F("🍜","Ramen",16,1550,{w:1.5,bites:2,size:1.2}),F("🌯","Burrito",22,2250,{w:1,bites:3,size:1.25}),F("🍩","Doughnut",8,1100,{w:1,flee:1})],
-  bb:{hp:80000,kcb:450,reward:2400000},
+  bb:{hp:30000,kcb:450,reward:2400000},
   secs:[{n:"Night Market",floor:"street",wall:"street"},{n:"Food Trucks",floor:"asphalt",wall:"streetTrucks"},{n:"Neon Alley",floor:"neon",wall:"streetNeon"}],
   bosses:[{e:"🍙",name:"Onigiri Ollie",mv:"dart",spd:240,mi:4,atk:[{k:"spread",e:"🍙",n:5,every:2,spd:380},{k:"charge",every:4}]},{e:"🌯",name:"Mega Burrito",mv:"flee",spd:160,mi:3.5,atk:[{k:"ring",e:"🌶️",n:12,every:2.6,spd:300},{k:"spin",e:"🌽",every:5.5,spd:300}]},{e:"🥙",name:"Doner Mountain",mv:"dart",spd:230,mi:3,atk:[{k:"spin",e:"🥩",every:4.5,spd:320},{k:"slam",every:3.2,r:120},{k:"charge",every:5}]}],
   hz:{scooter:1,puddle:2},
@@ -547,7 +549,7 @@ const ZONES=[
  {id:"buffet",name:"The Buffet",e:"🍽️",cost:0,at:36,
   th:{glow:"255,215,150"},
   foods:[F("🍕","Pizza slice",10,3200,{w:3}),F("🍗","Chicken leg",12,4200,{w:2}),F("🍤","Prawn",5,2400,{w:2,flee:1}),F("🍰","Gateau",18,7600,{w:1,bites:2,size:1.2}),F("🍖","Rib",16,6800,{w:1})],
-  bb:{hp:90000,kcb:2000,reward:48000000},
+  bb:{hp:55000,kcb:2000,reward:48000000},
   secs:[{n:"Dessert Table",floor:"buffet",wall:"buffetDessert"},{n:"Wedding Party",floor:"parquet",wall:"buffetWedding"},{n:"The Carvery",floor:"buffet",wall:"buffet"}],
   bosses:[{e:"🍮",name:"The Trifle",mv:"wander",spd:70,mi:3,atk:[{k:"ring",e:"🍒",n:12,every:2.6,spd:270},{k:"spread",e:"🍓",n:5,every:3.2,spd:330}]},{e:"🎂",name:"Wedding Cake",mv:"still",spd:0,mi:2,atk:[{k:"slam",every:2.2,r:140},{k:"spin",e:"🍰",every:5,spd:300}]},{e:"🦃",name:"The Sunday Roast",mv:"still",spd:0,mi:2.5,atk:[{k:"spread",e:"🥕",n:7,every:1.8,spd:380},{k:"slam",every:3,r:130},{k:"ring",e:"🥔",n:14,every:3.4,spd:280}]}],
   hz:{waiter:1,rival:1},
@@ -1859,7 +1861,8 @@ function spawnBoss(encore){
     at:b.atk.map(a=>a.every*rnd(.5,.8)+1.2)});
   R.shake=.8;SFX.boss();rumble(450,1,.5);
   if(!SIM)$("#hBossIco").textContent=b.e;
-  banner(b.e,encore?`Encore: ${b.name}`:b.name,encore?`Back for seconds · ${max} bites`:`${R.zone.secs[R.si].n} boss · ${Math.ceil(hp)} bites to go`,"boss");
+  R.bossStart=hp;
+  banner(b.e,encore?`Encore: ${b.name}`:b.name,encore?`Back for seconds · ${max} bites`:hp<max?`Back with ${Math.ceil(hp)}/${max} HP · your ${Math.floor(max-hp)} damage is saved`:`${R.zone.secs[R.si].n} boss · ${max} bites to go`,"boss");
 }
 function bossDown(f){
   const z=R.zone,b=f.def,zi=ZI[z.id];
@@ -2088,7 +2091,7 @@ function endRun(){
   if(R.maxCombo>=5)ex.push(`Best combo: ${R.maxCombo}`);
   if(R.golds)ex.push(`${R.golds} golden ${R.golds>1?"dishes":"dish"}`);
   if(R.shooed)ex.push(`${R.shooed} seagull${R.shooed>1?"s":""} shooed`);
-  if(!secDone(R.zone,R.si)&&S.bhp[R.sk]!=null)ex.push(`${R.boss.e} ${R.boss.name}: ${Math.ceil(S.bhp[R.sk])} bites left. It'll be waiting next run`);
+  if(!secDone(R.zone,R.si)&&S.bhp[R.sk]!=null){const took=Math.floor((R.bossStart??S.bhp[R.sk])-S.bhp[R.sk]);ex.push(`${R.boss.e} You took ${took} off ${R.boss.name}. ${Math.ceil(S.bhp[R.sk])}/${bossHp(R.boss)} left, saved for next run`);}
   if(R.bossKill)ex.push(R.bossKill.final?`🏆 ${R.zone.name} cleared! Trophy earned (+10% kcal)`:`${R.bossKill.name} beaten!`);
   if(R.next)ex.push(`🔓 Next up: ${R.next}`);
   if(R.wonNow)ex.push("You can start a new season from the gym.");
