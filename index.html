@@ -192,6 +192,23 @@ body.touch .glyph{display:none!important}
 .treeInner svg{position:absolute;left:0;top:0;overflow:visible;pointer-events:none}
 .tzoom{position:absolute;right:10px;top:10px;display:flex;gap:6px;align-items:center;z-index:5}
 .tzoom .btn{min-width:40px;font-size:18px;padding:6px 10px}
+.ulist{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;height:100%;min-height:0}
+.ucol{display:flex;flex-direction:column;min-height:0;background:rgba(120,80,30,.07);border-radius:12px;box-shadow:inset 0 0 0 2px rgba(122,90,50,.25);padding:8px}
+.ucol h3{margin:0 0 6px;padding:6px 10px;border-radius:9px;background:var(--c);color:#fff;font:900 18px/1 var(--disp);text-shadow:0 2px 0 rgba(0,0,0,.35);border:3px solid var(--out)}
+.urows{display:flex;flex-direction:column;gap:5px;overflow-y:auto;min-height:0;padding:2px 3px 6px;scrollbar-width:none}
+.ugrp{font:800 12px/1 var(--ui);letter-spacing:.06em;text-transform:uppercase;color:rgba(59,42,28,.75);margin:6px 2px 1px}
+.ugrp.lock{opacity:.6}
+.urow{display:grid;grid-template-columns:34px 1fr;align-items:center;gap:8px;text-align:left;padding:5px 8px;border-radius:10px;border:3px solid var(--out);border-left:8px solid var(--c);background:#efe3c8;color:var(--out);box-shadow:0 2px 0 rgba(60,35,10,.35);position:relative}
+.urow .ue{font-size:24px;line-height:1;text-align:center}
+.urow .ut{display:flex;flex-direction:column;min-width:0}.urow .ut b{font:800 15px/1.1 var(--ui);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.urow .ub{display:flex;align-items:center;gap:6px;margin-top:3px;min-width:0}.urow .ut small{flex:1;font:600 12px/1.15 var(--ui);color:#6b5236;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
+.urow .up{flex:none;font:900 12px/1 var(--ui);white-space:nowrap;padding:3px 6px;border-radius:7px;background:rgba(42,26,18,.12)}
+.urow.can{background:#fff7dc;box-shadow:0 0 0 3px #fff,0 2px 0 rgba(60,35,10,.35)}.urow.can .up{background:#f2c230}
+.urow.can::after{content:"!";position:absolute;right:-7px;top:-9px;width:20px;height:20px;border-radius:50%;background:#d8423a;color:#fff;border:2px solid #fff;font:900 14px/16px var(--ui);text-align:center}
+.urow.max{background:#f6efdc;opacity:.85}.urow.max .up{background:#f2c230}
+.urow.lock{background:#c9bea6;opacity:.7;filter:grayscale(.6)}
+.urow:focus-visible,body.pad .urow:focus{outline:none;z-index:2;animation:selWave 1.2s ease-out infinite}
+body.phone .urow .ut small{display:none}body.phone .urow .ut{flex-direction:row;align-items:center;justify-content:space-between;gap:4px}body.phone .urow .ub{margin:0}body.phone .urow{grid-template-columns:24px 1fr;padding:3px 5px}body.phone .urow .ue{font-size:18px}body.phone .ucol h3{font-size:14px;padding:4px 6px}
 .tpages{position:absolute;left:50%;bottom:10px;transform:translateX(-50%);display:flex;gap:6px;z-index:6}
 .tpg{position:relative;display:flex;align-items:center;gap:6px;padding:7px 12px;border-radius:999px;border:3px solid var(--out);background:#e9dcc2;color:var(--out);font:800 15px/1 var(--ui);box-shadow:0 3px 0 rgba(60,35,10,.45);white-space:nowrap}
 .tpg .te{font-size:18px;line-height:1}
@@ -581,9 +598,7 @@ body.touch .hnote .kbt{display:none} body.touch .hnote .tct{display:inline}
               <button class="btn gold" id="seasonBtn">New season</button>
             </div>
           </div>
-          <div class="treeScroll"><div class="tree" id="tree"><div class="tlegend" id="tlegend"></div><div class="tpages" id="tpages"></div><div class="treeInner" id="treeInner"><svg id="treeSvg"></svg></div>
-            <div class="tzoom"><button class="btn small" id="tzIn" aria-label="Zoom in">+</button><button class="btn small" id="tzOut" aria-label="Zoom out">−</button><button class="btn small" id="tzFit">Fit</button><span class="glyph kb">+/−</span><span class="glyph pd pS">R stick</span></div>
-            <div class="jumpHint"><span class="glyph kb">E</span><span class="glyph pd pS">RT</span> jump here</div></div></div>
+          <div class="treeScroll"><div class="ulist" id="ulist"></div></div>
         </div>
         <div class="info" id="info">
           <div class="ie" id="iE">🏋️</div>
@@ -749,7 +764,7 @@ const ZONES=[
  {id:"shop",name:"Corner Shop",e:"🏪",cost:0,at:13,
   th:{glow:"220,235,255"},
   foods:[F("🍌","Banana",6,12,{w:3}),F("🍪","Cookie",5,18,{w:3}),F("🍫","Choc bar",8,32,{w:2}),F("🥪","Meal deal",14,60,{w:1.4,bites:2,size:1.15}),F("🥧","Pork pie",12,100,{w:.5})],
-  bb:{hp:18,hps:[7,20,24,120,195],kcb:6,reward:600},
+  bb:{hp:18,hps:[7,16,26,120,220],kcb:6,reward:600},
   secs:[{n:"Front Door",floor:"shop",wall:"shopDoor"},{n:"The Aisles",floor:"shop",wall:"shop"},{n:"Freezer Aisle",floor:"kitchen",wall:"freezers"},{n:"Stock Room",floor:"wood",wall:"stock"},{n:"The Till",floor:"wood",wall:"shopTill"}],
   bosses:[{e:"🥤",name:"Fizzy Pop",mv:"dart",spd:200,mi:6,atk:[{k:"burst",e:"💦",n:3,every:3,spd:300}]},{e:"🍞",name:"The Loaf",mv:"wander",spd:80,mi:5,atk:[{k:"wave",e:"🍞",every:3.6,spd:220}]},{e:"🍦",name:"Mr Whippy",mv:"wander",spd:90,mi:5,atk:[{k:"homing",e:"🧊",every:2.6,spd:220},{k:"bounce",e:"🧊",n:3,every:3.8,spd:280}]},{e:"🍿",name:"Popcorn Pete",mv:"dart",spd:210,mi:4,atk:[{k:"rain",e:"🍿",n:5,every:3.2}]},{e:"🧀",name:"The Big Cheese",mv:"wander",spd:80,mi:4,atk:[{k:"slam",every:3.4,r:110},{k:"wave",e:"🧀",every:4.4,spd:230}]}],
   hz:{puddle:3},
@@ -757,7 +772,7 @@ const ZONES=[
  {id:"chippy",name:"The Chippy",e:"🍟",cost:0,at:68,
   th:{glow:"255,236,190"},
   foods:[F("🍟","Chips",10,64,{w:3}),F("🥚","Pickled egg",5,36,{w:2}),F("🌭","Saveloy",9,74,{w:2}),F("🐟","Battered cod",16,180,{w:1,flee:1,size:1.2}),F("🍔","Chip butty",18,230,{w:.6,bites:2,size:1.2})],
-  bb:{hp:360,hps:[560,1600,3200,7800,14000],kcb:25,reward:10000},
+  bb:{hp:360,hps:[380,1150,3000,5500,10500],kcb:25,reward:10000},
   secs:[{n:"The Queue",floor:"chippy",wall:"chippy"},{n:"The Fryers",floor:"kitchen",wall:"chippyFry"},{n:"Spud Room",floor:"wood",wall:"curryKitchen"},{n:"Seafront",floor:"street",wall:"seafront"},{n:"Back Alley",floor:"asphalt",wall:"chippyAlley"}],
   bosses:[{e:"🥫",name:"Mushy Peas",mv:"wander",spd:60,mi:5,atk:[{k:"bounce",e:"🟢",n:5,every:2.8,spd:300}]},{e:"🌭",name:"Big Saveloy",mv:"dart",spd:220,mi:4,atk:[{k:"charge",every:3.6},{k:"homing",e:"🌭",every:2.8,spd:240}]},{e:"🥔",name:"Spud King",mv:"wander",spd:80,mi:4,atk:[{k:"mine",e:"🥔",n:3,every:4},{k:"slam",every:3.4,r:120}]},{e:"🦑",name:"Kraken Calamari",mv:"flee",spd:150,mi:4,atk:[{k:"boomer",e:"💧",n:5,every:3,spd:360},{k:"spin",e:"💧",every:6,spd:260}]},{e:"🐟",name:"Moby Cod",mv:"flee",spd:160,mi:4,atk:[{k:"wave",e:"💧",every:3.4,spd:240},{k:"charge",every:4.6}]}],
   hz:{grease:2,gull:2},
@@ -765,7 +780,7 @@ const ZONES=[
  {id:"curry",name:"Curry House",e:"🍛",cost:0,at:135,
   th:{glow:"255,170,90"},
   foods:[F("🍚","Pilau rice",10,170,{w:3}),F("🥟","Samosa",8,190,{w:2.5}),F("🍛","Tikka masala",18,540,{w:1.2,bites:2,size:1.2}),F("🌶️","Vindaloo chilli",6,250,{w:.8,spicy:1}),F("🍢","Seekh kebab",10,340,{w:1,flee:1})],
-  bb:{hp:7000,hps:[20000,56000,86000,120000,140000],hp0:3200,kcb:100,reward:160000},
+  bb:{hp:7000,hps:[20000,58000,110000,130000,172000],hp0:3200,kcb:100,reward:160000},
   secs:[{n:"Dining Room",floor:"curry",wall:"curry"},{n:"Spice Store",floor:"wood",wall:"spice"},{n:"The Kitchen",floor:"kitchen",wall:"curryKitchen"},{n:"Banquet Hall",floor:"parquet",wall:"banquet"},{n:"The Tandoor",floor:"terracotta",wall:"curryTandoor"}],
   bosses:[{e:"🥘",name:"The Balti Bowl",mv:"wander",spd:70,mi:4,atk:[{k:"ring",e:"🔥",n:8,every:3.2,spd:240}],fire:1},{e:"🧅",name:"Onion Bhaji",mv:"dart",spd:220,mi:4,atk:[{k:"boomer",e:"🧅",n:3,every:2.6,spd:380}]},{e:"🍢",name:"Kebab King",mv:"dart",spd:230,mi:4,atk:[{k:"burst",e:"🍢",n:3,every:2.6,spd:420},{k:"charge",every:4.5}]},{e:"🍚",name:"Biryani Boss",mv:"wander",spd:80,mi:3.5,atk:[{k:"rain",e:"🍚",n:6,every:3.2},{k:"spin",e:"🍚",every:5.5,spd:280}]},{e:"🍲",name:"The Phaal Pot",mv:"wander",spd:70,mi:3.5,atk:[{k:"slam",every:3,r:130},{k:"homing",e:"🌶️",every:2.4,spd:240}],fire:1}],
   hz:{fire:5},
@@ -773,7 +788,7 @@ const ZONES=[
  {id:"street",name:"Street Food",e:"🌮",cost:0,at:170,
   th:{glow:"255,200,140"},
   foods:[F("🌮","Taco",8,600,{w:3}),F("🍡","Dango",6,500,{w:2.5}),F("🍜","Ramen",16,1550,{w:1.5,bites:2,size:1.2}),F("🌯","Burrito",22,2250,{w:1,bites:3,size:1.25}),F("🍩","Doughnut",8,1100,{w:1,flee:1})],
-  bb:{hp:30000,hps:[140000,150000,250000,450000,700000],hp0:8000,kcb:450,reward:2400000},
+  bb:{hp:30000,hps:[244000,380000,470000,595000,925000],hp0:8000,kcb:450,reward:2400000},
   secs:[{n:"Night Market",floor:"street",wall:"street"},{n:"Food Trucks",floor:"asphalt",wall:"streetTrucks"},{n:"Hawker Hall",floor:"kitchen",wall:"street"},{n:"Rooftop",floor:"asphalt",wall:"rooftop"},{n:"Neon Alley",floor:"neon",wall:"streetNeon"}],
   bosses:[{e:"🍙",name:"Onigiri Ollie",mv:"dart",spd:240,mi:4,atk:[{k:"wave",e:"🍙",every:3,spd:260},{k:"charge",every:4.2}]},{e:"🌯",name:"Mega Burrito",mv:"flee",spd:160,mi:3.5,atk:[{k:"bounce",e:"🌶️",n:5,every:2.6,spd:320},{k:"mine",e:"🌯",n:3,every:4.6}]},{e:"🥟",name:"Dim Sum Don",mv:"wander",spd:90,mi:3.5,atk:[{k:"boomer",e:"🥟",n:5,every:2.8,spd:360},{k:"burst",e:"🥟",n:3,every:3.6,spd:340}]},{e:"🍣",name:"Sushi Sam",mv:"dart",spd:250,mi:3.5,atk:[{k:"homing",e:"🍣",every:2,spd:270},{k:"charge",every:3.8}]},{e:"🥙",name:"Doner Mountain",mv:"dart",spd:230,mi:3,atk:[{k:"spin",e:"🥩",every:5,spd:320},{k:"rain",e:"🥩",n:6,every:3.6},{k:"slam",every:3.4,r:120}]}],
   hz:{scooter:1,puddle:2},
@@ -781,7 +796,7 @@ const ZONES=[
  {id:"buffet",name:"The Buffet",e:"🍽️",cost:0,at:190,
   th:{glow:"255,215,150"},
   foods:[F("🍕","Pizza slice",10,3200,{w:3}),F("🍗","Chicken leg",12,4200,{w:2}),F("🍤","Prawn",5,2400,{w:2,flee:1}),F("🍰","Gateau",18,7600,{w:1,bites:2,size:1.2}),F("🍖","Rib",16,6800,{w:1})],
-  bb:{hp:90000,hps:[750000,980000,1400000,1700000,2300000],hp0:14000,kcb:2000,reward:48000000},
+  bb:{hp:90000,hps:[1300000,1800000,2500000,3000000,4300000],hp0:14000,kcb:2000,reward:48000000},
   secs:[{n:"Dessert Table",floor:"buffet",wall:"buffetDessert"},{n:"Wedding Party",floor:"parquet",wall:"buffetWedding"},{n:"Seafood Bar",floor:"kitchen",wall:"seafood"},{n:"Cheese & Wine",floor:"wood",wall:"cheese"},{n:"The Carvery",floor:"buffet",wall:"buffet"}],
   bosses:[{e:"🍮",name:"The Trifle",mv:"wander",spd:70,mi:3,atk:[{k:"bounce",e:"🍓",n:6,every:2.6,spd:320},{k:"ring",e:"🍒",n:10,every:4.2,spd:260}]},{e:"🎂",name:"Wedding Cake",mv:"wander",spd:50,mi:2,atk:[{k:"rain",e:"🍰",n:7,every:3},{k:"slam",every:3,r:140}]},{e:"🦞",name:"Lobster Lord",mv:"dart",spd:220,mi:3,atk:[{k:"charge",every:3.4},{k:"boomer",e:"🦐",n:5,every:2.6,spd:380}]},{e:"🧀",name:"Brie Baron",mv:"wander",spd:80,mi:3,atk:[{k:"wave",e:"🧀",every:3,spd:260},{k:"mine",e:"🧀",n:4,every:4.4}]},{e:"🦃",name:"The Sunday Roast",mv:"wander",spd:60,mi:2.5,atk:[{k:"burst",e:"🥕",n:5,every:2.6,spd:380},{k:"homing",e:"🥔",every:2.4,spd:250},{k:"rain",e:"🍗",n:6,every:3.6},{k:"charge",every:5.2}]}],
   hz:{waiter:1,rival:1},
@@ -823,7 +838,7 @@ ZONES.forEach((z,zi)=>{const avg=z.foods.reduce((a,f)=>a+f.kcal,0)/z.foods.lengt
 // Nodes have a few levels each; getting a node to level 3 (or maxing a 1-2 level node) opens the next ones.
 const pct=v=>Math.round(v*100)+"%";
 const NODES=[
- {id:"start",g:"gold",x:0,y:0,e:"🏋️",name:"Rookie Lifter",max:1,base:0,k:1,v:L=>L,f:()=>"Every bulk starts somewhere",d:"The root of the tree. Up is time, right is damage, left is kcal gains, down is abilities."},
+ {id:"start",g:"gold",x:0,y:0,e:"🏋️",name:"Rookie Lifter",max:1,base:0,k:1,v:L=>L,f:()=>"Every bulk starts somewhere",d:"Where every bulk starts. Upgrades come in four columns: Time, Damage, Gains and Abilities, and each market adds more."},
  // ⬆ TIME (blue)
  {id:"appetite",p:"start",g:"blue",x:0,y:-1,e:"⏱️",name:"Appetite",max:5,base:40,k:2.3,v:L=>15+1.2*L,f:v=>`${v.toFixed(1)}s per run`,d:"How long each run lasts. Runs top out at 25 seconds."},
  {id:"digest",p:"appetite2",g:"blue",x:-1,y:-2,e:"🍽️",name:"Second Helpings",max:5,base:1500,k:2.3,v:L=>.04*L,f:v=>`+${v.toFixed(2)}s per food`,d:"Every food you finish wins back a little of the time you've lost to hits."},
@@ -849,7 +864,7 @@ const NODES=[
  // ➡ THROWING (yellow, under Chew speed and Rhythm): dumbbells fire on their own at the nearest enemy, bosses first
  {id:"tpow",p:"chew",g:"yellow",x:1,y:1,e:"🎳",name:"Throw Power",max:5,base:150,k:2.3,v:L=>1+.15*L,f:v=>`×${v.toFixed(2)} throw damage`,d:"Your dumbbells hit enemies and bosses harder."},
  {id:"quick",p:"combo",g:"yellow",x:2,y:2,e:"⏩",name:"Quick Release",max:5,base:2500,k:2.3,v:L=>1+.1*L,f:v=>`throw ${pct(v-1)} faster`,d:"Throw dumbbells more often."},
- {id:"trange",p:"quick",g:"yellow",x:2,y:3,e:"🔭",name:"Long Throw",max:4,base:8000,k:2.3,v:L=>420+70*L,f:v=>`${v} throw range`,d:"Your auto-aim picks off enemies from further away."},
+ {id:"trange",p:"quick",g:"yellow",x:2,y:3,e:"🔭",name:"Long Throw",max:4,base:8000,k:2.3,v:L=>280+60*L,f:v=>`${v} throw range`,d:"Your auto-aim picks off enemies from further away."},
  {id:"tspd",p:"trange",g:"yellow",x:2,y:4,e:"🚀",name:"Fastball",max:4,base:30000,k:2.3,v:L=>1+.2*L,f:v=>`×${v.toFixed(1)} throw speed`,d:"Dumbbells fly faster, so fast enemies can't dodge them."},
  {id:"twin",p:"quick",g:"yellow",x:3,y:2,e:"✌️",name:"Twin Throw",max:2,base:60000,k:4,v:L=>1+L,f:v=>`${v} dumbbells per throw`,d:"Throw extra dumbbells in a fan. Great against crowds of goblins."},
  {id:"pierce",p:"twin",g:"yellow",x:4,y:2,e:"📌",name:"Straight Through",max:3,base:800000,k:3,v:L=>L,f:v=>v?`passes through ${v} enem${v>1?"ies":"y"}`:"stops at the first enemy",d:"Dumbbells keep going after they hit."},
@@ -949,9 +964,9 @@ const EQUIP=[
 ];
 // Supplements are gym-only: every one does something the skill tree can't (owner request 2026-10-17)
 const SUPPS=[
- {id:"partner",e:"🤜",name:"Training partner",max:5,base:400,k:7,f:L=>`partner throws too · ×${(.5+.15*L).toFixed(2)} power`,d:"A lifting partner follows you round the market and throws dumbbells at enemies too."},
- {id:"spotter",e:"🧍",name:"Spotter",max:3,base:300,k:30,f:L=>`${L} free hit${L>1?"s":""} every run`,d:"Someone's got your back. The first hits each run don't cost you any appetite."},
- {id:"second",e:"🔁",name:"One More Set",max:4,base:900,k:10,f:L=>`+${2+L}s at time-up, once a run`,d:"When time runs out, dig deep for a few more seconds. Goes past the 30 second limit."},
+ {id:"partner",e:"🤜",name:"Training partner",max:20,base:400,k:2.05,f:L=>`partner throws too · ×${(.5+.15*L).toFixed(2)} power`,d:"A lifting partner follows you round the market and throws dumbbells at enemies too."},
+ {id:"spotter",e:"🧍",name:"Spotter",max:6,base:300,k:12,f:L=>`${L} free hit${L>1?"s":""} every run`,d:"Someone's got your back. The first hits each run don't cost you any appetite."},
+ {id:"second",e:"🔁",name:"One More Set",max:8,base:900,k:5,f:L=>`+${2+L}s at time-up, once a run`,d:"When time runs out, dig deep for a few more seconds. Goes past the 30 second limit."},
  {id:"hype",e:"📣",name:"Hype man",max:5,base:250,k:7,f:L=>`boss needs ${pct(.05*L)} fewer kills`,d:"The crowd chants for the boss, so it shows up a little sooner and you get longer to fight it."},
  {id:"magnet",e:"🧲",name:"Magnet straps",max:5,base:120,k:6,f:L=>`power-up reach +${pct(.4*L)}`,d:"Power-ups fly to you from further away."},
  {id:"timer",e:"⏲️",name:"Rest timer",max:5,base:500,k:7,f:L=>`skills recharge ${pct(.08*L)} faster`,d:"Dash, Shield, Gym Party and Cheat Meal all come back sooner."},
@@ -987,8 +1002,8 @@ const secDone=(z,i)=>!!S.cleared[secKey(z,i)];
 const selZone=()=>ZONES[ZI[S.zone]],selSec=()=>clamp(S.si||0,0,NSEC-1);
 // Skill tree pages, one per market (owner: tab across them instead of one huge tree). A node's page comes from its price; a page opens when you reach its market.
 const pgOpen=k=>S.zones.length-1>=k;
-const needTxt=n=>n.p&&pgOpen(n.pg)?`${NI[n.p].name} to level ${need(n.p)}`:`to ${ZONES[n.pg].name}`;   // what opens this node
-const avail=n=>pgOpen(n.pg)&&(!n.p||lv(n.p)>=need(n.p));   // n.p is the parent on the node's own page (see relayout)
+const needTxt=n=>pgOpen(n.pg)&&n.p?`${NI[n.p].name} to level ${need(n.p)}`:`to ${ZONES[n.pg].name}`;   // what opens this node
+const avail=n=>pgOpen(n.pg)&&(!n.p||NI[n.p].pg<n.pg||lv(n.p)>=need(n.p));   // a parent from an earlier market doesn't hold it back
 const medalsFor=k=>Math.floor(2*Math.sqrt(k/4.5e9));   // ~6 medals for a first season (seasons got longer on 2026-10-17)
 let SIM=false;
 
@@ -1212,88 +1227,24 @@ function nextBanner(){const b=BQ.shift(),el=$("#banner");if(!b){el.hidden=true;b
   el.hidden=false;const w=el.firstElementChild;w.style.animation="none";void w.offsetWidth;w.style.animation="";
   bT=setTimeout(nextBanner,2100);}
 
-// Build the tree once; renderGym just updates classes and text (so controller focus survives a purchase)
+// Upgrades are a plain list in four columns (owner: the node tree looked goofy and was slow). Each column is a branch:
+// Time, Damage, Gains, Abilities. Rows are grouped by the market whose prices they belong to (n.pg); a market's rows show once you
+// reach it, plus a locked teaser for the next one. An upgrade can still need another one first (n.p), only within its own market.
 NODES.forEach(n=>{n.pg=n.id==="bulk"?4:n.id==="start"||!n.base?0:n.base<3000?0:n.base<150000?1:n.base<5e6?2:n.base<1e9?3:4;});
-// Each page after the first is its own connected tree around a market badge at 0,0 (owner: pages must look like the first one, no gaps).
-// Nodes whose parent is on an earlier page form a "spine" going out from the badge in their branch's direction (cheapest first);
-// their own children branch off one grid step at a time. Lines are real prerequisites, like on the first page.
-(function relayout(){
-  const DIRS={appetite:[0,-1],chew:[1,0],stomach:[-1,0],speed:[0,1]};
-  const DIR={};for(const n of NODES){let m=n;while(m.p&&m.p!=="start")m=NI[m.p];DIR[n.id]=DIRS[m.id]||[0,1];}const dirOf=n=>DIR[n.id];   // from the original parents, before any are rewired
-  for(let k=1;k<5;k++){
-    const pageN=NODES.filter(n=>n.pg===k);if(!pageN.length)continue;
-    const kids={};pageN.forEach(n=>{if(n.p&&NI[n.p].pg===k)(kids[n.p]=kids[n.p]||[]).push(n);});
-    const occ=new Set(["0,0"]),key=(x,y)=>x+","+y,place=(n,x,y)=>{n.x=x;n.y=y;occ.add(key(x,y));};
-    const spines=[];
-    for(const [dk,d] of Object.entries(DIRS)){const sp=pageN.filter(n=>!(n.p&&NI[n.p].pg===k)&&dirOf(n)===d).sort((a,b)=>a.base-b.base);
-      sp.forEach((n,i)=>{place(n,d[0]*(i+1),d[1]*(i+1));n.p=i?sp[i-1].id:null;n.proot=!i;});spines.push([d,sp]);}
-    const grow=(n,din,flip)=>{const cs=(kids[n.id]||[]).sort((a,b)=>a.base-b.base);let f=flip;
-      for(const c of cs){const pa=[din[1],din[0]],pb=[-din[1],-din[0]],opts=f?[pb,pa,din]:[pa,pb,din];f=!f;
-        let ok=null;for(const o of opts){if(!occ.has(key(n.x+o[0],n.y+o[1]))){ok=o;break;}}
-        if(!ok){for(let r=2;r<6&&!ok;r++)for(const o of opts)if(!occ.has(key(n.x+o[0]*r,n.y+o[1]*r))){ok=[o[0]*r,o[1]*r];break;}}
-        place(c,n.x+ok[0],n.y+ok[1]);grow(c,[Math.sign(ok[0]),Math.sign(ok[1])],f);}};
-    for(const [d,sp] of spines)sp.forEach((n,i)=>grow(n,d,i%2===1));
-  }
-})();
-let TP=0;   // the tree page you're looking at
-const treeEl=$("#tree"),treeIn=$("#treeInner"),svg=$("#treeSvg"),nodeEls={},lineEls={};
-let infoId="start",touchSel=null;
-// The tree sits on a grid: every link is one step up/down/left/right. CELL px per grid step.
-const CELL=124,GX=[Math.min(...NODES.map(n=>n.x))-1,Math.max(...NODES.map(n=>n.x))+1],GY=[Math.min(...NODES.map(n=>n.y))-1,Math.max(...NODES.map(n=>n.y))+1];
-const TW=(GX[1]-GX[0])*CELL,TH=(GY[1]-GY[0])*CELL;
-const gpx=x=>(x-GX[0])*CELL,gpy=y=>(y-GY[0])*CELL;
-treeIn.style.width=TW+"px";treeIn.style.height=TH+"px";svg.setAttribute("width",TW);svg.setAttribute("height",TH);
-const pageBadges=ZONES.map((z,k)=>{if(!k)return null;const b=document.createElement("div");b.className="node root badge";b.style.left=gpx(0)+"px";b.style.top=gpy(0)+"px";b.innerHTML=`<span>${z.e}</span>`;b.dataset.tip=z.name+" upgrades";b.hidden=true;treeIn.appendChild(b);return b;});
-NODES.forEach(n=>{
-  if(!n.p&&n.pg>0){const l=document.createElementNS("http://www.w3.org/2000/svg","line");l.setAttribute("x1",gpx(0));l.setAttribute("y1",gpy(0));l.setAttribute("x2",gpx(n.x));l.setAttribute("y2",gpy(n.y));l.setAttribute("stroke-linecap","round");svg.appendChild(l);lineEls[n.id]=l;}
-  if(n.p){const p=NI[n.p],l=document.createElementNS("http://www.w3.org/2000/svg","line");
-    l.setAttribute("x1",gpx(p.x));l.setAttribute("y1",gpy(p.y));l.setAttribute("x2",gpx(n.x));l.setAttribute("y2",gpy(n.y));
-    l.setAttribute("stroke-linecap","round");svg.appendChild(l);lineEls[n.id]=l;}
-});
-for(const [t,x,y] of [["⏱ TIME",0,GY[0]+.35],["DAMAGE 💪",GX[1]-.45,-.55],["🔥 GAINS",GX[0]+.45,-.55],["⚡ ABILITIES",0,GY[1]-.35]]){const l=document.createElement("div");l.className="tlab";l.textContent=t;l.style.left=gpx(x)+"px";l.style.top=gpy(y)+"px";treeIn.appendChild(l);}
-NODES.forEach(n=>{
-  const b=document.createElement("button");b.className="node"+(n.skill?" skill":"")+(n.id==="start"?" root":"");
-  b.style.left=gpx(n.x)+"px";b.style.top=gpy(n.y)+"px";b.style.setProperty("--c",BRC[n.g]);
-  b.innerHTML=`<span>${n.e}</span>${n.id==="start"?"":`<span class="gem"></span><span class="lv"></span>`}`;
-  b.onmouseenter=()=>{infoId=n.id;renderInfo();};
-  b.onfocus=()=>{infoId=n.id;renderInfo();followNode(n);};
-  // touch: the first tap selects (shows the details + Buy), a second tap on the same node buys
-  b.onclick=()=>{if(dragMoved)return;if(document.body.classList.contains("touch")&&touchSel!==n.id){touchSel=n.id;infoId=n.id;renderInfo();return;}infoId=n.id;buyNode(n);};
-  treeIn.appendChild(b);nodeEls[n.id]=b;
-});
-/* pan + zoom */
-const TV={z:.85,x:0,y:0};
-const vw=()=>treeEl.clientWidth,vh=()=>treeEl.clientHeight;
-function applyTree(){TV.z=clamp(TV.z,.2,1.6);treeIn.style.transform=`translate(${TV.x}px,${TV.y}px) scale(${TV.z})`;}
-function centerOn(px,py){TV.x=vw()/2-px*TV.z;TV.y=vh()/2-py*TV.z;applyTree();}
-function followNode(n){const sx=TV.x+gpx(n.x)*TV.z,sy=TV.y+gpy(n.y)*TV.z,m=90*TV.z+30;if(sx<m||sx>vw()-m||sy<m||sy>vh()-m)centerOn(gpx(n.x),gpy(n.y));}
-function zoomBy(f,cx=vw()/2,cy=vh()/2){const z0=TV.z;TV.z=clamp(TV.z*f,.2,1.6);const k=TV.z/z0;TV.x=cx-(cx-TV.x)*k;TV.y=cy-(cy-TV.y)*k;applyTree();}
-function fitTree(){   // fit the nodes on this page (plus their anchors), clear of the legend at the top and the page tabs at the bottom
-  const vis=NODES.filter(n=>!nodeEls[n.id].hidden);if(!vis.length||!vw())return;
-  const xs=vis.map(n=>gpx(n.x)),ys=vis.map(n=>gpy(n.y)),x0=Math.min(...xs)-60,x1=Math.max(...xs)+60,y0=Math.min(...ys)-60,y1=Math.max(...ys)+75;
-  const sm=vh()<360,top=sm?34:58,bot=sm?54:74,aw=vw()-30,ah=Math.max(60,vh()-top-bot);
-  TV.z=clamp(Math.min(aw/(x1-x0),ah/(y1-y0)),.2,1.1);TV.x=(vw()-(x1-x0)*TV.z)/2-x0*TV.z;TV.y=top+(ah-(y1-y0)*TV.z)/2-y0*TV.z;applyTree();}
-function setPage(k,quiet){if(!pgOpen(k)){if(!quiet){toast(`Reach ${ZONES[k].name} to open these upgrades`);SFX.no();}return;}TP=k;renderGym();fitTree();if(!quiet)SFX.buy(k);}
-ZONES.forEach((z,k)=>{const b=document.createElement("button");b.className="tpg";b.innerHTML=`<span class="te">${z.e}</span><span class="tn">${z.name}</span>`;b.onclick=()=>setPage(k);$("#tpages").appendChild(b);});
-function homeTree(){TV.z=.85;centerOn(gpx(0),gpy(0));}
-$("#tzIn").onclick=()=>zoomBy(1.2);$("#tzOut").onclick=()=>zoomBy(1/1.2);$("#tzFit").onclick=fitTree;
-treeEl.addEventListener("wheel",e=>{e.preventDefault();const r=treeEl.getBoundingClientRect(),k=treeEl.clientWidth/r.width;zoomBy(e.deltaY<0?1.12:1/1.12,(e.clientX-r.left)*k,(e.clientY-r.top)*k);},{passive:false});
-let drag=null,dragMoved=false;
-// two-finger pinch zooms around the fingers (and pans with them)
-const PT=new Map();let pinch=null;
-const pinchState=()=>{const[a,b]=[...PT.values()];return{d:Math.hypot(a.x-b.x,a.y-b.y)||1,mx:(a.x+b.x)/2,my:(a.y+b.y)/2};};
-treeEl.addEventListener("pointerdown",e=>{if(e.pointerType!=="touch")return;PT.set(e.pointerId,{x:e.clientX,y:e.clientY});if(PT.size===2){pinch=pinchState();drag=null;dragMoved=true;}},true);
-addEventListener("pointermove",e=>{if(!PT.has(e.pointerId))return;PT.set(e.pointerId,{x:e.clientX,y:e.clientY});if(!pinch||PT.size<2)return;
-  const p=pinchState(),r=treeEl.getBoundingClientRect(),k=treeEl.clientWidth/r.width;
-  zoomBy(p.d/pinch.d,(p.mx-r.left)*k,(p.my-r.top)*k);TV.x+=(p.mx-pinch.mx)*k;TV.y+=(p.my-pinch.my)*k;applyTree();pinch=p;});
-for(const ev of["pointerup","pointercancel"])addEventListener(ev,e=>{PT.delete(e.pointerId);if(PT.size<2)pinch=null;});
-treeEl.addEventListener("pointerdown",e=>{if(e.target.closest(".tzoom")||pinch)return;drag={x:e.clientX,y:e.clientY,tx:TV.x,ty:TV.y};dragMoved=false;});
-addEventListener("pointermove",e=>{if(!drag||pinch)return;const r=treeEl.getBoundingClientRect(),k=treeEl.clientWidth/r.width,dx=(e.clientX-drag.x)*k,dy=(e.clientY-drag.y)*k;if(Math.abs(dx)+Math.abs(dy)>6){dragMoved=true;treeEl.classList.add("drag");}if(dragMoved){TV.x=drag.tx+dx;TV.y=drag.ty+dy;applyTree();}});
-addEventListener("pointerup",()=>{drag=null;treeEl.classList.remove("drag");setTimeout(()=>dragMoved=false,0);});
-// recentre whenever the tree area really changes size (fullscreen on a phone settles slowly, so a fixed delay missed it)
-let treeSz=null;new ResizeObserver(()=>{const w=treeEl.clientWidth,h=treeEl.clientHeight;if(!w||!h)return;
-  if(!treeSz){TP=S.zones.length-1;S.tpSeen=TP;renderGym();fitTree();}else if(w!==treeSz[0]||h!==treeSz[1]){TV.x+=(w-treeSz[0])/2;TV.y+=(h-treeSz[1])/2;applyTree();}
-  treeSz=[w,h];}).observe(treeEl);   // only the very first size centres on the root; after that your pan/zoom stays put
+const UCOLS=[["time","⏱️ Time","blue"],["dmg","💥 Damage","yellow"],["gain","🔥 Gains","red"],["abil","⚡ Abilities","green"]];
+{const ROOT={appetite:"time",chew:"dmg",stomach:"gain",speed:"abil"};for(const n of NODES){let m=n;while(m.p&&m.p!=="start")m=NI[m.p];n.col=n.id==="start"?"dmg":ROOT[m.id]||"abil";}}
+const nodeEls={},ugroups={};let infoId="start",touchSel=null;
+const fitTree=()=>{},zoomBy=()=>{};   // no pan/zoom any more
+{const host=$("#ulist");
+  for(const [cid,title,g] of UCOLS){const col=document.createElement("div");col.className="ucol";col.style.setProperty("--c",BRC[g]);col.innerHTML=`<h3>${title}</h3><div class="urows"></div>`;host.appendChild(col);
+    const rows=col.querySelector(".urows");
+    ZONES.forEach((z,k)=>{const list=NODES.filter(n=>n.col===cid&&n.pg===k).sort((a,b)=>(a.id==="start"?-1:b.id==="start"?1:a.base-b.base));if(!list.length)return;
+      const h=document.createElement("div");h.className="ugrp";h.innerHTML=`<span>${z.e}</span> ${z.name}`;rows.appendChild(h);(ugroups[k]=ugroups[k]||[]).push(h);
+      for(const n of list){const b=document.createElement("button");b.className="urow";b.style.setProperty("--c",BRC[n.g]);
+        b.innerHTML=`<span class="ue">${n.e}</span><span class="ut"><b>${n.name}</b><span class="ub"><small></small><span class="up"></span></span></span>`;
+        b.onmouseenter=()=>{infoId=n.id;renderInfo();};b.onfocus=()=>{infoId=n.id;renderInfo();};
+        b.onclick=()=>{if(document.body.classList.contains("touch")&&touchSel!==n.id){touchSel=n.id;infoId=n.id;renderInfo();return;}infoId=n.id;buyNode(n);};
+        rows.appendChild(b);nodeEls[n.id]=b;}});}}
 function buyNode(n){
   const L=lv(n.id);
   if(L>=n.max){renderInfo();return;}
@@ -1320,7 +1271,6 @@ function renderInfo(){
   b.className="btn"+(!max&&avail(n)&&S.kcal>=c?" gold":"");
 }
 $("#iBuy").onclick=()=>buyNode(NI[infoId]);
-$("#tlegend").innerHTML=BRANCH.map(([g,t])=>`<span style="--c:${BRC[g]}"><i></i>${t}</span>`).join("");
 
 const zoneEls={},secEls={};
 const ATK={spread:"sprays shots at you",ring:"fires rings of shots",spin:"spins out a spiral",slam:"slams the floor",charge:"charges at you",wave:"sends walls of food (find the gap)",rain:"drops food from above",homing:"fires homing shots",burst:"fires rapid bursts",boomer:"throws boomerangs",bounce:"bounces shots off the walls",mine:"lays food mines"};
@@ -1463,22 +1413,16 @@ function renderGym(){
     $("#taskBar").style.width=(live?p/tk.t.n*100:0)+"%";$("#taskProg").textContent=live?`${p}/${tk.t.n}`:`${zone.name}`;$("#taskRew").textContent=`+${fmt(tk.t.r)} kcal`;}
   else{$("#taskTxt").textContent=`All ${zone.name} tasks done!`;$("#taskBar").style.width="100%";$("#taskProg").textContent="";$("#taskRew").textContent="";}
   $("#seasonCard").hidden=!S.beaten.buffet;
-  // a new market opens a new tree page: jump to it once
-  {const top=S.zones.length-1;if(top<(S.tpSeen??0)){S.tpSeen=top;TP=Math.min(TP,top);}if(top>(S.tpSeen??0)){S.tpSeen=top;TP=top;requestAnimationFrame(fitTree);}}
-  [...$("#tpages").children].forEach((b,k)=>{const open=pgOpen(k);b.className="tpg"+(k===TP?" on":"")+(open?"":" lock");b.querySelector(".te").textContent=open?ZONES[k].e:"🔒";
-    const c=open?NODES.filter(n=>n.pg===k&&avail(n)&&lv(n.id)<n.max&&S.kcal>=cost(n)).length:0;if(c&&k!==TP)b.dataset.n=String(c);else delete b.dataset.n;});
-  pageBadges.forEach((b,k)=>{if(b)b.hidden=k!==TP;});
+  // the list: rows of markets you've reached, plus the next market's rows as a locked teaser
+  const top=S.zones.length-1;
+  for(const [k,hs] of Object.entries(ugroups)){const show=+k<=top+1;for(const h of hs){h.hidden=!show;h.classList.toggle("lock",+k>top);h.lastChild.textContent=" "+ZONES[k].name+(+k>top?" · reach it to unlock":"");}}
   NODES.forEach(n=>{
-    const b=nodeEls[n.id],L=lv(n.id),max=L>=n.max,ok=avail(n),can=ok&&!max&&S.kcal>=cost(n);
-    const peek=!ok&&(!n.p||avail(NI[n.p]));   // parent is reachable: show a "?" so you know something's coming
-    const here=n.pg===TP;
-    b.className="node"+(n.skill?" skill":"")+(n.id==="start"?" root":"")+(L>0?" own":"")+(max?" max":"")+(can&&here?" can":"")+(!ok?" lock":"")+(peek?" peek":"");
-    b.hidden=!here||(!ok&&!peek);b.firstElementChild.textContent=ok?n.e:"?";
-    const l=b.querySelector(".lv");if(l)l.textContent=n.skill?(L?"✓":fmt(cost(n))):(max?"MAX":`${L}/${n.max}`);
+    const b=nodeEls[n.id],L=lv(n.id),max=L>=n.max,ok=avail(n),can=ok&&!max&&S.kcal>=cost(n),open=pgOpen(n.pg);
+    b.hidden=n.pg>top+1;
+    b.className="urow"+(L>0?" own":"")+(max?" max":"")+(can?" can":"")+(!ok?" lock":"");
+    b.querySelector("small").textContent=!ok?(open?`Needs ${needTxt(n)}`:`Reach ${ZONES[n.pg].name}`):n.id==="start"?`${S.lv.start||1} lv · bench`:n.skill?(L?"Skill unlocked":n.f(1)):n.f(n.v(L));
+    b.querySelector(".up").textContent=max?(n.skill?"✓":"MAX"):!ok?"🔒":`${n.skill?"":`${L}/${n.max} · `}${fmt(cost(n))}`;
     b.setAttribute("aria-label",`${n.name}, level ${L} of ${n.max}`);
-    b.dataset.tip=!ok?`??? · get ${needTxt(n)}`:n.id==="start"?n.name:`${n.name}  ·  `+(max?(n.skill?"Unlocked":"MAX"):!ok?"🔒 Locked":`${fmt(cost(n))} kcal`);
-    const ln=lineEls[n.id];
-    if(ln){ln.style.display=b.hidden||n.pg!==TP?"none":"";const on=L>0,rd=ok;ln.setAttribute("stroke",on?"#3b2a1c":rd?BRC[n.g]:"#a8997c");ln.setAttribute("stroke-width",on?5:3.5);ln.setAttribute("stroke-dasharray",rd?"":"2 8");}
   });
   renderInfo();
 }
@@ -1648,13 +1592,14 @@ function drawGym(t,dt){
 /* ---------- RUN ---------- */
 const cv=$("#cv"),ctx=cv.getContext("2d");
 const portCv=$("#portCv"),pctx=portCv.getContext("2d");
-let WW=1280,WH=720,SCL=1,OX=0,OY=0,DPR=1,ROOM=null,ROOMQ=1,VIG=null;
+let RSC=1,rsT=0,rsN=0,rsUp=0;   // dynamic resolution: drops when a run runs slow, climbs back when there's headroom
+let WW=1280,WH=720,SCL=1,OX=0,OY=0,DPR=1,ROOM=null,ROOMQ=1,VIG=null,DARK=null;
 const WALL=140,SIDE=34,BOT=34,PR=28;
 const FX0=()=>SIDE,FX1=()=>WW-SIDE,FY0=()=>WALL,FY1=()=>WH-BOT;
 function layout(){
   const vw=innerWidth,vh=innerHeight;
   // render resolution budget: at most 1.5x and about 1440p worth of pixels (filling a 4K canvas was what dropped the frame rate in busy runs)
-  DPR=Math.min(1.5,window.devicePixelRatio||1);DPR=Math.min(DPR,Math.sqrt(2560*1440/Math.max(1,vw*vh)));
+  DPR=Math.min(1.5,window.devicePixelRatio||1);DPR=Math.min(DPR,Math.sqrt(2560*1440/Math.max(1,vw*vh)))*RSC;   // RSC: automatic resolution scale (see frame)
   cv.width=Math.round(vw*DPR);cv.height=Math.round(vh*DPR);
   fitScreen();
   const hud=$("#hud"),top=(hud.getBoundingClientRect().height||70)+6,bot=document.body.classList.contains("touch")?6:($("#skillbar").getBoundingClientRect().height||70)+16;
@@ -1963,7 +1908,12 @@ function buildRoom(z,si=0){
   const v=document.createElement("canvas");v.width=Math.ceil(WW*q/2);v.height=Math.ceil(WH*q/2);const vc=v.getContext("2d");vc.scale(q/2,q/2);
   const vg=vc.createRadialGradient(WW/2,WH*.55,Math.min(WW,WH)*.25,WW/2,WH*.55,Math.max(WW,WH)*.72);vg.addColorStop(0,"rgba(0,0,0,0)");vg.addColorStop(.6,"rgba(0,0,0,.22)");vg.addColorStop(1,"rgba(0,0,0,.72)");vc.fillStyle=vg;vc.fillRect(0,0,WW,WH);
   VIG=v;
+  if(z.id==="street"){const d=document.createElement("canvas"),dq=.5;d.width=Math.ceil(WW*2*dq);d.height=Math.ceil(WH*2*dq);const dc=d.getContext("2d");dc.scale(dq,dq);
+    dc.fillStyle="rgba(6,8,24,.7)";dc.fillRect(0,0,WW*2,WH*2);dc.globalCompositeOperation="destination-out";
+    const hg=dc.createRadialGradient(WW,WH,120,WW,WH,380);hg.addColorStop(0,"rgba(0,0,0,1)");hg.addColorStop(1,"rgba(0,0,0,0)");dc.fillStyle=hg;dc.fillRect(0,0,WW*2,WH*2);DARK=d;}
+  else DARK=null;
 }
+const BELT_V=120,BELTS=()=>{const h=FY1()-FY0();return [{y:FY0()+h*.32,h:66,dir:1},{y:FY0()+h*.72,h:66,dir:-1}];};
 const LAMPS=()=>WW<1000?[WW*.2,WW*.8]:[WW*.14,WW*.34,WW*.66,WW*.86];
 // light fittings drawn every frame so they can flicker
 function drawLights(tm){
@@ -2040,8 +1990,18 @@ function spawnFood(initial,at,gold){
   while(tries<20&&(Math.hypot(x-R.x,y-R.y)<120||R.puddles.some(p=>Math.hypot((x-p.x)/p.rx,(y-p.y)/p.ry)<1)));
   const hp0=def.bites*EHP[ZI[R.zone.id]][R.si];
   const f={def,x,y,r,left:hp0,hp0,gold:gold??Math.random()<R.gold,pop:initial?1:0,vx:at?at.vx||0:0,vy:at?at.vy||0:0,wob:Math.random()*6,hit:0,sq:0,blink:rnd(1,5),step:0};
-  R.foods.push(f);return f;
+  R.foods.push(f);
+  // later markets add new kinds of food monster on top of the usual ones (owner: Street Food got samey)
+  if(!at&&!gold){const zi=ZI[R.zone.id],r=Math.random();
+    if(zi>=4&&r<.12){f.kind="elite";f.e="🍗";f.armor=true;f.left=f.hp0=f.hp0*3;f.r*=1.25;}
+    else if(zi>=3&&r<.26){f.kind="split";f.e="🌮";f.left=f.hp0=f.hp0*1.2;}
+    else if(zi>=2&&r<.42){f.kind="bomb";f.e="🌶️";f.left=f.hp0=f.hp0*.6;f.spd=150*(1+.04*R.si);}}
+  return f;
 }
+// chilli bomb: goes off where it is. On you it costs time; it always hurts food monsters around it.
+function bombBoom(f,onPlayer){const rad=130;burst(f.x,f.y,"#ff7a2a",18,1.5);burst(f.x,f.y,"#ffd84a",10,1);R.pounds.push({x:f.x,y:f.y,t:0,max:rad});R.shake=Math.max(R.shake,.35);if(!SIM)SFX.smash();
+  for(const g of R.foods.slice())if(g!==f&&!g.boss&&!g.clock&&R.foods.includes(g)&&Math.hypot(g.x-f.x,g.y-f.y)<rad+g.r)chomp(g,{shot:1,chain:1,amt:hitAmt(g)*4});
+  if(onPlayer&&Math.hypot(R.x-f.x,R.y-10-f.y)<rad+PR)knock("Boom!",.3,1.2,(R.x-f.x)*3,(R.y-f.y)*3);}
 function setupHazards(){
   const h=R.zone.hz,st=R.stage,n=k=>h[k]?h[k]+(k==="fire"?st:Math.floor(st/2)):0; // more hazards after each boss
   const spot=(minD=160)=>{let x,y,t=0;do{x=rnd(FX0()+90,FX1()-90);y=rnd(FY0()+70,FY1()-60);t++;}while(t<30&&(Math.hypot(x-R.x,y-R.y)<minD||R.puddles.concat(R.fires).some(p=>Math.hypot(x-p.x,y-p.y)<200)));return{x,y};};
@@ -2129,7 +2089,7 @@ function padMenu(st,dt){
   else if(dir){padRep.t-=dt;if(padRep.t<=0){padRep.t=.11;navMove(dir);}}
   if(st.A){const a=document.activeElement;if(a&&a!==document.body&&a.click){a.click();}else navMove([0,1]);padHold=0;padHoldEl=a;}
   // hold A on an upgrade to keep buying it
-  {const a=document.activeElement;if(st.Ah&&a&&a===padHoldEl&&!dir&&(a.classList.contains("node")||a.classList.contains("gitem"))){padHold+=dt;if(padHold>.6){padHoldRep-=dt;if(padHoldRep<=0){padHoldRep=.14;a.click();}}}else{padHold=0;padHoldRep=0;}}
+  {const a=document.activeElement;if(st.Ah&&a&&a===padHoldEl&&!dir&&(a.classList.contains("urow")||a.classList.contains("gitem"))){padHold+=dt;if(padHold>.6){padHoldRep-=dt;if(padHoldRep<=0){padHoldRep=.14;a.click();}}}else{padHold=0;padHoldRep=0;}}
   if((st.LT||st.RT)&&!R&&navLayer()===$("#gym"))jumpPanel(st.RT?"tree":"markets");
   if(st.ry&&!R&&TAB==="tree"&&navLayer()===$("#gym")){zoomBy(1-st.ry*dt*.9);}
   if(st.B)navBack();
@@ -2142,7 +2102,7 @@ let padHold=0,padHoldRep=0,padHoldEl=null;   // hold-to-buy only repeats on the 
 function jumpPanel(to){
   if(to==="markets"){const b=secEls[S.zone]&&secEls[S.zone][selSec()];(b||$("#goBtn")).focus();}
   else if(TAB==="gym"){const it=[...document.querySelectorAll("#paneGym .gitem")];(it.find(b=>b.classList.contains("can"))||it[0]).focus();}
-  else{const can=NODES.filter(n=>!nodeEls[n.id].hidden&&nodeEls[n.id].classList.contains("can")).sort((a,b)=>Math.hypot(a.x-50,a.y-32)-Math.hypot(b.x-50,b.y-32))[0];nodeEls[(can||NODES.find(n=>!nodeEls[n.id].hidden)||NI.start).id].focus();}
+  else{const rows=[...document.querySelectorAll("#ulist .urow")].filter(b=>!b.hidden);(rows.find(b=>b.classList.contains("can"))||rows[0]).focus();}
   SFX.buy(0);
 }
 // d-pad around the skill tree follows its branches
@@ -2258,6 +2218,13 @@ function update(dt){
   if(v>25&&R.dashT<=0&&(mx||my)){const l=Math.hypot(mx,my);R.fx=mx/l;R.fy=my/l;}
   if(R.dashT<=0&&v>40)R.walk+=dt*v/22;
   R.x=clamp(R.x,FX0()+PR,FX1()-PR);R.y=clamp(R.y,FY0()+PR*.3,FY1()-PR*1.2);
+  // The Buffet: conveyor belts carry you and the food monsters
+  if(R.zone.id==="buffet")for(const b of BELTS()){if(R.dashT<=0&&Math.abs(R.y+PR*.6-b.y)<b.h/2){R.x=clamp(R.x+b.dir*BELT_V*dt,FX0()+PR,FX1()-PR);}
+    for(const f of R.foods)if(!f.boss&&!f.clock&&Math.abs(f.y+f.r*.6-b.y)<b.h/2){f.x+=b.dir*BELT_V*dt;keepIn(f,f.r);}}
+  // hot floor (owner: late runs turned into standing still): stand still too long and the floor sizzles, then flares
+  {const mv=Math.hypot(R.x-(R.px??R.x),R.y-(R.py??R.y));R.px=R.x;R.py=R.y;const th=ZI[R.zone.id]===0?3:2;
+    if(mv<40*dt&&!R.ending&&R.stun<=0)R.still=(R.still||0)+dt;else R.still=Math.max(0,(R.still||0)-dt*4);
+    if(R.still>th){R.sizzle=(R.sizzle||0)+dt;if(R.sizzle>.8){R.sizzle=0;R.still=0;knock("Too hot!",.2,1,0,0);burst(R.x,R.y+PR,"#ff7a2a",14,1.2);}}else R.sizzle=0;}
   for(const t of R.trail)t.life-=dt;R.trail=R.trail.filter(t=>t.life>0);
   // foods
   const inhR=stat("inhaleR");
@@ -2276,6 +2243,10 @@ function update(dt){
     f.stun=Math.max(0,(f.stun||0)-dt);
     if(f.clock||f.stun>0){}
     else if(f.def.flee&&d<150){f.vx+=dx/d*300*dt;f.vy+=dy/d*300*dt;}
+    else if(f.kind==="bomb"){   // chilli bombs run straight at you, then fizz for 0.7s and go off
+      if(f.fuse>0){f.fuse-=dt;if(f.fuse<=0){f.blown=true;bombBoom(f,true);const i=R.foods.indexOf(f);if(i>=0)R.foods.splice(i,1);continue;}}
+      else if(f.pop>=1){const ddx=R.x-f.x,ddy=R.y-10-f.y,dd=Math.hypot(ddx,ddy)||1;f.x+=ddx/dd*f.spd*dt;f.y+=ddy/dd*f.spd*dt;f.step+=dt*9;if(dd<f.r+PR+40){f.fuse=.7;if(!SIM)tone(900,.3,"square",.03,3);}}
+      keepIn(f,f.r);continue;}
     else{ // food monsters shuffle towards you (sometimes off somewhere else)
       f.t=(f.t||0)+dt;
       if(!f.goal||Math.hypot(f.goal.x-f.x,f.goal.y-f.y)<16||f.t>f.gt){const near=Math.random()<.55;f.goal=near?{x:R.x+rnd(-160,160),y:R.y+rnd(-120,120)}:{x:rnd(FX0()+60,FX1()-60),y:rnd(FY0()+60,FY1()-60)};f.gt=f.t+rnd(1.5,3.2);f.spd=f.spd||rnd(38,62)*(1+.06*R.si);}
@@ -2293,7 +2264,7 @@ function update(dt){
   // eating
   if(R.stun<=0){
     // dashing smashes through food monsters
-    if(R.dashT>0){for(const f of R.foods.slice()){if(f.dash===R.dashId||f.boss||f.clock)continue;if(Math.hypot(f.x-R.x,f.y-R.y)<f.r+PR+10){f.dash=R.dashId;chomp(f,{shot:1,amt:hitAmt(f)*2});}}}
+    if(R.dashT>0){for(const f of R.foods.slice()){if(f.dash===R.dashId||f.boss||f.clock)continue;if(Math.hypot(f.x-R.x,f.y-R.y)<f.r+PR+10){f.dash=R.dashId;chomp(f,{shot:1,brk:1,amt:hitAmt(f)*2});}}}
     if(R.chew<=0){
       let best=null,bd=1e9;
       for(const f of R.foods){if(!f.clock)continue;const d=Math.hypot(f.x-R.x,f.y-(R.y-10))-f.r-PR-R.reach;if(d<0&&d<bd){bd=d;best=f;}}
@@ -2324,7 +2295,7 @@ function update(dt){
   R.foods=R.foods.filter(f=>!(f.clock&&f.left<0));
   // goblins keep turning up on the way to the boss (fewer once it's out)
   R.miniT-=dt;const gob=R.foods.filter(f=>f.mini).length,gmax=(R.bossOut?1:2)+Math.floor(R.si/2)+Math.floor(ZI[R.zone.id]/2);
-  if(R.miniT<=0&&gob<gmax){R.miniT=rnd(2.2,3.6)/(1+.12*R.si);const g=spawnFood(false);g.def=R.zone.mini;g.left=g.hp0=g.def.bites*EHP[ZI[R.zone.id]][R.si]*1.5;g.r=26*g.def.size;g.gold=false;g.mini=1;g.pop=0;puff(g.x,g.y,"#fff");}
+  if(R.miniT<=0&&gob<gmax){R.miniT=rnd(2.2,3.6)/(1+.12*R.si);const g=spawnFood(false);g.kind=null;g.e=null;g.armor=false;g.spd=0;g.def=R.zone.mini;g.left=g.hp0=g.def.bites*EHP[ZI[R.zone.id]][R.si]*1.5;g.r=26*g.def.size;g.gold=false;g.mini=1;g.pop=0;puff(g.x,g.y,"#fff");}
   // fx
   for(const p of R.parts){p.x+=p.vx*dt;p.y+=p.vy*dt;p.vy+=p.g*dt;p.vx*=Math.pow(.2,dt);p.life-=dt;}
   R.parts=R.parts.filter(p=>p.life>0);
@@ -2421,7 +2392,7 @@ function smashFood(f,mult){if(f.clock)return;chomp(f,{shot:1,chain:1,amt:hitAmt(
 function bellySlam(){
   R.pounds.push({x:R.x,y:R.y+10,t:0,max:R.slamR});R.shake=Math.max(R.shake,.6);
   floatText(R.x,R.y-120,"BELLY SLAM!",COL.gold,2);if(!SIM){tone(70,.35,"sawtooth",.07,.5);noise(.3,.12,200,.7,.4);}rumble(200,.6,.4);
-  for(const g of R.foods.slice())if(!g.clock&&Math.hypot(g.x-R.x,g.y-R.y)<R.slamR)chomp(g,{shot:1,chain:1,amt:hitAmt(g)*(g.boss?1:3)});
+  for(const g of R.foods.slice())if(!g.clock&&Math.hypot(g.x-R.x,g.y-R.y)<R.slamR)chomp(g,{shot:1,chain:1,brk:1,amt:hitAmt(g)*(g.boss?1:3)});
 }
 function events(dt){
   for(const p of R.pounds)p.t+=dt;R.pounds=R.pounds.filter(p=>p.t<.5);
@@ -2456,6 +2427,7 @@ function drawEvents(tm){
   ctx.globalAlpha=1;
 }
 function chomp(f,o={}){
+  if(f.armor&&o.amt!=null){if(o.brk){f.armor=false;floatText(f.x,f.y-f.r-30,"ARMOUR OFF!","#cfd6df",2);burst(f.x,f.y,"#cfd6df",14,1.3);if(!SIM)SFX.smash();}else o={...o,amt:o.amt*.25};}   // elites: dumbbells barely dent the armour; a Dash, Shield or Belly Slam breaks it
   const def=f.def,boss=!!f.boss,cheat=R.cheatT>0;
   const crit=o.crit??(!o.plate&&Math.random()<R.crit);
   const bites=o.amt!=null?Math.min(boss?f.hp:f.left,o.amt*(crit?3:1)):boss?Math.min(f.hp,(o.plate&&!o.aoe?R.jaw*.5:R.jaw*R.dmg)*(crit?3:1)):Math.min(R.jaw*(crit?3:1),f.left);
@@ -2488,6 +2460,9 @@ function eaten(f){
   if(f.clock){const add=addTime(stat("clockV"));floatText(f.x,f.y-30,add>0?`⏱ +${add.toFixed(1)}s`:"⏱ Full!","#9fd3ff",2);if(!add){R.kcal+=Math.max(20,R.kcal*.03);}if(!SIM)SFX.gold();return;}
   burst(f.x,f.y,f.gold?COL.gold:"#f5e6c4",12,1.2);puff(f.x,f.y,"#fff");R.kills=(R.kills||0)+1;
   spawnLoot(def,f.x,f.y,f.gold);
+  if(f.kind==="elite"){spawnLoot(def,f.x,f.y,f.gold);spawnLoot(def,f.x,f.y,f.gold);}
+  if(f.kind==="bomb"&&!f.blown)bombBoom(f,false);   // shoot it early and it only hurts the monsters round it
+  if(f.kind==="split")for(const s2 of[-1,1]){const c=spawnFood(false,{x:f.x+s2*22,y:f.y,vx:s2*220,vy:-60});c.def=def;c.kind="half";c.e="🌮";c.r=f.r*.65;c.left=c.hp0=f.hp0*.35;c.pop=1;c.spd=(f.spd||55)*1.6;}
 }
 // Loot: what a knocked-down food monster leaves behind. Walk over it to eat it.
 function spawnLoot(def,x,y,gold,o={}){if(R.loot.length>70)return;const a=rnd(0,Math.PI*2),v=o.v??rnd(60,150);
@@ -2580,12 +2555,12 @@ function shield(dt){if(!(R.inhT>0))return;R.inv=Math.max(R.inv,.05);const rad=st
   R.shT=(R.shT||0)-dt;if(R.shT>0)return;R.shT=.25;
   let hit=0;
   for(const f of R.foods.slice()){if(f.clock||f.enter>0)continue;const dx=f.x-R.x,dy=f.y-R.y,d=Math.hypot(dx,dy)||1;if(d>rad+f.r)continue;
-    hit=1;chomp(f,{shot:1,chain:1,amt:hitAmt(f)*(f.boss?.5:1.5)});if(!f.boss&&R.foods.includes(f)){f.vx+=dx/d*520;f.vy+=dy/d*520;}}
+    hit=1;chomp(f,{shot:1,chain:1,brk:1,amt:hitAmt(f)*(f.boss?.5:1.5)});if(!f.boss&&R.foods.includes(f)){f.vx+=dx/d*520;f.vy+=dy/d*520;}}
   for(const g of R.gulls)if(g.st!=="gone"&&Math.hypot(g.x-R.x,g.y-R.y)<rad+20){hit=1;hitGull(g,R.jaw*R.thrPowE*1.5);}
   if(hit&&!SIM)tone(480,.04,"square",.025,.6);}
 // You throw dumbbells on your own: at the boss if it's in range, otherwise at the nearest goblin. No enemy, no throw.
 function thrTarget(){
-  const b=R.foods.find(f=>f.boss&&!(f.enter>0));if(b&&Math.hypot(b.x-R.x,b.y-R.y)<R.thrR+260+b.r)return b;   // bosses can be hit from further away
+  const b=R.foods.find(f=>f.boss&&!(f.enter>0));if(b&&Math.hypot(b.x-R.x,b.y-R.y)<R.thrR+150+b.r)return b;   // shorter range (owner): go to the enemies instead of waiting   // bosses can be hit from further away
   let best=null,bd=R.thrR;for(const f of R.foods){if(f.boss||f.clock||f.pop<1)continue;const d=Math.hypot(f.x-R.x,f.y-R.y)-f.r;if(d<bd){bd=d;best=f;}}
   for(const g of R.gulls){if(g.st==="gone")continue;const d=Math.hypot(g.x-R.x,g.y-R.y)-20;if(d<bd){bd=d;best=g;}}return best;
 }
@@ -2750,7 +2725,9 @@ function drawFood(f,tm){
   if(!f.clock&&(f.def.flee||!f.boss||f.def.mv!=="still")){ctx.strokeStyle=OUT;ctx.lineWidth=Math.max(3,f.r*.1);ctx.lineCap="round";const lg=Math.sin(f.step*2)*f.r*.18;
     ctx.beginPath();ctx.moveTo(f.x-f.r*.3,f.y+f.r*.5-hop);ctx.lineTo(f.x-f.r*.3+lg,f.y+f.r*.85);ctx.moveTo(f.x+f.r*.3,f.y+f.r*.5-hop);ctx.lineTo(f.x+f.r*.3-lg,f.y+f.r*.85);ctx.stroke();}
   const flip=f.boss?f.x>R.x:(f.vx<-5);
-  drawSpr(ctx,f.def.e,f.x,f.y-hop,f.r*partial,{sx,sy,gold:f.gold,flash:f.hit,flip});
+  if(f.fuse>0){const k=1-f.fuse/.7;ctx.fillStyle=`rgba(255,120,40,${.2+.4*k*(.5+.5*Math.sin(tm*40))})`;circ(ctx,f.x,f.y,130*k);ctx.fill();}
+  drawSpr(ctx,f.e||f.def.e,f.x,f.y-hop,f.r*partial*(f.fuse>0?1+.25*(1-f.fuse/.7):1),{sx,sy,gold:f.gold,flash:f.hit||(f.fuse>0&&Math.sin(tm*30)>0),flip});
+  if(f.armor){ctx.strokeStyle=OUT;ctx.lineWidth=9;circ(ctx,f.x,f.y-hop,f.r*1.12);ctx.stroke();ctx.strokeStyle="#b9c1cc";ctx.lineWidth=5;ctx.stroke();for(let k=0;k<6;k++){const a=k*Math.PI/3+tm*.5;ctx.fillStyle="#e6ebf1";circ(ctx,f.x+Math.cos(a)*f.r*1.12,f.y-hop+Math.sin(a)*f.r*1.12,3.5);ctx.fill();}}
   drawFoodEyes(f,f.x,f.y-hop+f.r*.05,partial*pop);
   if(f.boss){hpBar(f.x,f.y+f.r+14,f.r*2.6,f.hp/f.max,`${Math.ceil(f.hp)}`);
     ctx.font=`900 20px ${DISP}`;ctx.textAlign="center";ctx.lineWidth=5;ctx.strokeStyle=OUT;ctx.strokeText(f.def.name,f.x,f.y-f.r-22);ctx.fillStyle=COL.gold;ctx.fillText(f.def.name,f.x,f.y-f.r-22);}
@@ -2821,6 +2798,10 @@ function draw(){
   if(zoom>1){ctx.translate(R.x,R.y);ctx.scale(zoom,zoom);ctx.translate(-R.x,-R.y);}
   if(ROOM)ctx.drawImage(ROOM,0,0,WW,WH);
   ctx.save();ctx.beginPath();ctx.rect(SIDE,WALL-40,WW-2*SIDE,WH-BOT-WALL+40);ctx.clip();
+  if(R.zone.id==="buffet")for(const b of BELTS()){const y0=b.y-b.h/2;ctx.fillStyle="#2b2f36";ctx.fillRect(FX0(),y0,FX1()-FX0(),b.h);ctx.fillStyle="#3d434c";ctx.fillRect(FX0(),y0+6,FX1()-FX0(),b.h-12);
+    const off=((tm*BELT_V*b.dir)%60+60)%60;ctx.strokeStyle="rgba(242,194,48,.55)";ctx.lineWidth=5;ctx.lineCap="round";ctx.beginPath();
+    for(let x=FX0()-60+off;x<FX1()+60;x+=60){const t=b.dir*12;ctx.moveTo(x-t,y0+16);ctx.lineTo(x+t,b.y);ctx.lineTo(x-t,y0+b.h-16);}ctx.stroke();
+    ctx.strokeStyle=OUT;ctx.lineWidth=4;ctx.strokeRect(FX0(),y0,FX1()-FX0(),b.h);}
   // floor hazards
   for(const p of R.puddles){
     ell(ctx,p.x,p.y,p.rx,p.ry);ctx.fillStyle=p.kind==="water"?"rgba(110,170,230,.55)":"rgba(220,180,60,.5)";ctx.fill();ctx.lineWidth=4;ctx.strokeStyle=OUT;ctx.stroke();
@@ -2856,6 +2837,7 @@ function draw(){
   for(const s of R.scoots)if(s.warn<=0)actors.push([s.y+26,()=>{drawShadow(s.x,s.y+26,38);drawSpr(ctx,"🛵",s.x,s.y-6,40,{flip:s.dir<0});}]);
   actors.sort((a,b)=>a[0]-b[0]);for(const a of actors)a[1]();
 
+  if(R.zone.id==="street"&&DARK)ctx.drawImage(DARK,R.x-WW,R.y-10-WH,WW*2,WH*2);   // night market: you carry your own light
   ctx.lineCap="round";
   for(const l of R.loot)drawLoot(l,tm);
   for(const d of R.darts){ctx.strokeStyle="rgba(255,240,200,.35)";ctx.lineWidth=d.r*.9;ctx.beginPath();ctx.moveTo(d.x,d.y);ctx.lineTo(d.x-d.vx*.06,d.y-d.vy*.06);ctx.stroke();
@@ -2864,6 +2846,7 @@ function draw(){
   for(const p of R.shots){ctx.fillStyle="rgba(216,40,40,.28)";circ(ctx,p.x,p.y,p.r*1.55);ctx.fill();ctx.lineWidth=3;ctx.strokeStyle="rgba(255,90,80,.9)";ctx.stroke();
     ctx.strokeStyle="rgba(255,120,100,.35)";ctx.lineWidth=p.r*.9;ctx.lineCap="round";ctx.beginPath();ctx.moveTo(p.x,p.y);ctx.lineTo(p.x-p.vx*.12,p.y-p.vy*.12);ctx.stroke();
     drawSpr(ctx,p.e,p.x,p.y,p.r,{rot:p.rot});}
+  if(R.still>(ZI[R.zone.id]===0?3:2)-.7&&!R.ending){const k=Math.min(1,(R.still-((ZI[R.zone.id]===0?3:2)-.7))/1.5);ctx.fillStyle=`rgba(255,${120-60*k},30,${.25+.35*k*(.6+.4*Math.sin(tm*30))})`;ell(ctx,R.x,R.y+PR,PR*(1.4+.5*k),PR*(.5+.2*k));ctx.fill();if(k>.3&&Math.random()<.3)puff(R.x+rnd(-20,20),R.y+PR,"#ffb36b");}
   // you: always drawn last, over every dumbbell and effect, with a bright ring at your feet (owner kept losing the character)
   if(!R.ending){ell(ctx,R.x,R.y+PR,PR*1.25,PR*.42);ctx.lineWidth=4;ctx.strokeStyle="rgba(255,236,170,.9)";ctx.stroke();ctx.lineWidth=2;ctx.strokeStyle="rgba(42,26,18,.8)";ell(ctx,R.x,R.y+PR,PR*1.25+4,PR*.42+3);ctx.stroke();}
   drawPlayer(tm);
@@ -3010,6 +2993,8 @@ const awayEarned=catchUp(.5,8);
 document.addEventListener("visibilitychange",()=>{if(document.hidden){S.cashT=Date.now();save();}else catchUp(1,8);});
 function frame(now){
   const rdt=(now-lastT)/1000,dt=Math.min(.05,rdt);lastT=now;
+  if(R&&!R.done&&!paused&&!SIM&&!document.hidden&&rdt<.25){rsT+=rdt;rsN++;if(rsT>=1){const fps=rsN/rsT;rsT=0;rsN=0;
+      if(fps<50&&RSC>.55){RSC=Math.max(.55,RSC-.15);layout();rsUp=0;}else if(fps>=58&&RSC<1){if(++rsUp>=4){RSC=Math.min(1,RSC+.15);layout();rsUp=0;}}else rsUp=0;}}
   fpsN++;fpsT+=rdt;if(fpsT>=.5){if(!$("#fps").hidden)$("#fps").textContent=Math.round(fpsN/fpsT)+" FPS";fpsN=0;fpsT=0;}
   pollPad(dt);
   if(!SIM){S.cash+=income()*dt;bizT-=dt;if(bizT<=0){bizT=.25;if(!$("#gym").hidden)renderBiz();coach();if((saveT-=.25)<=0){saveT=10;S.cashT=Date.now();save();}}}
@@ -3063,13 +3048,12 @@ function leaveTitle(goFS){
   if(goFS&&!document.fullscreenElement){try{document.documentElement.requestFullscreen({navigationUI:"hide"}).then(()=>{if(document.body.classList.contains("touch"))screen.orientation.lock("landscape").catch(()=>{});}).catch(()=>{});}catch(e){}}
   if(!S.runs)openModal("helpModal","#helpClose");else $("#goBtn").focus();
   if(awayEarned>=1)setTimeout(()=>banner("💷","Welcome back!",`Your gym earned ${money(awayEarned)} while you were away`,"gold"),400);
-  TP=S.zones.length-1;S.tpSeen=TP;renderGym();requestAnimationFrame(fitTree);
+  renderGym();
 }
 $("#title").addEventListener("pointerdown",e=>{if(e.pointerType==="touch")setMode("touch");else leaveTitle(true);});
 // touch starts on the tap's end: that's when the browser allows fullscreen
 $("#title").addEventListener("click",()=>leaveTitle(true));
 if(DEBUG){$("#title").hidden=true;$("#gym").hidden=false;}
-fitTree(); // start the tree fitted to its page
 if(document.fonts&&document.fonts.ready)document.fonts.ready.then(()=>{SPR.clear();renderGym();fitScreen();});
 requestAnimationFrame(frame);
 
