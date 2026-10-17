@@ -130,8 +130,8 @@ body.touch .glyph{display:none!important}
 .eqgrid{grid-template-columns:repeat(2,minmax(0,1fr))}
 .gitem{display:grid;grid-template-columns:34px minmax(0,1fr) auto;align-items:center;gap:8px;text-align:left;padding:5px 8px;border:3px solid #6b4f2c;border-radius:10px;background:rgba(255,255,255,.4);color:var(--pink);box-shadow:0 2px 0 rgba(80,50,20,.3)}
 .gitem .gi{font-size:24px;line-height:1;text-align:center}
-.gitem b{display:block;font:800 15px/1.1 var(--disp);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.gitem small{display:block;font:600 12px/1.2 var(--ui);color:#6b4f2c;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.gitem b{display:block;font:800 15px/1.1 var(--disp);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.gitem b i{font-style:normal;font:800 12px/1 var(--ui);opacity:.75;margin-left:4px}
+.gitem small{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;font:600 12px/1.2 var(--ui);color:#6b4f2c;overflow:hidden;white-space:normal}
 .gitem .gc{font:800 13px/1 var(--ui);padding:6px 8px;border-radius:8px;background:#cdb88d;border:2px solid #6b4f2c;white-space:nowrap}
 .gitem.can .gc{background:#5aa83a;color:#fff;border-color:#2f5d1f}
 .gitem.max .gc{background:#f2c230;color:#3b2a1c}
@@ -950,9 +950,9 @@ const EQUIP=[
 ];
 // Supplements are gym-only: every one does something the skill tree can't (owner request 2026-10-17)
 const SUPPS=[
- {id:"partner",e:"🤜",name:"Training partner",max:20,base:400,k:2.05,f:L=>`partner throws too · ×${(.5+.15*L).toFixed(2)} power`,d:"A lifting partner follows you round the market and throws dumbbells at enemies too."},
+ {id:"partner",e:"🤜",name:"Training partner",max:20,base:400,k:2.05,f:L=>`×${(.5+.15*L).toFixed(2)} throw power`,d:"A lifting partner follows you round the market and throws dumbbells at enemies too."},
  {id:"spotter",e:"🧍",name:"Spotter",max:6,base:300,k:12,f:L=>`${L} free hit${L>1?"s":""} every run`,d:"Someone's got your back. The first hits each run don't cost you any appetite."},
- {id:"second",e:"🔁",name:"One More Set",max:8,base:900,k:5,f:L=>`+${2+L}s at time-up, once a run`,d:"When time runs out, dig deep for a few more seconds. Goes past the 30 second limit."},
+ {id:"second",e:"🔁",name:"One More Set",max:8,base:900,k:5,f:L=>`+${2+L}s when time runs out`,d:"When time runs out, dig deep for a few more seconds. Goes past the 30 second limit."},
  {id:"hype",e:"📣",name:"Hype man",max:5,base:250,k:7,f:L=>`boss needs ${pct(.05*L)} fewer kills`,d:"The crowd chants for the boss, so it shows up a little sooner and you get longer to fight it."},
  {id:"magnet",e:"🧲",name:"Magnet straps",max:5,base:120,k:6,f:L=>`power-up reach +${pct(.4*L)}`,d:"Power-ups fly to you from further away."},
  {id:"timer",e:"⏲️",name:"Rest timer",max:5,base:500,k:7,f:L=>`skills recharge ${pct(.08*L)} faster`,d:"Deadlift Slam, Shield, Gym Party and Cheat Meal all come back sooner."},
@@ -980,7 +980,7 @@ let lastRank=-1;
 function members(){let base=4,mm=1;for(const e of EQUIP){const L=gl(e.id);if(e.add)base+=e.add*L;if(e.mm)mm*=1+e.mm*L;}return Math.floor(base*mm*fame());}
 function income(){if(S.tut<2&&!SIM)return 0;   // no gym, no members paying you: income starts when you open it
   let sp=1;for(const e of EQUIP)if(e.sp)sp*=1+e.sp*gl(e.id);return members()*.25*sp*(1+.15*S.medals);}
-const eqDesc=e=>[e.add&&`+${e.add} members`,e.mm&&`+${Math.round(e.mm*100)}% members`,e.sp&&`+${Math.round(e.sp*100)}% spend`].filter(Boolean).join(", ");
+const eqDesc=e=>e.add&&e.mm?`+${e.add} and +${Math.round(e.mm*100)}% members`:[e.add&&`+${e.add} members`,e.mm&&`+${Math.round(e.mm*100)}% members`,e.sp&&`+${Math.round(e.sp*100)}% member spend`].filter(Boolean).join(", ");
 const money=n=>"£"+fmt(n);
 const bossHp=b=>Math.round(b.hp*Math.pow(1.5,S.season-1));
 const secOpen=(z,i)=>S.zones.includes(z.id)&&(S.sec[z.id]||0)>i;
@@ -1321,7 +1321,7 @@ function bizItem(list,it,isEq){
   b.onclick=()=>{const L=isEq?gl(it.id):sl(it.id);if(L>=it.max)return;if(gymLocked(it,L,isEq)){toast(`Unlocks at ${ZONES[gymNeed(it,L,isEq)].name}`);SFX.no();return;}const c=gcost(it,L);
     if(S.cash<c){toast(`Need ${money(c-S.cash)} more`);SFX.no();return;}
     seeNew(it,isEq,1);const r0=rankN();S.cash-=c;(isEq?S.g:S.sp)[it.id]=L+1;save();SFX.buy(L);if(isEq&&L===0)banner(it.e,it.name,"New in your gym!");
-    const r1=rankN();if(r1>r0){const k=RANKS[r1-1];banner(k.e,`${k.name} gym!`,`New perk: ${k.perk}`,"gold");}renderGym();};
+    const r1=rankN();if(r1>r0){const k=RANKS[r1-1];banner(k.e,`${k.name} gym!`,`New perk: ${k.perk}`,"gold");}renderBiz();};   // only the gym needs refreshing (a full renderGym made gym clicks laggy)
   list.appendChild(b);return b;
 }
 EQUIP.forEach(e=>eqEls[e.id]=bizItem($("#eqList"),e,true));
@@ -1360,7 +1360,7 @@ function renderBiz(){
   for(const [arr,els,lvf,eq] of [[EQUIP,eqEls,gl,1],[SUPPS,supEls,sl,0]])for(const it of arr){const b=els[it.id],L=lvf(it.id),max=L>=it.max,c=gcost(it,L);
     const lk=!max&&gymLocked(it,L,eq);
     b.className="gitem"+(max?" max":lk?" lock":S.cash>=c?" can":"")+(gymIsNew(it,L,eq)?" new":"");
-    b.querySelector("b").textContent=`${it.name} ${L}/${it.max}`;
+    b.querySelector("b").innerHTML=`${it.name}<i>${L}/${it.max}</i>`;
     b.querySelector("small").textContent=eq?eqDesc(it):it.f(Math.max(1,L));
     if(!eq)b.title=it.d+(max?"":` Next level: ${it.f(L+1)}.`);
     b.querySelector(".gc").textContent=max?"MAX":lk?`🔒 ${ZONES[gymNeed(it,L,eq)].e}`:money(c);
