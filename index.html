@@ -739,42 +739,42 @@ const rnd=(a,b)=>a+Math.random()*(b-a);
 const F=(e,name,fill,kcal,o={})=>({e,name,fill,kcal,w:o.w??1,bites:o.bites??1,flee:!!o.flee,spicy:!!o.spicy,size:o.size??1});
 // Each market: foods, a boss (hp = bites, kc = kcal per bite), hazards and tasks. `at` = foods eaten in a run before the boss turns up.
 const ZONES=[
- {id:"shop",name:"Corner Shop",e:"🏪",cost:0,at:12,
+ {id:"shop",name:"Corner Shop",e:"🏪",cost:0,at:16,
   th:{glow:"220,235,255"},
   foods:[F("🍌","Banana",6,12,{w:3}),F("🍪","Cookie",5,18,{w:3}),F("🍫","Choc bar",8,32,{w:2}),F("🥪","Meal deal",14,60,{w:1.4,bites:2,size:1.15}),F("🥧","Pork pie",12,100,{w:.5})],
-  bb:{hp:18,hps:[10,41,51,190,330],kcb:6,reward:600},
+  bb:{hp:18,hps:[10,36,52,200,390],kcb:6,reward:600},
   secs:[{n:"Front Door",floor:"shop",wall:"shopDoor"},{n:"The Aisles",floor:"shop",wall:"shop"},{n:"Freezer Aisle",floor:"kitchen",wall:"freezers"},{n:"Stock Room",floor:"wood",wall:"stock"},{n:"The Till",floor:"wood",wall:"shopTill"}],
   bosses:[{e:"🥤",name:"Fizzy Pop",mv:"dart",spd:200,mi:6,atk:[{k:"burst",e:"💦",n:3,every:3,spd:300}]},{e:"🍞",name:"The Loaf",mv:"wander",spd:80,mi:5,atk:[{k:"wave",e:"🍞",every:3.6,spd:220}]},{e:"🍦",name:"Mr Whippy",mv:"wander",spd:90,mi:5,atk:[{k:"homing",e:"🧊",every:2.6,spd:220},{k:"bounce",e:"🧊",n:3,every:3.8,spd:280}]},{e:"🍿",name:"Popcorn Pete",mv:"dart",spd:210,mi:4,atk:[{k:"rain",e:"🍿",n:5,every:3.2}]},{e:"🧀",name:"The Big Cheese",mv:"wander",spd:80,mi:4,atk:[{k:"slam",every:3.4,r:110},{k:"wave",e:"🧀",every:4.4,spd:230}]}],
   hz:{puddle:3},
   tasks:[{k:"eat",f:"Cookie",pl:"Cookies",n:20,r:150},{k:"run",n:600,r:300},{k:"combo",n:12,r:500}]},
- {id:"chippy",name:"The Chippy",e:"🍟",cost:0,at:14,
+ {id:"chippy",name:"The Chippy",e:"🍟",cost:0,at:32,
   th:{glow:"255,236,190"},
   foods:[F("🍟","Chips",10,64,{w:3}),F("🥚","Pickled egg",5,36,{w:2}),F("🌭","Saveloy",9,74,{w:2}),F("🐟","Battered cod",16,180,{w:1,flee:1,size:1.2}),F("🍔","Chip butty",18,230,{w:.6,bites:2,size:1.2})],
-  bb:{hp:360,hps:[1100,3200,7000,18000,31000],kcb:25,reward:10000},
+  bb:{hp:360,hps:[720,3300,6400,13000,26000],kcb:25,reward:10000},
   secs:[{n:"The Queue",floor:"chippy",wall:"chippy"},{n:"The Fryers",floor:"kitchen",wall:"chippyFry"},{n:"Spud Room",floor:"wood",wall:"curryKitchen"},{n:"Seafront",floor:"street",wall:"seafront"},{n:"Back Alley",floor:"asphalt",wall:"chippyAlley"}],
   bosses:[{e:"🥫",name:"Mushy Peas",mv:"wander",spd:60,mi:5,atk:[{k:"bounce",e:"🟢",n:5,every:2.8,spd:300}]},{e:"🌭",name:"Big Saveloy",mv:"dart",spd:220,mi:4,atk:[{k:"charge",every:3.6},{k:"homing",e:"🌭",every:2.8,spd:240}]},{e:"🥔",name:"Spud King",mv:"wander",spd:80,mi:4,atk:[{k:"mine",e:"🥔",n:3,every:4},{k:"slam",every:3.4,r:120}]},{e:"🦑",name:"Kraken Calamari",mv:"flee",spd:150,mi:4,atk:[{k:"boomer",e:"💧",n:5,every:3,spd:360},{k:"spin",e:"💧",every:6,spd:260}]},{e:"🐟",name:"Moby Cod",mv:"flee",spd:160,mi:4,atk:[{k:"wave",e:"💧",every:3.4,spd:240},{k:"charge",every:4.6}]}],
   hz:{grease:2,gull:2},
   tasks:[{k:"eat",f:"Chips",pl:"portions of Chips",n:40,r:5000},{k:"shoo",n:6,r:10000},{k:"run",n:40000,r:20000}]},
- {id:"curry",name:"Curry House",e:"🍛",cost:0,at:16,
+ {id:"curry",name:"Curry House",e:"🍛",cost:0,at:50,
   th:{glow:"255,170,90"},
   foods:[F("🍚","Pilau rice",10,170,{w:3}),F("🥟","Samosa",8,190,{w:2.5}),F("🍛","Tikka masala",18,540,{w:1.2,bites:2,size:1.2}),F("🌶️","Vindaloo chilli",6,250,{w:.8,spicy:1}),F("🍢","Seekh kebab",10,340,{w:1,flee:1})],
-  bb:{hp:7000,hps:[36000,79000,97000,110000,130000],hp0:3200,kcb:100,reward:160000},
+  bb:{hp:7000,hps:[27000,58000,100000,130000,170000],hp0:3200,kcb:100,reward:160000},
   secs:[{n:"Dining Room",floor:"curry",wall:"curry"},{n:"Spice Store",floor:"wood",wall:"spice"},{n:"The Kitchen",floor:"kitchen",wall:"curryKitchen"},{n:"Banquet Hall",floor:"parquet",wall:"banquet"},{n:"The Tandoor",floor:"terracotta",wall:"curryTandoor"}],
   bosses:[{e:"🥘",name:"The Balti Bowl",mv:"wander",spd:70,mi:4,atk:[{k:"ring",e:"🔥",n:8,every:3.2,spd:240}],fire:1},{e:"🧅",name:"Onion Bhaji",mv:"dart",spd:220,mi:4,atk:[{k:"boomer",e:"🧅",n:3,every:2.6,spd:380}]},{e:"🍢",name:"Kebab King",mv:"dart",spd:230,mi:4,atk:[{k:"burst",e:"🍢",n:3,every:2.6,spd:420},{k:"charge",every:4.5}]},{e:"🍚",name:"Biryani Boss",mv:"wander",spd:80,mi:3.5,atk:[{k:"rain",e:"🍚",n:6,every:3.2},{k:"spin",e:"🍚",every:5.5,spd:280}]},{e:"🍲",name:"The Phaal Pot",mv:"wander",spd:70,mi:3.5,atk:[{k:"slam",every:3,r:130},{k:"homing",e:"🌶️",every:2.4,spd:240}],fire:1}],
   hz:{fire:5},
   tasks:[{k:"eat",f:"Samosa",pl:"Samosas",n:40,r:100000},{k:"combo",n:30,r:200000},{k:"gold",n:3,r:400000}]},
- {id:"street",name:"Street Food",e:"🌮",cost:0,at:18,
+ {id:"street",name:"Street Food",e:"🌮",cost:0,at:62,
   th:{glow:"255,200,140"},
   foods:[F("🌮","Taco",8,600,{w:3}),F("🍡","Dango",6,500,{w:2.5}),F("🍜","Ramen",16,1550,{w:1.5,bites:2,size:1.2}),F("🌯","Burrito",22,2250,{w:1,bites:3,size:1.25}),F("🍩","Doughnut",8,1100,{w:1,flee:1})],
-  bb:{hp:30000,hps:[130000,140000,240000,280000,430000],hp0:8000,kcb:450,reward:2400000},
+  bb:{hp:30000,hps:[170000,180000,310000,560000,750000],hp0:8000,kcb:450,reward:2400000},
   secs:[{n:"Night Market",floor:"street",wall:"street"},{n:"Food Trucks",floor:"asphalt",wall:"streetTrucks"},{n:"Hawker Hall",floor:"kitchen",wall:"street"},{n:"Rooftop",floor:"asphalt",wall:"rooftop"},{n:"Neon Alley",floor:"neon",wall:"streetNeon"}],
   bosses:[{e:"🍙",name:"Onigiri Ollie",mv:"dart",spd:240,mi:4,atk:[{k:"wave",e:"🍙",every:3,spd:260},{k:"charge",every:4.2}]},{e:"🌯",name:"Mega Burrito",mv:"flee",spd:160,mi:3.5,atk:[{k:"bounce",e:"🌶️",n:5,every:2.6,spd:320},{k:"mine",e:"🌯",n:3,every:4.6}]},{e:"🥟",name:"Dim Sum Don",mv:"wander",spd:90,mi:3.5,atk:[{k:"boomer",e:"🥟",n:5,every:2.8,spd:360},{k:"burst",e:"🥟",n:3,every:3.6,spd:340}]},{e:"🍣",name:"Sushi Sam",mv:"dart",spd:250,mi:3.5,atk:[{k:"homing",e:"🍣",every:2,spd:270},{k:"charge",every:3.8}]},{e:"🥙",name:"Doner Mountain",mv:"dart",spd:230,mi:3,atk:[{k:"spin",e:"🥩",every:5,spd:320},{k:"rain",e:"🥩",n:6,every:3.6},{k:"slam",every:3.4,r:120}]}],
   hz:{scooter:1,puddle:2},
   tasks:[{k:"eat",f:"Taco",pl:"Tacos",n:60,r:5000000},{k:"run",n:20000000,r:10000000},{k:"combo",n:50,r:20000000}]},
- {id:"buffet",name:"The Buffet",e:"🍽️",cost:0,at:20,
+ {id:"buffet",name:"The Buffet",e:"🍽️",cost:0,at:66,
   th:{glow:"255,215,150"},
   foods:[F("🍕","Pizza slice",10,3200,{w:3}),F("🍗","Chicken leg",12,4200,{w:2}),F("🍤","Prawn",5,2400,{w:2,flee:1}),F("🍰","Gateau",18,7600,{w:1,bites:2,size:1.2}),F("🍖","Rib",16,6800,{w:1})],
-  bb:{hp:90000,hps:[570000,1000000,1200000,1500000,1700000],hp0:14000,kcb:2000,reward:48000000},
+  bb:{hp:90000,hps:[1000000,1400000,1900000,2300000,2700000],hp0:14000,kcb:2000,reward:48000000},
   secs:[{n:"Dessert Table",floor:"buffet",wall:"buffetDessert"},{n:"Wedding Party",floor:"parquet",wall:"buffetWedding"},{n:"Seafood Bar",floor:"kitchen",wall:"seafood"},{n:"Cheese & Wine",floor:"wood",wall:"cheese"},{n:"The Carvery",floor:"buffet",wall:"buffet"}],
   bosses:[{e:"🍮",name:"The Trifle",mv:"wander",spd:70,mi:3,atk:[{k:"bounce",e:"🍓",n:6,every:2.6,spd:320},{k:"ring",e:"🍒",n:10,every:4.2,spd:260}]},{e:"🎂",name:"Wedding Cake",mv:"wander",spd:50,mi:2,atk:[{k:"rain",e:"🍰",n:7,every:3},{k:"slam",every:3,r:140}]},{e:"🦞",name:"Lobster Lord",mv:"dart",spd:220,mi:3,atk:[{k:"charge",every:3.4},{k:"boomer",e:"🦐",n:5,every:2.6,spd:380}]},{e:"🧀",name:"Brie Baron",mv:"wander",spd:80,mi:3,atk:[{k:"wave",e:"🧀",every:3,spd:260},{k:"mine",e:"🧀",n:4,every:4.4}]},{e:"🦃",name:"The Sunday Roast",mv:"wander",spd:60,mi:2.5,atk:[{k:"burst",e:"🥕",n:5,every:2.6,spd:380},{k:"homing",e:"🥔",every:2.4,spd:250},{k:"rain",e:"🍗",n:6,every:3.6},{k:"charge",every:5.2}]}],
   hz:{waiter:1,rival:1},
@@ -787,6 +787,8 @@ const ZI=Object.fromEntries(ZONES.map((z,i)=>[z.id,i]));
 // Each boss keeps its old total kcal (kt), so tougher bosses don't speed up the economy.
 const NSEC=5,SECK=[1,1.2,1.45,1.7,2],BHP=[1,2,4,8,16],BHP0=[1,1.25,1.5,1.8,2.2],   // BHP0: the old curve, so a tougher boss doesn't pay out more kcal in total
  BREW=[.12,.2,.3,.45,1];
+// fewer bullets per attack so there's room to dodge (owner): attacks with 3+ shots fire 30% fewer
+for(const z of ZONES)for(const b of z.bosses)for(const a of b.atk)if(a.n>=3)a.n=Math.round(a.n*.7);
 for(const z of ZONES){z.bosses=z.bosses.map((b,i)=>({...b,n:i,final:i===NSEC-1,hp:z.bb.hps?z.bb.hps[i]:Math.round(z.bb.hp*BHP[i]),kt:z.bb.kcb*SECK[i]*(z.bb.hp0||z.bb.hp)*BHP0[i],reward:Math.round(z.bb.reward*BREW[i]),get kc(){return this.kt/this.hp;}}));z.boss=z.bosses[NSEC-1];}
 const secKey=(z,i)=>z.id+":"+i;
 // Foods get chewier in each market so Jaw strength keeps mattering (more bites; kcal rises more gently)
@@ -885,7 +887,7 @@ const SKILLS=[
 
 /* ---------- SAVE ---------- */
 const KEY="bulkSeason.v2";
-const fresh=()=>({kcal:0,total:0,best:0,runs:0,lv:{start:1},v5:1,v6:1,tut:0,gymSeen:0,seenNew:{},zones:["shop"],zone:"shop",si:0,sec:{shop:1},cleared:{},bhp:{},beaten:{},task:{},eat:{},shoo:0,
+const fresh=()=>({kcal:0,total:0,best:0,runs:0,lv:{start:1},v5:1,v6:1,v7:1,tut:0,gymSeen:0,seenNew:{},zones:["shop"],zone:"shop",si:0,sec:{shop:1},cleared:{},bhp:{},beaten:{},task:{},eat:{},shoo:0,
   season:1,medals:0,seasonKcal:0,cash:0,cashT:0,g:{},sp:{},won:false,muted:false,music:true,seen:false});
 let S=fresh();
 // Every load keeps a backup of the save it found, so nothing is ever lost to an update (Save & devices → Restore backup)
@@ -906,6 +908,8 @@ function migrate(x){
   if(x.gymSeen==null)x.gymSeen=x.zones.length-1;   // last market whose gym unlocks you've looked at
   if(!x.v6){const OLD={shake:[40,1.6],pre:[150,1.9],creatine:[120,1.7],coach:[400,1.8],tea:[300,1.8],socks:[1000,2]};
     for(const [id,[b,k]] of Object.entries(OLD)){for(let L=0;L<(x.sp[id]||0);L++)x.cash+=Math.round(b*Math.pow(k,L));delete x.sp[id];}x.v6=1;}
+  // v7: the Gym bag (start with a power-up) was removed (owner) -- refund its money
+  if(!x.v7){for(let L=0;L<(x.sp.gymbag||0);L++)x.cash+=Math.round(150*Math.pow(7,L));delete x.sp.gymbag;x.v7=1;}
   x.si=Math.min(x.si||0,(x.sec[x.zone]||1)-1);
   return x;
 }
@@ -932,15 +936,14 @@ const EQUIP=[
  {id:"racks",t:2,e:"🏋️",name:"Squat racks",max:6,base:5000,k:1.7,add:18},
  {id:"sauna",t:3,e:"🧖",name:"Sauna",max:5,base:20000,k:2.4,sp:.4},
  {id:"yoga",t:3,e:"🧘",name:"Yoga studio",max:6,base:60000,k:1.75,add:30},
- {id:"pool",t:4,e:"🏊",name:"Swimming pool",max:3,base:400000,k:3,add:60,mm:.3},
+ {id:"pool",t:4,e:"🏊",name:"Swimming pool",max:12,base:400000,k:2.2,add:60,mm:.1}   // the late money sink,
 ];
 // Supplements are gym-only: every one does something the skill tree can't (owner request 2026-10-17)
 const SUPPS=[
  {id:"partner",e:"🤜",name:"Training partner",max:5,base:400,k:7,f:L=>`partner throws too · ×${(.5+.15*L).toFixed(2)} power`,d:"A lifting partner follows you round the market and throws dumbbells at enemies too."},
  {id:"spotter",e:"🧍",name:"Spotter",max:3,base:300,k:30,f:L=>`${L} free hit${L>1?"s":""} every run`,d:"Someone's got your back. The first hits each run don't cost you any appetite."},
- {id:"second",e:"🔁",name:"One More Set",max:4,base:900,k:10,f:L=>`+${2+L}s at time-up, once a run`,d:"When time runs out, dig deep for a few more seconds. Goes past the 25 second limit."},
- {id:"hype",e:"📣",name:"Hype man",max:5,base:250,k:7,f:L=>`boss arrives ${pct(.12*L)} sooner`,d:"The crowd chants for the boss, so it shows up sooner and you get longer to fight it."},
- {id:"gymbag",e:"🎒",name:"Gym bag",max:5,base:150,k:7,f:L=>`start with a power-up (${2+L}s)`,d:"Packed the night before: every run starts with a random power-up already going."},
+ {id:"second",e:"🔁",name:"One More Set",max:4,base:900,k:10,f:L=>`+${2+L}s at time-up, once a run`,d:"When time runs out, dig deep for a few more seconds. Goes past the 30 second limit."},
+ {id:"hype",e:"📣",name:"Hype man",max:5,base:250,k:7,f:L=>`boss needs ${pct(.05*L)} fewer kills`,d:"The crowd chants for the boss, so it shows up a little sooner and you get longer to fight it."},
  {id:"magnet",e:"🧲",name:"Magnet straps",max:5,base:120,k:6,f:L=>`power-up reach +${pct(.4*L)}`,d:"Power-ups fly to you from further away."},
  {id:"timer",e:"⏲️",name:"Rest timer",max:5,base:500,k:7,f:L=>`skills recharge ${pct(.08*L)} faster`,d:"Dash, Shield, Plate Toss and Cheat Meal all come back sooner."},
  {id:"prize",e:"💰",name:"Prize money",max:5,base:200,k:7,f:L=>`+${L*20}s of income per boss`,d:"Sponsors pay out every time you beat a boss. Spend it on the gym."},
@@ -949,14 +952,15 @@ const SUPPS=[
 const gl=id=>S.g[id]||0,sl=id=>S.sp[id]||0;
 // The gym grows with your season: equipment unlocks by market (t), and each supplement level waits for the next market.
 const mktReached=()=>S.zones.length-1;
-const gymNeed=(it,L,isEq)=>isEq?(it.t||0):(it.max>1?Math.round(L*4/(it.max-1)):0);   // market index needed to buy level L+1
-const gymLocked=(it,L,isEq)=>gymNeed(it,L,isEq)>mktReached();
+// Nothing in the gym is locked behind a market any more (owner: getting stuck on a market froze the gym too). Prices alone pace it.
+const gymNeed=()=>0;
+const gymLocked=()=>false;
 // Gym ranks: more members unlock permanent perks you can only get from the gym
 const RANKS=[
  {n:40,e:"🥉",name:"Bronze",perk:"+15% kcal"},          // ~Corner Shop
  {n:300,e:"🥈",name:"Silver",perk:"supplements 20% cheaper"},   // ~The Chippy
  {n:1500,e:"🥇",name:"Gold",perk:"+25% throw damage"},        // ~Curry House
- {n:5000,e:"💎",name:"Platinum",perk:"start every run with Rapid Fire"},   // ~Street Food
+ {n:5000,e:"💎",name:"Platinum",perk:"power-ups last 50% longer"},   // ~Street Food
  {n:15000,e:"🏆",name:"Legend",perk:"×1.5 kcal"},       // ~The Buffet
 ];
 const rankN=()=>{const m=members();let r=0;for(const k of RANKS)if(m>=k.n)r++;return r;};
@@ -1349,8 +1353,8 @@ function gymCan(){return [...EQUIP.map(e=>[e,gl(e.id),1]),...SUPPS.map(p=>[p,sl(
 function treeCan(){return NODES.filter(n=>avail(n)&&lv(n.id)<n.max&&S.kcal>=cost(n)).length;}
 // gym items that opened since you last looked (a new market unlocks a wave)
 // 'new' is per unlock (the market that opened it), not per level, so buying a level doesn't make the next one look new
-function gymIsNew(it,L,eq){if(L>=it.max)return false;const n=gymNeed(it,L,eq);return n<=mktReached()&&n>S.gymSeen&&!(S.seenNew||{})[it.id+":m"+n];}
-function seeNew(it,isEq,quiet){const L=isEq?gl(it.id):sl(it.id);if(!gymIsNew(it,L,isEq))return;(S.seenNew=S.seenNew||{})[it.id+":m"+gymNeed(it,L,isEq)]=1;if(!quiet){save();renderBiz();}}
+function gymIsNew(){return false;}   // NEW badges came from market unlocks, which are gone
+function seeNew(){}
 function gymNew(){return [...EQUIP.map(e=>gymIsNew(e,gl(e.id),1)),...SUPPS.map(p=>gymIsNew(p,sl(p.id),0))].filter(Boolean).length;}
 // first-time coach: one bubble pointing at the one thing to do next
 function coach(){const c=$("#coach");if(!c)return;let el=null,txt="";
@@ -1916,7 +1920,9 @@ function drawLights(tm){
 }
 let R=null,paused=false;
 // A run never lasts more than 25 seconds of real play. Time pickups only win back time lost to hits.
-const MAXRUN=25;
+const MAXRUN=30;   // the most a fully upgraded run can last (owner); runs still start at 15s
+// Throws are capped at 4 a second so the screen stays readable (owner); faster throw stats turn into damage via R.thrK.
+const THR_GAP=.25;
 const KLOOT=1;   // kcal scale for eaten drops (tuned with the sim)
 // one dumbbell's damage: bosses use THR (they're big and never dodge), food monsters take the full hit
 const hitAmt=f=>f.boss?R.jaw*R.dmg*R.thrPow:R.jaw*R.thrPowE;
@@ -1938,18 +1944,18 @@ function startRun(){HC.clear();vsReset();
      ate:{},golds:0,bossDmg:0,shooed:0,done:false,tasksDone:[],blink:0,flashT:0,
      darts:[],thrT:.4,thrCd:stat("chew")*stat("chew2")/stat("quick"),thrPow:THR*THRZ[ZI[zone.id]]*stat("tpow")*stat("heavy")*stat("bulk"),thrR:stat("trange"),thrV:760*stat("tspd"),thrN:stat("twin"),thrP:stat("pierce"),
      loot:[],kills:0,thrPowE:stat("tpow")*stat("heavy")*stat("bulk"),pups:[],pw:{},pupT:5,pupE:11-1.5*lv("pdrop"),pupG:.12+.06*lv("pdrop"),pupD:stat("pump"),
-     spot:sl("spotter"),second:sl("second")?2+sl("second"):0,hype:1-.12*sl("hype"),mag:1+.4*sl("magnet"),cdK:1-.08*sl("timer"),cash0:S.cash,
+     spot:sl("spotter"),second:sl("second")?2+sl("second"):0,hype:1-.05*sl("hype"),mag:1+.4*sl("magnet"),cdK:1-.08*sl("timer"),cash0:S.cash,
      mate:sl("partner")?{x:0,y:0,thrT:1,walk:0,face:1,m:.5+.15*sl("partner"),cd:1.6/(1+.2*sl("partner"))}:null};
   if(rankN()>=3){R.thrPow*=1.25;R.thrPowE*=1.25;}
   if(!SIM)layout();else{WW=1280;WH=720;}
   R.x=WW/2;R.y=(WALL+WH)/2+60;
   if(R.mate){R.mate.x=R.x-70;R.mate.y=R.y+10;}
-  {const ks=Object.keys(PUPS);if(sl("gymbag"))R.pw[ks[Math.floor(Math.random()*ks.length)]]=2+sl("gymbag");if(rankN()>=4)R.pw.rapid=Math.max(R.pw.rapid||0,4);}
+  if(rankN()>=4)R.pupD*=1.5;
   if(!SIM){buildRoom(zone,si);}
   SKILLS.forEach(s=>R.cds[s.id]=0);
   setupHazards();
   for(let i=0;i<Math.ceil(lv("buddy")/2);i++)R.buds.push({x:WW*(.3+.4*i),y:FY1()-60,vx:0,vy:0,tgt:null,chew:0,walk:0,face:1,mouth:0});
-  for(let i=0;i<Math.ceil(R.max*.75);i++)spawnFood(true);
+  for(let i=0;i<Math.min(10,Math.ceil(R.max*.75));i++)spawnFood(true);   // a small opening crowd: the rest arrive over time, so the build-up to the boss can't be skipped
   // a boss you've already damaged is waiting at the start of the run
   S.bhp={};   // bosses come back at full HP every run
   if(!SIM){
@@ -2162,11 +2168,11 @@ function update(dt){
     for(const p of R.parts){p.x+=p.vx*dt;p.y+=p.vy*dt;p.vy+=p.g*dt;p.life-=dt;}R.parts=R.parts.filter(p=>p.life>0);
     if(R.ending<=0||SIM)endRun();return;}
   R.t-=dt;R.el+=dt;
-  if(!R.bossOut&&!secDone(R.zone,R.si)&&R.el>R.T*.45*R.hype)spawnBoss();   // the boss always shows up in time to fight it
+  if(!R.bossOut&&!secDone(R.zone,R.si)&&R.el>R.T*.6)spawnBoss();   // a backup: the boss always shows up in time to fight it (normally it comes after enough kills)
   if(R.bossWait>0){R.bossWait-=dt;if(R.bossWait<=0&&!R.bossOut)spawnBoss();}
   R.chew-=dt*(R.cheatT>0?1.6:1);
   R.mouth=Math.max(0,R.mouth-dt*6);R.boost-=dt;R.shake=Math.max(0,R.shake-dt*3);R.fullMsg-=dt;
-  R.hurt=Math.max(0,(R.hurt||0)-dt);R.stun=Math.max(0,R.stun-dt);R.inv=Math.max(0,R.inv-dt);R.inhT-=dt;R.cheatT-=dt;R.comboT-=dt;
+  R.hurt=Math.max(0,(R.hurt||0)-dt);R.bossKcT=(R.bossKcT||0)-dt;R.stun=Math.max(0,R.stun-dt);R.inv=Math.max(0,R.inv-dt);R.inhT-=dt;R.cheatT-=dt;R.comboT-=dt;
   if(R.comboT<=0&&R.combo>0){if(R.combo>=10)floatText(R.x,R.y-100,`Combo ${R.combo}`,COL.cream);R.combo=0;}
   for(const k in R.cds)R.cds[k]=Math.max(0,R.cds[k]-dt);
   // movement input
@@ -2200,7 +2206,7 @@ function update(dt){
     if(f.mini){f.t=(f.t||0)+dt;
       if(!f.goal||Math.hypot(f.goal.x-f.x,f.goal.y-f.y)<16||f.t>f.gt){const near=Math.random()<.6;f.goal=near?{x:R.x+rnd(-140,140),y:R.y+rnd(-110,110)}:{x:rnd(FX0()+60,FX1()-60),y:rnd(FY0()+60,FY1()-60)};f.gt=f.t+rnd(1.5,3);}
       const gx=f.goal.x-f.x,gy=f.goal.y-f.y,gd=Math.hypot(gx,gy)||1;f.x+=gx/gd*70*dt+f.vx*dt;f.y+=gy/gd*70*dt+f.vy*dt;f.vx*=Math.pow(.05,dt);f.vy*=Math.pow(.05,dt);f.step+=dt*6;
-      {const dx=R.x-f.x,dy=R.y-10-f.y,d=Math.hypot(dx,dy)||1;if(d<f.r+PR-4&&f.pop>=1){knock("Ouch!",.25,.8,dx/d*420,dy/d*420);f.vx=-dx/d*500;f.vy=-dy/d*500;}}
+      {const dx=R.x-f.x,dy=R.y-10-f.y,d=Math.hypot(dx,dy)||1;if(d<f.r+PR-4&&f.pop>=1){const push=f.r+PR-4-d;f.x-=dx/d*push;f.y-=dy/d*push;}}
       f.style=f.style||GOB[R.zone.id][Math.floor(Math.random()*GOB[R.zone.id].length)];
       f.shotT=(f.shotT??rnd(1.5,3))-dt;if(f.shotT<=0&&f.pop>=1){f.shotT=rnd(3.4,4.8)/(1+.1*R.si);goblinShot(f);}
       keepIn(f,f.r);continue;}
@@ -2212,7 +2218,13 @@ function update(dt){
       f.t=(f.t||0)+dt;
       if(!f.goal||Math.hypot(f.goal.x-f.x,f.goal.y-f.y)<16||f.t>f.gt){const near=Math.random()<.55;f.goal=near?{x:R.x+rnd(-160,160),y:R.y+rnd(-120,120)}:{x:rnd(FX0()+60,FX1()-60),y:rnd(FY0()+60,FY1()-60)};f.gt=f.t+rnd(1.5,3.2);f.spd=f.spd||rnd(38,62)*(1+.06*R.si);}
       const gx=f.goal.x-f.x,gy=f.goal.y-f.y,gd=Math.hypot(gx,gy)||1;if(f.pop>=1){f.x+=gx/gd*f.spd*dt;f.y+=gy/gd*f.spd*dt;f.step+=dt*5;}}
-    if(!f.clock&&!(f.stun>0)&&f.pop>=1&&Math.hypot(R.x-f.x,R.y-10-f.y)<f.r+PR-6){const a=Math.atan2(R.y-f.y,R.x-f.x);knock("Ouch!",.2,.5,Math.cos(a)*360,Math.sin(a)*360);f.vx=-Math.cos(a)*420;f.vy=-Math.sin(a)*420;}
+    if(!f.clock&&!(f.stun>0)&&f.pop>=1){const ddx=R.x-f.x,ddy=R.y-10-f.y,dd=Math.hypot(ddx,ddy)||1;
+      f.lcd=(f.lcd??rnd(.5,2))-dt;
+      if(f.lunge>0){f.lunge-=dt;if(f.lunge<=0){f.ldash=.22;}}              // wind-up done: go
+      else if(f.ldash>0){f.ldash-=dt;f.x+=f.lax*560*dt;f.y+=f.lay*560*dt;
+        if(dd<f.r+PR-4){f.ldash=0;knock("Ouch!",.2,.5,f.lax*380,f.lay*380);f.vx=-f.lax*300;f.vy=-f.lay*300;}}
+      else if(f.lcd<=0&&dd<150){f.lunge=.5;f.lax=ddx/dd;f.lay=ddy/dd;f.lcd=rnd(2.2,3.4);}  // telegraph: red flash + shake for 0.5s
+      if(dd<f.r+PR-6&&!(f.ldash>0)){const push=(f.r+PR-6-dd);f.x-=ddx/dd*push;f.y-=ddy/dd*push;}}
     if(f.vx||f.vy){f.x+=f.vx*dt;f.y+=f.vy*dt;f.vx*=Math.pow(.08,dt);f.vy*=Math.pow(.08,dt);f.step+=Math.hypot(f.vx,f.vy)*dt/8;if(Math.abs(f.vx)<1&&Math.abs(f.vy)<1)f.vx=f.vy=0;}
     keepIn(f,f.r);
   }
@@ -2398,7 +2410,7 @@ function chomp(f,o={}){
   if(boss){f.hp-=bites;R.bossDmg+=bites;if(!RM)R.shake=Math.max(R.shake,.25);}
   else f.left-=bites;
   burst(f.x,f.y,f.gold?COL.gold:"#f5e6c4",boss?6:7);sparkle(f.x,f.y-4,boss);
-  if(kc>0)floatText(f.x+rnd(-10,10),f.y-f.r-8,"+"+fmt(kc),f.gold?COL.gold:COL.cream,f.gold||boss?1:0);
+  if(kc>0){if(boss&&o.shot){R.bossKc=(R.bossKc||0)+kc;if(!(R.bossKcT>0)){R.bossKcT=.45;floatText(f.x+rnd(-14,14),f.y-f.r-8,"+"+fmt(R.bossKc),COL.cream,1);R.bossKc=0;}}else floatText(f.x+rnd(-10,10),f.y-f.r-8,"+"+fmt(kc),f.gold?COL.gold:COL.cream,f.gold||boss?1:0);}
   if(!SIM){if(f.gold)SFX.gold();else if(o.shot)tone(boss?180:260,.05,"square",.035,.5);else SFX.chomp(R.combo);}
   if(o.shot&&!o.chain&&lv("chain")&&Math.random()<stat("chain")){
     const near=R.foods.filter(g=>g!==f&&!g.boss&&Math.hypot(g.x-f.x,g.y-f.y)<240).sort((a,b)=>Math.hypot(a.x-f.x,a.y-f.y)-Math.hypot(b.x-f.x,b.y-f.y)).slice(0,3);
@@ -2460,7 +2472,7 @@ function spawnBoss(encore){
     at:b.atk.map(a=>a.every*rnd(.5,.8)+1.2)});
   R.shake=.8;SFX.boss();rumble(450,1,.5);
   if(!SIM)$("#hBossIco").textContent=b.e;
-  R.bossStart=hp;R.bossAt=R.el;
+  R.bossStart=hp;R.bossAt=R.el;R.bossK=R.kills||0;
   banner(b.e,encore?`Encore: ${b.name}`:b.name,encore?`Back for seconds · ${fmt(max)} HP`:`${R.zone.secs[R.si].n} boss · ${fmt(max)} HP · beat it before time runs out!`,"boss");
 }
 function bossDown(f){
@@ -2516,11 +2528,11 @@ function thrTarget(){
   for(const g of R.gulls){if(g.st==="gone")continue;const d=Math.hypot(g.x-R.x,g.y-R.y)-20;if(d<bd){bd=d;best=g;}}return best;
 }
 function throwing(dt){
-  R.thrT-=dt*(R.cheatT>0?1.8:1);
+  R.thrT-=dt;
   shield(dt);
   if(R.thrT<=0&&R.stun<=0&&!R.ending){const t=thrTarget();
-    if(t){const pw=R.pw;R.thrT=R.thrCd*(pw.rapid>0?.4:1);
-      const ox=R.x,oy=R.y-40,ang=Math.atan2(t.y-oy,t.x-ox),heavy=pw.heavy>0;
+    if(t){const pw=R.pw,eff=R.thrCd*(pw.rapid>0?.4:1)/(R.cheatT>0?1.8:1),gap=Math.max(eff,THR_GAP);R.thrT=gap;R.thrK=gap/eff;   // capped rate, same damage
+      R.hand=-(R.hand||1);const ox=R.x+R.hand*24,oy=R.y-16,ang=Math.atan2(t.y-oy,t.x-ox),heavy=pw.heavy>0;
       const n=R.thrN+(pw.spread>0?4:0),fan=pw.spread>0?.22:.14,base={pierce:R.thrP,r:heavy?24:16,heavy,bounce:heavy?3:0};
       for(let k=0;k<n;k++){const o=n>1?(k-(n-1)/2)*fan:0;dart(ox,oy,ang+o,Math.abs(o)<.01?t:null,base);}
       if(pw.ring>0)for(let k=0;k<8;k++)dart(ox,oy,ang+Math.PI/8+k*Math.PI/4,null,base);
@@ -2529,8 +2541,8 @@ function throwing(dt){
   R.throwA=Math.max(0,(R.throwA||0)-dt);
   if(R.mate){const m=R.mate,gx=R.x-R.fx*80,gy=R.y-R.fy*50+16,dx=gx-m.x,dy=gy-m.y,d=Math.hypot(dx,dy);
     if(d>12){const sp=Math.min(d*4,330*R.spd);m.x+=dx/d*sp*dt;m.y+=dy/d*sp*dt;m.walk+=sp*dt/22;m.face=dx<0?-1:1;}keepIn(m,PR);
-    m.thrT-=dt;if(m.thrT<=0&&!R.ending){const t=thrTarget();if(t){m.thrT=R.thrCd*m.cd*(R.pw.rapid>0?.5:1);const a=Math.atan2(t.y-(m.y-40),t.x-m.x);
-        dart(m.x,m.y-40,a,t,{pierce:R.thrP,r:14,heavy:false});R.darts[R.darts.length-1].m=m.m;m.face=t.x<m.x?-1:1;}else m.thrT=.1;}}
+    m.thrT-=dt;if(m.thrT<=0&&!R.ending){const t=thrTarget();if(t){const me=R.thrCd*m.cd*(R.pw.rapid>0?.5:1),mg=Math.max(me,.4);m.thrT=mg;const a=Math.atan2(t.y-(m.y-40),t.x-m.x);
+        dart(m.x+m.face*20,m.y-16,a,t,{pierce:R.thrP,r:14,heavy:false,noK:1});R.darts[R.darts.length-1].m=m.m*mg/me;m.face=t.x<m.x?-1:1;}else m.thrT=.1;}}
   for(const d of R.darts){
     if(d.tgt&&(R.foods.includes(d.tgt)||(d.tgt.gull&&d.tgt.st!=="gone"))){const want=Math.atan2(d.tgt.y-d.y,d.tgt.x-d.x),cur=Math.atan2(d.vy,d.vx),sp=Math.hypot(d.vx,d.vy);const df=((want-cur+Math.PI*3)%(Math.PI*2))-Math.PI;const na=cur+clamp(df,-4*dt,4*dt);d.vx=Math.cos(na)*sp;d.vy=Math.sin(na)*sp;}
     d.x+=d.vx*dt;d.y+=d.vy*dt;d.life-=dt;d.rot+=dt*16;
@@ -2548,7 +2560,7 @@ function throwing(dt){
     if(d.x<FX0()-30||d.x>FX1()+30||d.y<FY0()-60||d.y>FY1()+30)d.life=0;}
   R.darts=R.darts.filter(d=>d.life>0);
 }
-function dart(x,y,ang,tgt,o){o.bounce=o.bounce||0;const reach=Math.max(R.thrR*1.25,tgt?Math.hypot(tgt.x-x,tgt.y-y)*1.3:0);R.darts.push({x,y,vx:Math.cos(ang)*R.thrV,vy:Math.sin(ang)*R.thrV,tgt,life:reach/R.thrV+.15,rot:rnd(0,6),hit:new Set(),pierce:o.pierce,r:o.r,heavy:o.heavy,bounce:o.bounce});}
+function dart(x,y,ang,tgt,o){o.bounce=o.bounce||0;const mk=o.noK?1:(R.thrK||1);const reach=Math.max(R.thrR*1.25,tgt?Math.hypot(tgt.x-x,tgt.y-y)*1.3:0);R.darts.push({x,y,vx:Math.cos(ang)*R.thrV,vy:Math.sin(ang)*R.thrV,tgt,life:reach/R.thrV+.15,rot:rnd(0,6),hit:new Set(),pierce:o.pierce,r:o.r,heavy:o.heavy,bounce:o.bounce,m:mk});}
 // Power-ups: grab one for a few seconds of better throws
 const PUPS={rapid:{e:"🔥",name:"Rapid Fire",col:"#ff8a3a"},spread:{e:"🔱",name:"Spread Shot",col:"#5fc8ff"},ring:{e:"💫",name:"Dumbbell Ring",col:"#c48bff"},heavy:{e:"🪨",name:"Heavy Iron",col:"#d9d2c2"}};   // heavy: big dumbbells, ×2.5 damage, each ricochets to 3 more enemies
 function dropPup(x,y){if(R.pups.length>=3)return;const ks=Object.keys(PUPS);R.pups.push({k:ks[Math.floor(Math.random()*ks.length)],x:clamp(x,FX0()+40,FX1()-40),y:clamp(y,FY0()+40,FY1()-40),life:9,pop:0});}
@@ -2580,7 +2592,7 @@ function drawPwIcons(){
     circ(ctx,x,y,16);fs(ctx,"#2a1a12cc",0);ctx.beginPath();ctx.arc(x,y,16,-Math.PI/2,-Math.PI/2+Math.PI*2*R.pw[k]/R.pupD);ctx.lineWidth=4;ctx.strokeStyle=P.col;ctx.stroke();drawSpr(ctx,P.e,x,y,10);});
 }
 // Bosses fight back: shots, rings, spirals, floor slams and charges. Getting hit costs appetite time. Dashing makes you immune.
-function shoot(f,a,ang,spd){spd*=.8;R.shots.push({src:f,x:f.x,y:f.y,vx:Math.cos(ang)*spd,vy:Math.sin(ang)*spd,e:a.e,r:20,life:5,rot:rnd(0,6),near:0});}
+function shoot(f,a,ang,spd){spd*=.8;R.shots.push({src:f,x:f.x,y:f.y,vx:Math.cos(ang)*spd,vy:Math.sin(ang)*spd,e:a.e,r:15,life:5,rot:rnd(0,6),near:0});}
 function bossAttacks(dt){
   const f=R.foods.find(x=>x.boss);
   if(f&&f.enter<=0){
@@ -2592,15 +2604,15 @@ function bossAttacks(dt){
       else if(a.k==="slam"){R.slams.push({x:R.x,y:R.y+10,r:a.r,t:1,max:1});SFX.full();}
       else if(a.k==="charge"&&b.mv!=="still"){f.charge={t:.75,ang:toP,go:0};}
       else if(a.k==="burst"){f.burst=3;f.burstT=0;f.burstA=a;}
-      else if(a.k==="wave"){const n=11,gap=Math.floor(rnd(3,8)),nx=-Math.sin(toP),ny=Math.cos(toP);for(let k=0;k<n;k++){if(Math.abs(k-gap)<=1)continue;const off=(k-(n-1)/2)*58;R.shots.push({x:f.x+nx*off,y:f.y+ny*off,vx:Math.cos(toP)*a.spd*.8,vy:Math.sin(toP)*a.spd*.8,e:a.e,r:20,life:6,rot:rnd(0,6),near:0});}SFX.toss();}
+      else if(a.k==="wave"){const n=11,gap=Math.floor(rnd(3,8)),nx=-Math.sin(toP),ny=Math.cos(toP);for(let k=0;k<n;k++){if(Math.abs(k-gap)<=1)continue;const off=(k-(n-1)/2)*58;R.shots.push({x:f.x+nx*off,y:f.y+ny*off,vx:Math.cos(toP)*a.spd*.8,vy:Math.sin(toP)*a.spd*.8,e:a.e,r:15,life:6,rot:rnd(0,6),near:0});}SFX.toss();}
       else if(a.k==="rain"){for(let k=0;k<a.n;k++)R.slams.push({x:clamp(R.x+rnd(-260,260),FX0()+40,FX1()-40),y:clamp(R.y+rnd(-180,180),FY0()+40,FY1()-30),r:52,t:1.1+k*.12,max:1.1+k*.12,e:a.e});SFX.full();}
-      else if(a.k==="homing"){R.shots.push({x:f.x,y:f.y,vx:Math.cos(toP)*a.spd*.8,vy:Math.sin(toP)*a.spd*.8,e:a.e,r:22,life:4.5,rot:0,near:0,home:3});SFX.toss();}
-      else if(a.k==="boomer"){for(let k=0;k<a.n;k++){const an=toP+(k/(a.n-1)-.5)*1.1;R.shots.push({x:f.x,y:f.y,vx:Math.cos(an)*a.spd,vy:Math.sin(an)*a.spd,e:a.e,r:20,life:3.4,rot:0,near:0,boom:1,age:0,v0x:Math.cos(an)*a.spd,v0y:Math.sin(an)*a.spd});}SFX.toss();}
-      else if(a.k==="bounce"){for(let k=0;k<a.n;k++){const an=toP+(a.n>1?(k/(a.n-1)-.5)*.9:0);R.shots.push({x:f.x,y:f.y,vx:Math.cos(an)*a.spd*.8,vy:Math.sin(an)*a.spd*.8,e:a.e,r:20,life:6,rot:0,near:0,bounces:2});}SFX.toss();}
+      else if(a.k==="homing"){R.shots.push({x:f.x,y:f.y,vx:Math.cos(toP)*a.spd*.8,vy:Math.sin(toP)*a.spd*.8,e:a.e,r:16,life:4.5,rot:0,near:0,home:3});SFX.toss();}
+      else if(a.k==="boomer"){for(let k=0;k<a.n;k++){const an=toP+(k/(a.n-1)-.5)*1.1;R.shots.push({x:f.x,y:f.y,vx:Math.cos(an)*a.spd,vy:Math.sin(an)*a.spd,e:a.e,r:15,life:3.4,rot:0,near:0,boom:1,age:0,v0x:Math.cos(an)*a.spd,v0y:Math.sin(an)*a.spd});}SFX.toss();}
+      else if(a.k==="bounce"){for(let k=0;k<a.n;k++){const an=toP+(a.n>1?(k/(a.n-1)-.5)*.9:0);R.shots.push({x:f.x,y:f.y,vx:Math.cos(an)*a.spd*.8,vy:Math.sin(an)*a.spd*.8,e:a.e,r:15,life:6,rot:0,near:0,bounces:2});}SFX.toss();}
       else if(a.k==="mine"){for(let k=0;k<a.n;k++){const an=rnd(0,6.28),d=rnd(90,200);R.slams.push({x:clamp(f.x+Math.cos(an)*d,FX0()+40,FX1()-40),y:clamp(f.y+Math.sin(an)*d,FY0()+40,FY1()-30),r:80,t:1.8,max:1.8,e:a.e,mine:1});}}
     });
     if(f.burst>0){f.burstT-=dt;if(f.burstT<=0){f.burst--;f.burstT=.2;const a=f.burstA,ang=Math.atan2(R.y-10-f.y,R.x-f.x);for(let k=0;k<a.n;k++)shoot(f,a,ang+(a.n>1?(k/(a.n-1)-.5)*.5:0),a.spd);SFX.toss();}}
-    if(f.spin>0){f.spin-=dt;f.spinT-=dt;if(f.spinT<=0){f.spinT=.09;f.spinA+=.42;shoot(f,f.spinE,f.spinA,f.spinE.spd);shoot(f,f.spinE,f.spinA+Math.PI,f.spinE.spd);}}
+    if(f.spin>0){f.spin-=dt;f.spinT-=dt;if(f.spinT<=0){f.spinT=.16;f.spinA+=.6;shoot(f,f.spinE,f.spinA,f.spinE.spd);shoot(f,f.spinE,f.spinA+Math.PI,f.spinE.spd);}}
     if(f.charge){const c=f.charge;if(c.t>0){c.t-=dt;}else{c.go+=dt;f.x+=Math.cos(c.ang)*820*dt;f.y+=Math.sin(c.ang)*820*dt;keepIn(f,f.r*.8);
         if(Math.hypot(f.x-R.x,f.y-R.y)<f.r+PR)knock("Bonk!",.7,2.5,Math.cos(c.ang)*600,Math.sin(c.ang)*600);
         if(c.go>.55)f.charge=null;}}
@@ -2670,6 +2682,7 @@ function drawFood(f,tm){
   if(f.gold){ctx.fillStyle=`rgba(242,194,48,${.18+.1*Math.sin(tm*6)})`;circ(ctx,f.x,f.y,f.r*1.5);ctx.fill();}
   if(f.clock){ctx.fillStyle=`rgba(120,200,255,${.2+.1*Math.sin(tm*6)})`;circ(ctx,f.x,f.y,f.r*1.5);ctx.fill();}
   if(f.mini){ctx.fillStyle=`rgba(216,66,58,${.16+.08*Math.sin(tm*5)})`;circ(ctx,f.x,f.y,f.r*1.45);ctx.fill();}
+  if(f.lunge>0){const k=1-f.lunge/.5;ctx.fillStyle=`rgba(230,40,40,${.25+.35*k})`;circ(ctx,f.x,f.y,f.r*(1.2+.3*k));ctx.fill();ctx.strokeStyle="rgba(230,40,40,.8)";ctx.lineWidth=5;ctx.beginPath();ctx.moveTo(f.x,f.y);ctx.lineTo(f.x+f.lax*90*k,f.y+f.lay*90*k);ctx.stroke();}
   // little legs on runners
   if(!f.clock&&(f.def.flee||!f.boss||f.def.mv!=="still")){ctx.strokeStyle=OUT;ctx.lineWidth=Math.max(3,f.r*.1);ctx.lineCap="round";const lg=Math.sin(f.step*2)*f.r*.18;
     ctx.beginPath();ctx.moveTo(f.x-f.r*.3,f.y+f.r*.5-hop);ctx.lineTo(f.x-f.r*.3+lg,f.y+f.r*.85);ctx.moveTo(f.x+f.r*.3,f.y+f.r*.5-hop);ctx.lineTo(f.x+f.r*.3-lg,f.y+f.r*.85);ctx.stroke();}
@@ -2768,7 +2781,6 @@ function draw(){
   // y-sorted actors
   const actors=[];
   for(const f of R.foods)actors.push([f.y+f.r*.8,()=>drawFood(f,tm)]);
-  actors.push([R.y+PR,()=>drawPlayer(tm)]);
   if(R.rival)actors.push([R.rival.y+PR,()=>drawRival(R.rival,tm)]);
   if(R.mate){const m=R.mate;actors.push([m.y+PR,()=>{if(R.ending){(R.win?drawCheer:drawKneel)(m.x,m.y+PR,30,tm,{look:MATE_LOOK,face:m.face,ph:.4});return;}drawShadow(m.x,m.y+PR,26);drawLifter(ctx,m.x,m.y+PR,30,{walk:m.walk,moving:true,face:m.face,top:"#2f9e6b",band:"#f2c230",shorts:"#22303f",lx:m.face,ly:0,fill:.2});
     ctx.font=`800 14px ${UIF}`;ctx.textAlign="center";ctx.lineWidth=4;ctx.strokeStyle=OUT;ctx.strokeText("Partner",m.x,m.y-60);ctx.fillStyle="#b9f0c9";ctx.fillText("Partner",m.x,m.y-60);}]);}
@@ -2777,13 +2789,18 @@ function draw(){
   for(const w of R.waiters)actors.push([w.y+30,()=>{drawShadow(w.x,w.y+30,26);drawSpr(ctx,"🤵",w.x,w.y-8+Math.abs(Math.sin(w.walk))*-4,30,{flip:w.dir<0});if(w.tray){rr(ctx,w.x-30+w.dir*16,w.y-62,60,10,5);fs(ctx,"#c9ccd6",3);drawSpr(ctx,R.zone.foods[0].e,w.x+w.dir*16-12,w.y-74,13);drawSpr(ctx,R.zone.foods[3].e,w.x+w.dir*16+12,w.y-74,13);}}]);
   for(const s of R.scoots)if(s.warn<=0)actors.push([s.y+26,()=>{drawShadow(s.x,s.y+26,38);drawSpr(ctx,"🛵",s.x,s.y-6,40,{flip:s.dir<0});}]);
   actors.sort((a,b)=>a[0]-b[0]);for(const a of actors)a[1]();
-  for(const p of R.shots){ctx.fillStyle="rgba(216,40,40,.28)";circ(ctx,p.x,p.y,p.r*1.55);ctx.fill();ctx.lineWidth=3;ctx.strokeStyle="rgba(255,90,80,.9)";ctx.stroke();
-    ctx.strokeStyle="rgba(255,120,100,.35)";ctx.lineWidth=p.r*.9;ctx.lineCap="round";ctx.beginPath();ctx.moveTo(p.x,p.y);ctx.lineTo(p.x-p.vx*.12,p.y-p.vy*.12);ctx.stroke();
-    drawSpr(ctx,p.e,p.x,p.y,p.r,{rot:p.rot});}
+
   ctx.lineCap="round";
   for(const l of R.loot)drawLoot(l,tm);
   for(const d of R.darts){ctx.strokeStyle="rgba(255,240,200,.35)";ctx.lineWidth=d.r*.9;ctx.beginPath();ctx.moveTo(d.x,d.y);ctx.lineTo(d.x-d.vx*.06,d.y-d.vy*.06);ctx.stroke();
-    if(d.heavy){ctx.fillStyle="rgba(255,255,255,.2)";circ(ctx,d.x,d.y,d.r*1.7);ctx.fill();}if(d.refl){ctx.fillStyle="rgba(120,200,255,.45)";circ(ctx,d.x,d.y,d.r*1.8);ctx.fill();}drawDumbbell(d.x,d.y,d.rot,d.r*1.25,d.heavy);}
+    if(d.heavy){ctx.fillStyle="rgba(255,255,255,.2)";circ(ctx,d.x,d.y,d.r*1.7);ctx.fill();}if(d.refl){ctx.fillStyle="rgba(120,200,255,.45)";circ(ctx,d.x,d.y,d.r*1.8);ctx.fill();}
+    const near=Math.hypot(d.x-R.x,d.y-R.y)<90;ctx.globalAlpha=near?.55:.95;drawDumbbell(d.x,d.y,d.rot,d.r*1.25,d.heavy);ctx.globalAlpha=1;}
+  for(const p of R.shots){ctx.fillStyle="rgba(216,40,40,.28)";circ(ctx,p.x,p.y,p.r*1.55);ctx.fill();ctx.lineWidth=3;ctx.strokeStyle="rgba(255,90,80,.9)";ctx.stroke();
+    ctx.strokeStyle="rgba(255,120,100,.35)";ctx.lineWidth=p.r*.9;ctx.lineCap="round";ctx.beginPath();ctx.moveTo(p.x,p.y);ctx.lineTo(p.x-p.vx*.12,p.y-p.vy*.12);ctx.stroke();
+    drawSpr(ctx,p.e,p.x,p.y,p.r,{rot:p.rot});}
+  // you: always drawn last, over every dumbbell and effect, with a bright ring at your feet (owner kept losing the character)
+  if(!R.ending){ell(ctx,R.x,R.y+PR,PR*1.25,PR*.42);ctx.lineWidth=4;ctx.strokeStyle="rgba(255,236,170,.9)";ctx.stroke();ctx.lineWidth=2;ctx.strokeStyle="rgba(42,26,18,.8)";ell(ctx,R.x,R.y+PR,PR*1.25+4,PR*.42+3);ctx.stroke();}
+  drawPlayer(tm);
   if(!R.ending)drawPwIcons();
   drawEvents(tm);
   // plates
@@ -2879,7 +2896,7 @@ function endRun(){
     // red counters like the hub tabs: what you can afford right now
     {const tc=treeCan();for(const [el,c] of [[$("#gymBtn2"),S.tut===2?n:0],[$("#backBtn"),tc]]){if(c)el.dataset.n=String(Math.min(c,99));else delete el.dataset.n;}}
     if(S.tut===1){g.hidden=false;g.innerHTML="Nice first run! Now open <b>your own gym</b>: members pay you £ while you play, and you spend it on gym-only perks.";$("#gymBtn2").className="btn gold";$("#gymBtn2").textContent="🏋️ Open your gym";}
-    else if(R.newMkt!=null){const nm=R.newMkt,eqs=EQUIP.filter(e=>(e.t||0)===nm).map(e=>e.e+" "+e.name);
+    else if(false){const nm=R.newMkt,eqs=EQUIP.filter(e=>(e.t||0)===nm).map(e=>e.e+" "+e.name);
       g.hidden=false;g.classList.add("unlock");g.innerHTML=`🔓 <b>New in Your Gym:</b> ${eqs.length?eqs.join(", ")+", and ":""}the next level of every supplement!`;$("#gymBtn2").className="btn gold";}}
   $("#againBtn").textContent=R.next?"Onwards":"Run it back";
   $("#results").hidden=false;SFX.end();
@@ -3027,7 +3044,7 @@ function sim(maxRuns=400,start={}){
     while(!R.done&&steps<20000){update(1/30);steps++;}
     const secs=R.T-Math.max(0,R.t)+8;time+=secs;S.cash+=income()*secs;
     for(const z of ZONES){if(S.zones.includes(z.id)&&!ms["open "+z.id])ms["open "+z.id]=`run ${r} · ${(time/60).toFixed(1)}m · dps ${(stat("jaw")*dmgMult()/stat("chew")).toFixed(1)}`;for(let k=0;k<NSEC;k++)if(S.cleared[z.id+":"+k]&&!ms[z.id+k])ms[z.id+k]=r;if(S.beaten[z.id]&&!ms["beat "+z.id])ms["beat "+z.id]=`run ${r} · ${(time/60).toFixed(1)}m`;}
-    log.push(`run ${r} ${R.sk} £${fmt(S.cash)} +${fmt(income())}/s kcal ${fmt(R.kcal)} boss ${S.cleared[R.sk]?'dead':(R.foods.find(f=>f.boss)?Math.ceil(R.foods.find(f=>f.boss).hp)+'/'+bossHp(R.boss):'-')} hits ${R.hits||0} fight ${R.fightT?R.fightT.toFixed(1)+'s':'-'} hp ${fmt(bossHp(R.boss))} dps ${fmt(R.jaw*R.dmg*R.thrPow/R.thrCd)} lv ${levels()} gym m${members()} r${rankN()} eq${Object.values(S.g).reduce((x,y)=>x+y,0)} sp${Object.values(S.sp).reduce((x,y)=>x+y,0)} t ${(time/60).toFixed(1)}m`);
+    log.push(`run ${r} ${R.sk} £${fmt(S.cash)} +${fmt(income())}/s kcal ${fmt(R.kcal)} boss ${S.cleared[R.sk]?'dead':(R.foods.find(f=>f.boss)?Math.ceil(R.foods.find(f=>f.boss).hp)+'/'+bossHp(R.boss):'-')} hits ${R.hits||0} bAt ${R.bossAt!=null?R.bossAt.toFixed(1)+'/'+R.T.toFixed(0)+' k'+R.bossK:'-'} fight ${R.fightT?R.fightT.toFixed(1)+'s':'-'} hp ${fmt(bossHp(R.boss))} dps ${fmt(R.jaw*R.dmg*R.thrPow/R.thrCd)} lv ${levels()} gym m${members()} r${rankN()} eq${Object.values(S.g).reduce((x,y)=>x+y,0)} sp${Object.values(S.sp).reduce((x,y)=>x+y,0)} t ${(time/60).toFixed(1)}m`);
     R=null;simBuy();
     if(S.beaten.buffet)break;
   }
