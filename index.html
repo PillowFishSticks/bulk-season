@@ -526,7 +526,7 @@ body.touch .hnote .kbt{display:none} body.touch .hnote .tct{display:inline}
     <header class="hubtop">
       <div class="plaques">
         <div class="plaque" title="kcal to spend"><div class="ico">🔥</div><div class="val" id="bankKcal">0</div></div>
-        <div class="plaque" title="Gym money"><div class="ico">💷</div><div><div class="val cashv" id="bankCash">£0</div><small id="bankInc">+£0/s</small></div></div>
+        <div class="plaque" id="cashPlq" title="Gym money"><div class="ico">💷</div><div><div class="val cashv" id="bankCash">£0</div><small id="bankInc">+£0/s</small></div></div>
         <div class="plaque" id="medalPlq" title="Season medals" hidden><div class="ico">🏅</div><div class="val" id="bankMedal">0</div></div>
       </div>
       <h1 class="logo">BULK SEASON<small id="seasonLbl">SEASON 1</small></h1>
@@ -964,7 +964,8 @@ const gcost=(it,L)=>Math.round(it.base*Math.pow(it.k,L)*(SUPPS.includes(it)&&ran
 const fame=()=>(1+.2*trophies())*(1+(bench()-20)/400);
 let lastRank=-1;
 function members(){let base=4,mm=1;for(const e of EQUIP){const L=gl(e.id);if(e.add)base+=e.add*L;if(e.mm)mm*=1+e.mm*L;}return Math.floor(base*mm*fame());}
-function income(){let sp=1;for(const e of EQUIP)if(e.sp)sp*=1+e.sp*gl(e.id);return members()*.25*sp*(1+.15*S.medals);}
+function income(){if(S.tut<2&&!SIM)return 0;   // no gym, no members paying you: income starts when you open it
+  let sp=1;for(const e of EQUIP)if(e.sp)sp*=1+e.sp*gl(e.id);return members()*.25*sp*(1+.15*S.medals);}
 const eqDesc=e=>[e.add&&`+${e.add} members`,e.mm&&`+${Math.round(e.mm*100)}% members`,e.sp&&`+${Math.round(e.sp*100)}% spend`].filter(Boolean).join(", ");
 const money=n=>"£"+fmt(n);
 const bossHp=b=>Math.round(b.hp*Math.pow(1.5,S.season-1));
@@ -1357,7 +1358,7 @@ function coach(){const c=$("#coach");if(!c)return;let el=null,txt="";
     else if(S.tut===2&&S.coachTree&&TAB!=="tree"){el=$("#tabTree");txt="Spend your kcal here";}}
   if(!el||!el.offsetParent){c.hidden=true;return;}
   const r=el.getBoundingClientRect(),below=r.top<90;c.classList.toggle("below",below);c.style.left=(r.left+r.width/2)+"px";c.style.top=(below?r.bottom:r.top)+"px";$("#coachTxt").textContent=txt;c.hidden=false;}
-function openGym(){S.tut=2;S.coachTree=1;if(!gl("weights"))S.g.weights=1;S.cashT=Date.now();save();toGym();setTab("gym");
+function openGym(){S.cash=0;S.tut=2;S.coachTree=1;if(!gl("weights"))S.g.weights=1;S.cashT=Date.now();save();toGym();setTab("gym");
   banner("🏋️","Your gym is open!","Members pay you £ all the time, even while you're out eating","gold");if(!SIM)SFX.win();}
 function badges(){const g=gymCan(),t=treeCan();
   {const el=$("#tabGym"),nw=S.tut===2&&gymNew()>0;el.classList.toggle("locked",S.tut<2);if(nw)el.dataset.new="1";else delete el.dataset.new;}
@@ -1367,7 +1368,7 @@ function renderRanks(){const m=members(),r=rankN(),nx=RANKS[r];
     `<span class="rtxt">${nx?`Next: <b>${nx.e} ${nx.name}</b> at ${nx.n} members (${fmt(m)} now): ${nx.perk}<div class="rbar"><i style="transform:scaleX(${(m/nx.n).toFixed(3)})"></i></div>`:"🏆 Legend gym: every perk unlocked"}</span>`;}
 function renderBiz(){
   if(SIM)return;
-  $("#bankCash").textContent=money(S.cash);$("#bankInc").textContent=`+${money(income())}/s`;
+  $("#cashPlq").hidden=S.tut<2;$("#bankCash").textContent=money(S.cash);$("#bankInc").textContent=`+${money(income())}/s`;
   badges();
   if(TAB!=="gym")return;
   {const k=rankN()+":"+members();if(renderBiz.rk!==k){renderBiz.rk=k;renderRanks();}}
