@@ -11,7 +11,7 @@ Play: https://pillowfishsticks.github.io/bulk-season/
 3. **Events.** Unlock things that happen on their own: plates crashing down on food, gym buddies who eat for you, and chomps that chain-zap nearby food.
 4. **Sections and bosses.** Each market has five sections, and each one should take you two or three runs (Corner Shop: Front Door, The Aisles, Freezer Aisle, Stock Room, The Till). Eat your way past food goblins (they chase you, shoot at you and bump into you) (knock down enough of them and the boss turns up), then knock it out with dumbbells before your appetite runs out. Hits cost you time. Beat a boss to open the next section; beat the fifth to open the next market.
 5. **Gym.** Spend kcal on upgrades in four columns: Time, Damage, Gains and Abilities. Each market you reach adds more, and some upgrades need another one at level 3 first. Run your own gym too: equipment brings members, members pay you money even while you're away, and money buys supplements: gym-only perks like a training partner who throws with you, a spotter who takes hits for you, One More Set, a hype man who brings the boss out sooner, and prize money for every boss. More members unlock gym ranks (Bronze to Legend) with permanent perks. Red badges on the tabs show when you can afford something.
-6. **New season.** Clear The Buffet and you can start again with medals that boost every kcal for good.
+6. **The end.** Clear The Buffet to finish the game. You can keep playing afterwards for golden feasts.
 
 Each market has its own hazards. None of them can kill you, but they knock you about: wet floors, seagulls that nick your dropped food and peck you (shoot them down), chilli spills that flare up, scooters, waiters and Big Dave, who's eating too.
 

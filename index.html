@@ -393,7 +393,6 @@ body.phone .stage{grid-template-rows:auto minmax(0,1fr) auto}
 .note{position:relative;background:#f6ebcd;border:3px solid #7a5a32;border-radius:6px;padding:16px 14px 14px;box-shadow:0 5px 0 rgba(80,50,20,.35);transform:rotate(-1.2deg)}
 .note::before{content:"";position:absolute;top:-9px;left:50%;width:16px;height:16px;margin-left:-8px;border-radius:50%;background:#c0392b;border:2px solid var(--out)}
 .note h3{margin:0;font:900 22px/1 var(--disp);text-align:center}
-.note.season{background:#3a2516;color:var(--cream);transform:rotate(1deg);text-align:center;display:grid;gap:8px;font-size:14px}
 /* ---------- RUN ---------- */
 #run{touch-action:none;user-select:none;-webkit-user-select:none;background:#0d0907}
 #run canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
@@ -554,7 +553,7 @@ body.touch .hnote .kbt{display:none} body.touch .hnote .tct{display:inline}
         <div class="plaque" id="cashPlq" title="Gym money"><div class="ico">💷</div><div><div class="val cashv" id="bankCash">£0</div><small id="bankInc">+£0/s</small></div></div>
         <div class="plaque" id="medalPlq" title="Season medals" hidden><div class="ico">🏅</div><div class="val" id="bankMedal">0</div></div>
       </div>
-      <h1 class="logo">BULK SEASON<small id="seasonLbl">SEASON 1</small></h1>
+      <h1 class="logo">BULK SEASON</h1>
       <div class="tools">
         <button class="btn small" id="charBtn">Character</button>
         <button class="btn small" id="helpBtn">How to play</button>
@@ -592,11 +591,6 @@ body.touch .hnote .kbt{display:none} body.touch .hnote .tct{display:inline}
               <div class="task" id="taskTxt"></div>
               <div class="tbar"><i id="taskBar"></i></div>
               <div class="trow"><span id="taskProg"></span><span id="taskRew"></span></div>
-            </div>
-            <div class="note season" id="seasonCard" hidden>
-              <div class="lbl">You're the champion</div>
-              <div>Start a new season. Upgrades, markets and bosses reset, but you keep medals that boost all kcal for good.</div>
-              <button class="btn gold" id="seasonBtn">New season</button>
             </div>
           </div>
           <div class="treeScroll"><div class="ulist" id="ulist"></div></div>
@@ -683,13 +677,6 @@ body.touch .hnote .kbt{display:none} body.touch .hnote .tct{display:inline}
       <div class="mbtns"><button class="btn gold" id="resetNo">Cancel</button><button class="btn" id="resetYes">Yes, reset</button></div>
     </div>
   </div>
-  <div class="modal" id="seasonModal" hidden>
-    <div class="parch mcard">
-      <h2>New season?</h2>
-      <p id="seasonTxt" style="margin:0;font-size:17px"></p>
-      <div class="mbtns"><button class="btn" id="seasonNo">Not yet</button><button class="btn gold" id="seasonYes">Start season</button></div>
-    </div>
-  </div>
   <div class="modal" id="helpModal" hidden>
     <div class="parch mcard help">
       <h2>How to play</h2>
@@ -736,7 +723,7 @@ body.touch .hnote .kbt{display:none} body.touch .hnote .tct{display:inline}
     <div class="crawlBox"><div class="crawl" id="crawl"></div></div>
     <div class="credEnd" id="credEnd" hidden>
       <div class="parch mcard"><h2>Thanks for playing!</h2><p id="credSum" style="margin:0"></p>
-        <div class="mbtns"><button class="btn" id="credGym">Back to the gym</button><button class="btn gold" id="credSeason">Start the next season</button></div></div>
+        <div class="mbtns"><button class="btn gold" id="credGym">Back to the gym</button></div></div>
     </div>
     <button class="btn small credSkip" id="credSkip">Skip <span class="glyph kb">Enter</span><span class="glyph pd pA">A</span></button>
   </section>
@@ -1388,7 +1375,6 @@ function renderGym(){
   renderBiz();coach();
   $("#bankKcal").textContent=fmt(S.kcal);
   $("#medalPlq").hidden=!S.medals;$("#bankMedal").textContent=S.medals+` (+${S.medals*15}%)`;
-  $("#seasonLbl").textContent="SEASON "+S.season;
   $("#stBench").textContent=bench()+" kg";$("#stDmg").textContent=`Boss damage ×${dmgMult().toFixed(2)}`;
   $("#stBest").textContent=fmt(S.best);
   $("#stTro").textContent=trophies()+" / 5";$("#stTroB").textContent=`+${trophies()*10}% kcal`;
@@ -1413,7 +1399,6 @@ function renderGym(){
     const live=k==="eat"||k==="shoo";
     $("#taskBar").style.width=(live?p/tk.t.n*100:0)+"%";$("#taskProg").textContent=live?`${p}/${tk.t.n}`:`${zone.name}`;$("#taskRew").textContent=`+${fmt(tk.t.r)} kcal`;}
   else{$("#taskTxt").textContent=`All ${zone.name} tasks done!`;$("#taskBar").style.width="100%";$("#taskProg").textContent="";$("#taskRew").textContent="";}
-  $("#seasonCard").hidden=!S.beaten.buffet;
   // the list: rows of markets you've reached, plus the next market's rows as a locked teaser
   const top=S.zones.length-1;
   for(const [k,hs] of Object.entries(ugroups)){const show=+k<=top+1;for(const h of hs){h.hidden=!show;h.classList.toggle("lock",+k>top);h.lastChild.textContent=" "+ZONES[k].name+(+k>top?" · reach it to unlock":"");}}
@@ -1478,16 +1463,6 @@ $("#runFs").onclick=e=>{e.stopPropagation();toggleFS();};
 if(!document.fullscreenEnabled)document.body.classList.add("nofs");
 document.addEventListener("fullscreenchange",()=>{document.body.classList.toggle("fs",!!document.fullscreenElement);if(document.fullscreenElement&&document.body.classList.contains("touch"))try{screen.orientation.lock("landscape").catch(()=>{});}catch(e){}});
 document.addEventListener("fullscreenchange",()=>{$("#fsBtn").firstChild.textContent=document.fullscreenElement?"Exit fullscreen ":"Fullscreen ";});
-$("#seasonBtn").onclick=()=>{
-  const m=medalsFor(S.seasonKcal);
-  $("#seasonTxt").textContent=`You'll earn ${m} medal${m===1?"":"s"} (+${m*15}% kcal and gym income for good). Skills, supplements, markets, tasks and bosses reset, and bosses get tougher. You keep your gym and its money.`;
-  $("#seasonModal").hidden=false;$("#seasonYes").focus();
-};
-$("#seasonNo").onclick=()=>{$("#seasonModal").hidden=true;$("#seasonBtn").focus();};
-$("#seasonYes").onclick=()=>{
-  const n=fresh();n.medals=S.medals+medalsFor(S.seasonKcal);n.season=S.season+1;n.best=S.best;n.runs=S.runs;n.total=S.total;n.muted=S.muted;n.seen=true;n.g=S.g;n.cash=S.cash;n.cashT=S.cashT;
-  S=n;save();$("#seasonModal").hidden=true;renderGym();SFX.win();banner("🏅",`Season ${S.season}`,`${S.medals} medals · +${S.medals*15}% kcal`,"gold");$("#goBtn").focus();
-};
 
 // Hub lifter: overhead pressing a bar loaded with plates that match your upgrades
 const hubCv=$("#titleCv");
@@ -2104,7 +2079,7 @@ function padMenu(st,dt){
   if(st.ry&&!R&&TAB==="tree"&&navLayer()===$("#gym")){zoomBy(1-st.ry*dt*.9);}
   if(st.B)navBack();
   if(st.Y&&!R&&navLayer()===$("#gym")){setTab(TAB==="tree"?"gym":"tree");SFX.buy(0);(TAB==="tree"?$("#tabTree"):$("#tabGym")).focus();}
-  if(st.Start&&!R&&!$("#gym").hidden&&$("#seasonModal").hidden)startRun();
+  if(st.Start&&!R&&!$("#gym").hidden)startRun();
   if((st.LB||st.RB)&&!R&&navLayer()===$("#gym")){const all=[];ZONES.forEach(z=>z.secs.forEach((_,i)=>{if(secOpen(z,i))all.push([z.id,i]);}));const k=all.findIndex(([id,i])=>id===S.zone&&i===selSec());const [nz,ni]=all[(k+(st.RB?1:-1)+all.length)%all.length];S.zone=nz;S.si=ni;save();renderGym();SFX.buy(ni);secEls[nz][ni].focus();}
 }
 let padHold=0,padHoldRep=0,padHoldEl=null;   // hold-to-buy only repeats on the node you pressed A on, and stops if you move
@@ -2140,7 +2115,7 @@ function listMove(cur,d){
   const other=vis(cols[k]);if(!other.length)return null;const y=cur.getBoundingClientRect().top;
   return other.reduce((b,r)=>Math.abs(r.getBoundingClientRect().top-y)<Math.abs(b.getBoundingClientRect().top-y)?r:b);
 }
-function navLayer(){for(const id of["charModal","helpModal","saveModal","seasonModal","resetModal","credits","results","pause"])if(!$("#"+id).hidden)return $("#"+id);return R?null:$("#gym");}
+function navLayer(){for(const id of["charModal","helpModal","saveModal","resetModal","credits","results","pause"])if(!$("#"+id).hidden)return $("#"+id);return R?null:$("#gym");}
 function navMove(d){
   const layer=navLayer();if(!layer)return false;
   const inView=b=>{const sc=b.closest(".urows");if(!sc)return true;const r=b.getBoundingClientRect(),v=sc.getBoundingClientRect();return r.bottom>v.top+4&&r.top<v.bottom-4;};
@@ -2162,7 +2137,6 @@ function navBack(){
   if(!$("#charModal").hidden){$("#charClose").click();return;}
   if(!$("#helpModal").hidden){$("#helpClose").click();return;}
   if(!$("#saveModal").hidden){$("#saveClose").click();return;}
-  if(!$("#seasonModal").hidden){$("#seasonNo").click();return;}
   if(!$("#resetModal").hidden){$("#resetNo").click();return;}
   if(!$("#pause").hidden){togglePause();return;}
   if(!$("#results").hidden){($("#backBtn").hidden?$("#gymBtn2"):$("#backBtn")).click();return;}
@@ -2958,7 +2932,7 @@ function endRun(){
   if(R.feastBonus)ex.push(`🎉 Feast bonus: +${fmt(R.feastBonus)} kcal`);
   if(R.bossKill)ex.push(R.bossKill.final?`🏆 ${R.zone.name} cleared! Trophy earned (+10% kcal)`:`${R.bossKill.name} beaten!`);
   if(R.next)ex.push(`🔓 Next up: ${R.next}`);
-  if(R.wonNow)ex.push("You can start a new season from the gym.");
+  if(R.wonNow)ex.push("You beat the game! Keep playing for golden feasts.");
   for(const t of R.tasksDone)ex.push("📜 "+t);
   if(best)ex.push("⭐ New best run");
   $("#rExtra").innerHTML=ex.map(s=>`<span>${s}</span>`).join("");
@@ -2986,7 +2960,7 @@ $("#againBtn").onclick=()=>{if(R&&R.wonNow)return showCredits();R=null;startRun(
 function showCredits(){
   const won=R;R=null;paused=false;$("#results").hidden=true;$("#run").hidden=true;$("#gym").hidden=true;
   const bosses=ZONES.flatMap(z=>z.bosses.map(b=>b.e+" "+b.name));
-  $("#crawl").innerHTML=`<h1>BULK SEASON</h1><p>Season ${S.season} complete</p><div class="big">🏆</div>
+  $("#crawl").innerHTML=`<h1>BULK SEASON</h1><p>The end</p><div class="big">🏆</div>
     <h2>Champion of the Buffet</h2><p>${S.runs} runs · ${fmt(S.total)} kcal eaten · best run ${fmt(S.best)}</p><p>Bench ${bench()} kg · ${members()} gym members · ${money(S.cash)} in the bank</p>
     <h2>Starring</h2><p>The Lifter, as themselves</p><p>Big Dave, as the guy who ate your chips</p><p>Every seagull at the Chippy</p>
     <h2>Bosses eaten</h2>${bosses.map(b=>`<p>${b}</p>`).join("")}
@@ -2994,16 +2968,15 @@ function showCredits(){
     <h2>Made by</h2><p>PillowFishSticks</p><p>Built with Claude</p><p>Inspired by Chef Knight</p>
     <h2>No foods were harmed</h2><p>Well. Quite a lot were, actually.</p>
     <div class="row">🍌🍪🍟🥚🍛🌶️🌮🍜🍕🍗🍰🦃</div><h2>Thanks for playing!</h2><p>Now go and have a proper meal.</p>`;
-  $("#credSum").textContent=`Start season ${S.season+1} to earn ${medalsFor(S.seasonKcal)} medals (+${medalsFor(S.seasonKcal)*15}% kcal and gym income for good), or keep playing this season.`;
+  $("#credSum").textContent="You beat Bulk Season! Your upgrades and gym stay, so you can keep playing: cleared sections give golden feasts.";
   $("#credEnd").hidden=true;$("#credSkip").hidden=false;$("#credits").hidden=false;
   const c=$("#crawl");c.style.animation="none";void c.offsetWidth;c.style.animation="";
   setSong("hub");$("#credSkip").focus();
 }
-function endCredits(){$("#credSkip").hidden=true;$("#credEnd").hidden=false;$("#credSeason").focus();}
+function endCredits(){$("#credSkip").hidden=true;$("#credEnd").hidden=false;$("#credGym").focus();}
 $("#crawl").addEventListener("animationend",endCredits);
 $("#credSkip").onclick=endCredits;
 $("#credGym").onclick=()=>{$("#credits").hidden=true;toGym();};
-$("#credSeason").onclick=()=>{$("#credits").hidden=true;toGym();$("#seasonBtn").click();};
 $("#goBtn").onclick=()=>{$("#coach").hidden=true;startRun();};
 addEventListener("keydown",e=>{if(e.key==="Enter"&&!R&&!$("#gym").hidden&&document.activeElement===document.body)startRun();});
 
