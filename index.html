@@ -2257,7 +2257,7 @@ function update(dt){
   for(const t of R.txt){t.y+=t.vy*dt;t.vy*=Math.pow(.15,dt);t.life-=dt*.85;}
   R.txt=R.txt.filter(t=>t.life>0);
   if(R.t<=0&&!R.ending&&R.second>0){R.t=R.second;R.T+=R.second;R.second=0;R.inv=1;banner("🔁","One more set!","Dig deep","gold");if(!SIM)SFX.win();}
-  if(R.t<=0&&!R.ending)R.ending=1.6;
+  if(R.t<=0&&!R.ending){R.ending=1.6;R.darts=[];}
 }
 
 function bossMove(f,dt){
@@ -2503,7 +2503,7 @@ function throwing(dt){
   if(R.thrT<=0&&R.stun<=0&&!R.ending){const t=thrTarget();
     if(t){const pw=R.pw;R.thrT=R.thrCd*(pw.rapid>0?.4:1);
       const ox=R.x,oy=R.y-40,ang=Math.atan2(t.y-oy,t.x-ox),heavy=pw.heavy>0;
-      const n=R.thrN+(pw.spread>0?4:0),fan=pw.spread>0?.22:.14,base={pierce:R.thrP+(heavy?3:0),r:heavy?24:16,heavy};
+      const n=R.thrN+(pw.spread>0?4:0),fan=pw.spread>0?.22:.14,base={pierce:R.thrP,r:heavy?24:16,heavy,bounce:heavy?3:0};
       for(let k=0;k<n;k++){const o=n>1?(k-(n-1)/2)*fan:0;dart(ox,oy,ang+o,Math.abs(o)<.01?t:null,base);}
       if(pw.ring>0)for(let k=0;k<8;k++)dart(ox,oy,ang+Math.PI/8+k*Math.PI/4,null,base);
       R.mouth=Math.max(R.mouth,.5);R.throwA=.18;if(!SIM)tone(560,.04,"triangle",.02,1.5);}
@@ -2523,13 +2523,16 @@ function throwing(dt){
         const amt=hitAmt(f)*(d.heavy?2.5:1)*(d.m||1),crit=Math.random()<R.crit;
         chomp(f,{shot:1,amt,crit});
         if(!f.boss&&R.foods.includes(f)){const a=Math.atan2(d.vy,d.vx);f.vx+=Math.cos(a)*160;f.vy+=Math.sin(a)*160;}
+        if(d.bounce>0){ // ricochet to the nearest enemy this dumbbell hasn't hit yet
+          let nx=null,nd=420;for(const g of R.foods){if(g.clock||d.hit.has(g)||g.enter>0)continue;const dd=Math.hypot(g.x-d.x,g.y-d.y);if(dd<nd){nd=dd;nx=g;}}
+          if(nx){d.bounce--;d.tgt=nx;const a=Math.atan2(nx.y-d.y,nx.x-d.x),sp=Math.hypot(d.vx,d.vy);d.vx=Math.cos(a)*sp;d.vy=Math.sin(a)*sp;d.life=nd/sp+.3;sparkle(d.x,d.y);if(!SIM)tone(700,.04,"triangle",.025,1.4);break;}}
         if(d.pierce--<=0){d.life=0;break;}}}
     if(d.x<FX0()-30||d.x>FX1()+30||d.y<FY0()-60||d.y>FY1()+30)d.life=0;}
   R.darts=R.darts.filter(d=>d.life>0);
 }
-function dart(x,y,ang,tgt,o){const reach=Math.max(R.thrR*1.25,tgt?Math.hypot(tgt.x-x,tgt.y-y)*1.3:0);R.darts.push({x,y,vx:Math.cos(ang)*R.thrV,vy:Math.sin(ang)*R.thrV,tgt,life:reach/R.thrV+.15,rot:rnd(0,6),hit:new Set(),pierce:o.pierce,r:o.r,heavy:o.heavy});}
+function dart(x,y,ang,tgt,o){o.bounce=o.bounce||0;const reach=Math.max(R.thrR*1.25,tgt?Math.hypot(tgt.x-x,tgt.y-y)*1.3:0);R.darts.push({x,y,vx:Math.cos(ang)*R.thrV,vy:Math.sin(ang)*R.thrV,tgt,life:reach/R.thrV+.15,rot:rnd(0,6),hit:new Set(),pierce:o.pierce,r:o.r,heavy:o.heavy,bounce:o.bounce});}
 // Power-ups: grab one for a few seconds of better throws
-const PUPS={rapid:{e:"🔥",name:"Rapid Fire",col:"#ff8a3a"},spread:{e:"🔱",name:"Spread Shot",col:"#5fc8ff"},ring:{e:"💫",name:"Dumbbell Ring",col:"#c48bff"},heavy:{e:"🪨",name:"Heavy Iron",col:"#d9d2c2"}};
+const PUPS={rapid:{e:"🔥",name:"Rapid Fire",col:"#ff8a3a"},spread:{e:"🔱",name:"Spread Shot",col:"#5fc8ff"},ring:{e:"💫",name:"Dumbbell Ring",col:"#c48bff"},heavy:{e:"🪨",name:"Heavy Iron",col:"#d9d2c2"}};   // heavy: big dumbbells, ×2.5 damage, each ricochets to 3 more enemies
 function dropPup(x,y){if(R.pups.length>=3)return;const ks=Object.keys(PUPS);R.pups.push({k:ks[Math.floor(Math.random()*ks.length)],x:clamp(x,FX0()+40,FX1()-40),y:clamp(y,FY0()+40,FY1()-40),life:9,pop:0});}
 function powerups(dt){
   for(const k in R.pw)R.pw[k]=Math.max(0,R.pw[k]-dt);
@@ -2684,21 +2687,22 @@ function drawPlayer(tm){
 }
 function endTitle(x,y,s,msg,col){const t=Math.min(1,(R.endA||0)/.3),pop=1+.25*(1-t);ctx.save();ctx.translate(x,y-s*3.6);ctx.scale(pop*t,pop*t);
   ctx.font=`900 34px ${DISP}`;ctx.textAlign="center";ctx.textBaseline="middle";ctx.lineWidth=7;ctx.strokeStyle=OUT;ctx.strokeText(msg,0,0);ctx.fillStyle=col;ctx.fillText(msg,0,0);ctx.restore();}
-function drawCheer(x,y,s,tm){
-  const e=R.endA||0,hop=Math.abs(Math.sin(e*7))*s*1.1*Math.max(0,1-e/2.2);
+const MATE_LOOK={top:"#2f9e6b",band:"#f2c230",shorts:"#22303f"},BUD_LOOK={top:"#3f7fd6",band:"#ffffff",shorts:"#22303f"};
+function drawCheer(x,y,s,tm,o={}){
+  const e=(R.endA||0)+(o.ph||0),hop=Math.abs(Math.sin(e*7))*s*1.1*Math.max(0,1-(R.endA||0)/2.2);
   drawShadow(x,y,30*(1-hop/(s*3)));
-  drawLifter(ctx,x,y-hop,s,{...charOpts(),fill:R.belly,bulk:bulk(),mouth:.7,face:R.face||1,press:1,sy:hop>2?1.05:.92});
-  endTitle(x,y-hop*.3,s,"BOSS DOWN!",COL.gold);
+  drawLifter(ctx,x,y-hop,s,{...(o.look||charOpts()),fill:o.look?.25:R.belly,bulk:o.look?1:bulk(),mouth:.7,face:o.face||R.face||1,press:1,sy:hop>2?1.05:.92});
+  if(!o.look)endTitle(x,y-hop*.3,s,"BOSS DOWN!",COL.gold);
 }
-function drawKneel(x,y,s,tm){
-  const a=Math.min(1,(R.endA||0)/.35);   // 0 standing → 1 on the knees
+function drawKneel(x,y,s,tm,o={}){
+  const a=Math.min(1,(R.endA||0)/.35),look=o.look||charOpts(),face=o.face||R.face||1;   // 0 standing → 1 on the knees
   drawShadow(x,y,30);
-  ctx.save();ctx.translate(x,y+s*.42*a);ctx.rotate(.12*a*(R.face||1));
-  drawLifter(ctx,0,0,s,{...charOpts(),fill:R.belly,bulk:bulk(),mouth:R.mouth,face:R.face||1,blink:true,sy:1-.12*a,strain:true});
+  ctx.save();ctx.translate(x,y+s*.42*a);ctx.rotate(.12*a*face);
+  drawLifter(ctx,0,0,s,{...look,fill:o.look?.25:R.belly,bulk:o.look?1:bulk(),mouth:o.look?.4+.3*Math.sin((R.endA||0)*9+1):R.mouth,face,blink:true,sy:1-.12*a,strain:true});
   ctx.restore();
   // knees on the floor
-  ctx.fillStyle=charOpts().sk||COL.skin;ctx.strokeStyle=OUT;ctx.lineWidth=3;for(const k of[-1,1]){ell(ctx,x+k*s*.32,y+2,s*.24,s*.14*a+1);ctx.fill();ctx.stroke();}
-  endTitle(x,y,s,"OUT OF STEAM!",COL.gold);
+  ctx.fillStyle=look.sk||COL.skin;ctx.strokeStyle=OUT;ctx.lineWidth=3;for(const k of[-1,1]){ell(ctx,x+k*s*.32,y+2,s*.24,s*.14*a+1);ctx.fill();ctx.stroke();}
+  if(!o.look)endTitle(x,y,s,"OUT OF STEAM!",COL.gold);
   // sweat
   for(let i=0;i<3;i++){const t=(tm*1.6+i*.33)%1;ctx.globalAlpha=1-t;ctx.fillStyle="#9fd3ff";ell(ctx,x+(i-1)*s*.55,y-s*2.4+t*s*.9+s*.42*a,4,6);ctx.fill();}
   ctx.globalAlpha=1;
@@ -2744,9 +2748,9 @@ function draw(){
   for(const f of R.foods)actors.push([f.y+f.r*.8,()=>drawFood(f,tm)]);
   actors.push([R.y+PR,()=>drawPlayer(tm)]);
   if(R.rival)actors.push([R.rival.y+PR,()=>drawRival(R.rival,tm)]);
-  if(R.mate){const m=R.mate;actors.push([m.y+PR,()=>{drawShadow(m.x,m.y+PR,26);drawLifter(ctx,m.x,m.y+PR,30,{walk:m.walk,moving:true,face:m.face,top:"#2f9e6b",band:"#f2c230",shorts:"#22303f",lx:m.face,ly:0,fill:.2});
+  if(R.mate){const m=R.mate;actors.push([m.y+PR,()=>{if(R.ending){(R.win?drawCheer:drawKneel)(m.x,m.y+PR,30,tm,{look:MATE_LOOK,face:m.face,ph:.4});return;}drawShadow(m.x,m.y+PR,26);drawLifter(ctx,m.x,m.y+PR,30,{walk:m.walk,moving:true,face:m.face,top:"#2f9e6b",band:"#f2c230",shorts:"#22303f",lx:m.face,ly:0,fill:.2});
     ctx.font=`800 14px ${UIF}`;ctx.textAlign="center";ctx.lineWidth=4;ctx.strokeStyle=OUT;ctx.strokeText("Partner",m.x,m.y-60);ctx.fillStyle="#b9f0c9";ctx.fillText("Partner",m.x,m.y-60);}]);}
-  for(const b of R.buds)actors.push([b.y+PR,()=>{drawShadow(b.x,b.y+PR,26);drawLifter(ctx,b.x,b.y+PR,28,{mouth:b.mouth,walk:b.walk,moving:Math.hypot(b.vx,b.vy)>20,face:b.face,top:"#3f7fd6",band:"#ffffff",shorts:"#22303f",lx:b.face,ly:0,fill:.3});
+  for(const b of R.buds)actors.push([b.y+PR,()=>{if(R.ending){(R.win?drawCheer:drawKneel)(b.x,b.y+PR,28,tm,{look:BUD_LOOK,face:b.face,ph:b.x*.01});return;}drawShadow(b.x,b.y+PR,26);drawLifter(ctx,b.x,b.y+PR,28,{mouth:b.mouth,walk:b.walk,moving:Math.hypot(b.vx,b.vy)>20,face:b.face,top:"#3f7fd6",band:"#ffffff",shorts:"#22303f",lx:b.face,ly:0,fill:.3});
     ctx.font=`800 14px ${UIF}`;ctx.textAlign="center";ctx.lineWidth=4;ctx.strokeStyle=OUT;ctx.strokeText("Buddy",b.x,b.y-58);ctx.fillStyle="#bfe1ff";ctx.fillText("Buddy",b.x,b.y-58);}]);
   for(const w of R.waiters)actors.push([w.y+30,()=>{drawShadow(w.x,w.y+30,26);drawSpr(ctx,"🤵",w.x,w.y-8+Math.abs(Math.sin(w.walk))*-4,30,{flip:w.dir<0});if(w.tray){rr(ctx,w.x-30+w.dir*16,w.y-62,60,10,5);fs(ctx,"#c9ccd6",3);drawSpr(ctx,R.zone.foods[0].e,w.x+w.dir*16-12,w.y-74,13);drawSpr(ctx,R.zone.foods[3].e,w.x+w.dir*16+12,w.y-74,13);}}]);
   for(const s of R.scoots)if(s.warn<=0)actors.push([s.y+26,()=>{drawShadow(s.x,s.y+26,38);drawSpr(ctx,"🛵",s.x,s.y-6,40,{flip:s.dir<0});}]);
