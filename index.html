@@ -149,6 +149,16 @@ body.touch .glyph{display:none!important}
 .tab[data-n]:not([aria-selected="true"]){animation:tabNag 1.6s ease-in-out infinite}
 @keyframes tabNag{0%,100%{transform:none}50%{transform:translateY(-3px)}}
 @media (prefers-reduced-motion:reduce){.tab[data-n]{animation:none!important}}
+.coach{position:fixed;z-index:30;pointer-events:none;transform:translate(-50%,calc(-100% - 18px));padding:10px 16px;border-radius:14px;background:#d8423a;color:#fff;border:3px solid #fff;font:900 20px/1.15 var(--disp);white-space:nowrap;box-shadow:0 6px 0 rgba(0,0,0,.35),0 0 30px rgba(216,66,58,.6);animation:coachBob 1.1s ease-in-out infinite}
+.coach::after{content:"";position:absolute;left:50%;bottom:-13px;transform:translateX(-50%);border:10px solid transparent;border-top-color:#fff;border-bottom:0}
+.coach.below{transform:translate(-50%,18px)}.coach.below::after{bottom:auto;top:-13px;border-top-color:transparent;border-bottom:10px solid #fff;border-top:0}
+@keyframes coachBob{50%{margin-top:-6px}}
+@media (prefers-reduced-motion:reduce){.coach{animation:none}}
+.tab.locked{opacity:.55;filter:grayscale(.8)}
+.tab[data-new]::after{content:"NEW";position:absolute;top:-12px;right:-14px;padding:3px 8px;border-radius:999px;background:#f2c230;color:#2a1a12;border:3px solid #fff;font:900 14px/1 var(--ui);box-shadow:0 2px 0 rgba(0,0,0,.35)}
+.gitem.new{border-color:#f2c230!important;box-shadow:0 0 0 3px rgba(242,194,48,.45)}
+.gitem.new b::after{content:" NEW";color:#f2c230;font:900 12px var(--ui)}
+.gymNote.unlock{background:#fff4c9;border-color:#e3a91f;color:#5a3b10}
 .gymNote{padding:10px 14px;border-radius:12px;background:#e8f5dc;border:3px solid #4f9a2c;color:#2f5d1f;font:800 17px/1.3 var(--ui)}
 .gymNote b{color:#1f4214}
 #gymBtn2.gold{animation:tabNag 1.6s ease-in-out infinite}
@@ -633,6 +643,7 @@ body.touch .hnote .kbt{display:none} body.touch .hnote .tct{display:inline}
       </div>
     </div>
   </div>
+  <div class="coach" id="coach" hidden><span id="coachTxt"></span></div>
   <div class="modal" id="resetModal" hidden>
     <div class="parch mcard">
       <h2>Reset everything?</h2>
@@ -865,7 +876,7 @@ const SKILLS=[
 
 /* ---------- SAVE ---------- */
 const KEY="bulkSeason.v2";
-const fresh=()=>({kcal:0,total:0,best:0,runs:0,lv:{start:1},v5:1,v6:1,zones:["shop"],zone:"shop",si:0,sec:{shop:1},cleared:{},bhp:{},beaten:{},task:{},eat:{},shoo:0,
+const fresh=()=>({kcal:0,total:0,best:0,runs:0,lv:{start:1},v5:1,v6:1,tut:0,gymSeen:0,zones:["shop"],zone:"shop",si:0,sec:{shop:1},cleared:{},bhp:{},beaten:{},task:{},eat:{},shoo:0,
   season:1,medals:0,seasonKcal:0,cash:0,cashT:0,g:{},sp:{},won:false,muted:false,music:true,seen:false});
 let S=fresh();
 // Every load keeps a backup of the save it found, so nothing is ever lost to an update (Save & devices → Restore backup)
@@ -882,6 +893,8 @@ function migrate(x){
     for(const k of Object.keys(x.cleared)){const [id,i]=k.split(":");if(i==="2"&&!x.beaten[id]){delete x.cleared[k];}}x.v5=1;}
   for(const id of x.zones)x.sec[id]=x.sec[id]||1;
   for(const id in x.lv){const n=NODES.find(q=>q.id===id);if(!n)delete x.lv[id];else x.lv[id]=Math.min(x.lv[id],n.max);}
+  if(x.tut==null)x.tut=x.runs>0?2:0;               // 0 = play your first run, 1 = open your gym, 2 = normal
+  if(x.gymSeen==null)x.gymSeen=x.zones.length-1;   // last market whose gym unlocks you've looked at
   if(!x.v6){const OLD={shake:[40,1.6],pre:[150,1.9],creatine:[120,1.7],coach:[400,1.8],tea:[300,1.8],socks:[1000,2]};
     for(const [id,[b,k]] of Object.entries(OLD)){for(let L=0;L<(x.sp[id]||0);L++)x.cash+=Math.round(b*Math.pow(k,L));delete x.sp[id];}x.v6=1;}
   x.si=Math.min(x.si||0,(x.sec[x.zone]||1)-1);
@@ -1290,7 +1303,10 @@ function taskProg(t){
 }
 
 let TAB="tree";
-function setTab(t){if(t==="markets"&&!document.body.classList.contains("phone"))t="tree";TAB=t;$("#paneMk").hidden=t!=="markets";$("#tabMk").setAttribute("aria-selected",t==="markets");document.querySelector(".treeWrap").classList.toggle("dark",t==="gym");$("#paneTree").hidden=t!=="tree";$("#paneGym").hidden=t!=="gym";$("#tabTree").setAttribute("aria-selected",t==="tree");$("#tabGym").setAttribute("aria-selected",t==="gym");renderBiz();}
+function setTab(t){if(t==="markets"&&!document.body.classList.contains("phone"))t="tree";
+  if(t==="gym"&&S.tut<2){toast(S.tut===0?"Play your first run to open your gym":"Open your gym from the results");SFX.no();return;}
+  if(TAB==="gym"&&t!=="gym"&&S.gymSeen<mktReached()){S.gymSeen=mktReached();save();}
+  TAB=t;if(t==="tree")S.coachTree=0;$("#paneMk").hidden=t!=="markets";$("#tabMk").setAttribute("aria-selected",t==="markets");document.querySelector(".treeWrap").classList.toggle("dark",t==="gym");$("#paneTree").hidden=t!=="tree";$("#paneGym").hidden=t!=="gym";$("#tabTree").setAttribute("aria-selected",t==="tree");$("#tabGym").setAttribute("aria-selected",t==="gym");renderBiz();}
 $("#tabTree").onclick=()=>setTab("tree");$("#tabMk").onclick=()=>setTab("markets");
 // Phone layout moves the play button into the top bar and the market list + tasks into the Markets tab
 function phoneDom(on){
@@ -1321,8 +1337,21 @@ setTab("tree");
 // how many things you can buy right now (shown as red badges on the tabs)
 function gymCan(){return [...EQUIP.map(e=>[e,gl(e.id),1]),...SUPPS.map(p=>[p,sl(p.id),0])].filter(([it,L,eq])=>L<it.max&&!gymLocked(it,L,eq)&&S.cash>=gcost(it,L)).length;}
 function treeCan(){return NODES.filter(n=>avail(n)&&lv(n.id)<n.max&&S.kcal>=cost(n)).length;}
+// gym items that opened since you last looked (a new market unlocks a wave)
+function gymIsNew(it,L,eq){if(L>=it.max)return false;const n=gymNeed(it,L,eq);return n<=mktReached()&&n>S.gymSeen;}
+function gymNew(){return [...EQUIP.map(e=>gymIsNew(e,gl(e.id),1)),...SUPPS.map(p=>gymIsNew(p,sl(p.id),0))].filter(Boolean).length;}
+// first-time coach: one bubble pointing at the one thing to do next
+function coach(){const c=$("#coach");if(!c)return;let el=null,txt="";
+  if(!$("#gym").hidden&&navLayer()===$("#gym")){
+    if(S.tut===0){el=$("#goBtn");txt="Play your first run!";}
+    else if(S.tut===2&&S.coachTree&&TAB!=="tree"){el=$("#tabTree");txt="Spend your kcal here";}}
+  if(!el||!el.offsetParent){c.hidden=true;return;}
+  const r=el.getBoundingClientRect(),below=r.top<90;c.classList.toggle("below",below);c.style.left=(r.left+r.width/2)+"px";c.style.top=(below?r.bottom:r.top)+"px";$("#coachTxt").textContent=txt;c.hidden=false;}
+function openGym(){S.tut=2;S.coachTree=1;if(!gl("weights"))S.g.weights=1;S.cashT=Date.now();save();toGym();setTab("gym");
+  banner("🏋️","Your gym is open!","Members pay you £ all the time, even while you're out eating","gold");if(!SIM)SFX.win();}
 function badges(){const g=gymCan(),t=treeCan();
-  for(const [id,n] of [["#tabGym",g],["#tabTree",t]]){const el=$(id),v=n?String(Math.min(n,99)):null;if(el.dataset.n!==(v??undefined)){if(v)el.dataset.n=v;else delete el.dataset.n;}}}
+  {const el=$("#tabGym"),nw=S.tut===2&&gymNew()>0;el.classList.toggle("locked",S.tut<2);if(nw)el.dataset.new="1";else delete el.dataset.new;}
+  for(const [id,n] of [["#tabGym",S.tut<2||gymNew()?0:g],["#tabTree",t]]){const el=$(id),v=n?String(Math.min(n,99)):null;if(el.dataset.n!==(v??undefined)){if(v)el.dataset.n=v;else delete el.dataset.n;}}}
 function renderRanks(){const m=members(),r=rankN(),nx=RANKS[r];
   $("#ranks").innerHTML=RANKS.map((k,i)=>`<span class="rk${i<r?" on":i===r?" next":""}" title="${k.n} members: ${k.perk}">${k.e} <b>${k.name}</b>${i<r?" ✓":""}</span>`).join("")+
     `<span class="rtxt">${nx?`Next: <b>${nx.e} ${nx.name}</b> at ${nx.n} members (${fmt(m)} now): ${nx.perk}<div class="rbar"><i style="transform:scaleX(${(m/nx.n).toFixed(3)})"></i></div>`:"🏆 Legend gym: every perk unlocked"}</span>`;}
@@ -1335,7 +1364,7 @@ function renderBiz(){
   $("#gCash").textContent=money(S.cash);$("#gMem").textContent=fmt(members());$("#gInc").textContent=money(income())+"/s";$("#gFame").textContent=fame().toFixed(2);
   for(const [arr,els,lvf,eq] of [[EQUIP,eqEls,gl,1],[SUPPS,supEls,sl,0]])for(const it of arr){const b=els[it.id],L=lvf(it.id),max=L>=it.max,c=gcost(it,L);
     const lk=!max&&gymLocked(it,L,eq);
-    b.className="gitem"+(max?" max":lk?" lock":S.cash>=c?" can":"");
+    b.className="gitem"+(max?" max":lk?" lock":S.cash>=c?" can":"")+(gymIsNew(it,L,eq)?" new":"");
     b.querySelector("b").textContent=`${it.name} ${L}/${it.max}`;
     b.querySelector("small").textContent=eq?eqDesc(it):it.f(Math.max(1,L));
     if(!eq)b.title=it.d+(max?"":` Next level: ${it.f(L+1)}.`);
@@ -1344,7 +1373,7 @@ function renderBiz(){
 }
 function renderGym(){
   if(SIM)return;
-  renderBiz();
+  renderBiz();coach();
   $("#bankKcal").textContent=fmt(S.kcal);
   $("#medalPlq").hidden=!S.medals;$("#bankMedal").textContent=S.medals+` (+${S.medals*15}%)`;
   $("#seasonLbl").textContent="SEASON "+S.season;
@@ -1407,7 +1436,7 @@ $("#charBtn").onclick=()=>{renderChars();openModal("charModal","#charList .on");
 $("#charClose").onclick=()=>{$("#charModal").hidden=true;$("#charBtn").focus();};
 function openModal(id,focus){$("#"+id).hidden=false;$(focus).focus();}
 $("#helpBtn").onclick=()=>openModal("helpModal","#helpClose");
-$("#helpClose").onclick=()=>{$("#helpModal").hidden=true;$(R?"#resumeBtn":"#goBtn").focus();};
+$("#helpClose").onclick=()=>{$("#helpModal").hidden=true;$(R?"#resumeBtn":"#goBtn").focus();coach();};
 // Save transfer: the whole save as a copy-pasteable code
 const SAVEP="BULK1:";
 const saveCode=()=>SAVEP+btoa(unescape(encodeURIComponent(JSON.stringify(S))));
@@ -2072,7 +2101,7 @@ function navBack(){
   if(!$("#seasonModal").hidden){$("#seasonNo").click();return;}
   if(!$("#resetModal").hidden){$("#resetNo").click();return;}
   if(!$("#pause").hidden){togglePause();return;}
-  if(!$("#results").hidden){$("#backBtn").click();return;}
+  if(!$("#results").hidden){($("#backBtn").hidden?$("#gymBtn2"):$("#backBtn")).click();return;}
 }
 
 /* ---------- SKILLS ---------- */
@@ -2434,7 +2463,7 @@ function bossDown(f){
     if(b.final){
       S.beaten[z.id]=true;
       const nz=ZONES[zi+1];
-      if(nz&&!S.zones.includes(nz.id)){S.zones.push(nz.id);S.sec[nz.id]=1;S.zone=nz.id;S.si=0;R.next=`${nz.name}: ${nz.secs[0].n}`;}
+      if(nz&&!S.zones.includes(nz.id)){S.zones.push(nz.id);S.sec[nz.id]=1;S.zone=nz.id;S.si=0;R.next=`${nz.name}: ${nz.secs[0].n}`;R.newMkt=S.zones.length-1;}
       if(z.id==="buffet"){S.won=true;R.wonNow=true;banner("🏆","Champion!","You ate the whole Sunday Roast","gold");}
       else banner("🏆",`${z.name} cleared!`,`+${fmt(rew)} kcal · Trophy: +10% kcal · ${nz?nz.name+" is open!":""}`,"gold");
       R.mult=kcalMult();
@@ -2806,18 +2835,23 @@ function endRun(){
   for(const t of R.tasksDone)ex.push("📜 "+t);
   if(best)ex.push("⭐ New best run");
   $("#rExtra").innerHTML=ex.map(s=>`<span>${s}</span>`).join("");
+  const first=S.tut===0;if(first){S.tut=1;save();}
+  $("#againBtn").hidden=S.tut===1;$("#backBtn").hidden=S.tut===1;
   {const earned=S.cash-R.cash0,n=gymCan(),g=$("#rGym");
     g.hidden=!(n||R.prize);g.innerHTML=`💷 Your gym made <b>${money(earned)}</b> while you ran${R.prize?` (incl. ${money(R.prize)} prize money)`:""}.`+(n?` <b>${n} upgrade${n>1?"s":""} ready</b> in Your Gym!`:"");
-    $("#gymBtn2").className="btn"+(n?" gold":"");}
+    $("#gymBtn2").className="btn"+(n?" gold":"");$("#gymBtn2").textContent="🏋️ Your Gym";g.classList.remove("unlock");
+    if(S.tut===1){g.hidden=false;g.innerHTML="Nice first run! Now open <b>your own gym</b>: members pay you £ while you play, and you spend it on gym-only perks.";$("#gymBtn2").className="btn gold";$("#gymBtn2").textContent="🏋️ Open your gym";}
+    else if(R.newMkt!=null){const nm=R.newMkt,eqs=EQUIP.filter(e=>(e.t||0)===nm).map(e=>e.e+" "+e.name);
+      g.hidden=false;g.classList.add("unlock");g.innerHTML=`🔓 <b>New in Your Gym:</b> ${eqs.length?eqs.join(", ")+", and ":""}the next level of every supplement!`;$("#gymBtn2").className="btn gold";}}
   $("#againBtn").textContent=R.next?"Onwards":"Run it back";
   $("#results").hidden=false;SFX.end();
   // brief guard so a dash button still being mashed doesn't skip the results
   for(const b of[$("#backBtn"),$("#againBtn"),$("#gymBtn2")])b.disabled=true;
-  setTimeout(()=>{for(const b of[$("#backBtn"),$("#againBtn"),$("#gymBtn2")])b.disabled=false;$("#backBtn").focus();},700);
+  setTimeout(()=>{for(const b of[$("#backBtn"),$("#againBtn"),$("#gymBtn2")])b.disabled=false;($("#backBtn").hidden?$("#gymBtn2"):$("#backBtn")).focus();},700);
 }
 function toGym(){setSong("hub");R=null;paused=false;$("#results").hidden=true;$("#run").hidden=true;$("#gym").hidden=false;renderGym();$("#goBtn").focus();}
 $("#backBtn").onclick=()=>{if(R&&R.wonNow)return showCredits();toGym();setTab("tree");jumpPanel("tree");};
-$("#gymBtn2").onclick=()=>{if(R&&R.wonNow)return showCredits();toGym();setTab("gym");const f=document.querySelector("#eqList .gitem.can,#supList .gitem.can");if(f)f.focus();};
+$("#gymBtn2").onclick=()=>{if(R&&R.wonNow)return showCredits();if(S.tut===1)return openGym();toGym();setTab("gym");const f=document.querySelector("#eqList .gitem.can,#supList .gitem.can");if(f)f.focus();};
 $("#againBtn").onclick=()=>{if(R&&R.wonNow)return showCredits();R=null;startRun();};
 // Closing credits after beating The Sunday Roast
 function showCredits(){
@@ -2841,7 +2875,7 @@ $("#crawl").addEventListener("animationend",endCredits);
 $("#credSkip").onclick=endCredits;
 $("#credGym").onclick=()=>{$("#credits").hidden=true;toGym();};
 $("#credSeason").onclick=()=>{$("#credits").hidden=true;toGym();$("#seasonBtn").click();};
-$("#goBtn").onclick=()=>startRun();
+$("#goBtn").onclick=()=>{$("#coach").hidden=true;startRun();};
 addEventListener("keydown",e=>{if(e.key==="Enter"&&!R&&!$("#gym").hidden&&document.activeElement===document.body)startRun();});
 
 /* ---------- MAIN LOOP ---------- */
@@ -2857,7 +2891,7 @@ function frame(now){
   const rdt=(now-lastT)/1000,dt=Math.min(.05,rdt);lastT=now;
   fpsN++;fpsT+=rdt;if(fpsT>=.5){if(!$("#fps").hidden)$("#fps").textContent=Math.round(fpsN/fpsT)+" FPS";fpsN=0;fpsT=0;}
   pollPad(dt);
-  if(!SIM){S.cash+=income()*dt;bizT-=dt;if(bizT<=0){bizT=.25;if(!$("#gym").hidden)renderBiz();if((saveT-=.25)<=0){saveT=10;S.cashT=Date.now();save();}}}
+  if(!SIM){S.cash+=income()*dt;bizT-=dt;if(bizT<=0){bizT=.25;if(!$("#gym").hidden)renderBiz();coach();if((saveT-=.25)<=0){saveT=10;S.cashT=Date.now();save();}}}
   const p0=performance.now();
   if(R&&!R.done&&!paused)update(dt);
   const p1=performance.now();
