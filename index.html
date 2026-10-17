@@ -860,8 +860,8 @@ const NODES=[
  {id:"dash",p:"speed",g:"green",x:0,y:2,e:"⚡",name:"Dash",skill:1,max:1,base:300,k:1,v:L=>L,f:()=>"Skill: burst forward",d:"Dash forward, smashing any food monster you touch for double damage. You can't be hit during a dash."},
  {id:"reach",p:"speed",g:"green",x:-1,y:1,e:"🤲",name:"Long arms",max:5,base:200,k:2.3,v:L=>6+8*L,f:v=>`+${v} reach`,d:"Power-ups and clocks fly to you from further away."},
  {id:"dashCD",p:"dash",g:"green",x:1,y:2,e:"🔋",name:"Quick Feet",max:4,base:4000,k:2.3,v:L=>4.5*Math.pow(.84,L),f:v=>`${v.toFixed(1)}s dash cooldown`,d:"Dash comes back sooner."},
- {id:"inhale",p:"dash",g:"green",x:0,y:3,e:"🛡️",name:"Shield",skill:1,max:1,base:8000,k:1,v:L=>L,f:()=>"Skill: a barrier that hurts what it touches",d:"Throw up a glowing barrier for a few seconds: nothing can hurt you, shots break on it, and it keeps hammering and shoving back any food monster that gets close (bosses too, a bit). 10s cooldown."},
- {id:"inhaleR",p:"inhale",g:"green",x:1,y:3,e:"🔰",name:"Bigger Shield",max:4,base:100000,k:2.3,v:L=>150*(1+.15*L),f:v=>`${Math.round(v)} shield size`,d:"The shield is bigger and lasts half a second longer per level."},
+ {id:"inhale",p:"dash",g:"green",x:0,y:3,e:"🛡️",name:"Shield",skill:1,max:1,base:8000,k:1,v:L=>L,f:()=>"Skill: a barrier that hits back",d:"A glowing barrier for a few seconds: nothing can hurt you, enemy shots bounce back at whoever fired them (up to 10), and it hammers and shoves back any food monster that gets close. 10s cooldown."},
+ {id:"inhaleR",p:"inhale",g:"green",x:1,y:3,e:"🪞",name:"Mirror Shield",max:4,base:100000,k:2.3,v:L=>150*(1+.15*L),f:v=>{const L=Math.round((v/150-1)/.15);return L?`reflects ${2+2*L} shots · bigger, +${(.5*L).toFixed(1)}s`:"shots just break"},d:"Your Shield bounces enemy shots back at whoever fired them (each hits for 60%), and gets a bit bigger and longer-lasting each level."},
  {id:"toss",p:"inhale",g:"green",x:0,y:4,e:"🥏",name:"Plate Toss",skill:1,max:1,base:200000,k:1,v:L=>L,f:()=>"Skill: hurl a bumper plate",d:"Hurl a spinning bumper plate that bounces round the room hitting food monsters for 6× damage (3× on bosses). 7s cooldown."},
  {id:"tossN",p:"toss",g:"green",x:1,y:4,e:"🎯",name:"Heavier Plates",max:4,base:4000000,k:2.3,v:L=>4+3*L,f:v=>`${v} hits per plate`,d:"Each plate hits more enemies before it stops."},
  {id:"cheat",p:"toss",g:"green",x:0,y:5,e:"🍰",name:"Cheat Meal",skill:1,max:1,base:100000000,k:1,v:L=>L,f:()=>"Skill: food ×3, throw faster",d:"For a few seconds every food is worth three times as much and you throw 80% faster. 22s cooldown."},
@@ -2123,7 +2123,7 @@ function useSkill(id){
   if(!skillOn(id)||R.cds[id]>0)return;
   const sk=SKILLS.find(s=>s.id===id);R.cds[id]=sk.cd()*R.cdK;
   if(id==="dash"){R.dashT=.22;R.dashId++;R.inv=Math.max(R.inv,.3);SFX.dash();for(let i=0;i<8;i++)puff(R.x,R.y+20,"#d8c7a8");}
-  if(id==="inhale"){R.inhT=3+.5*lv("inhaleR");R.shT=0;R.inv=Math.max(R.inv,R.inhT);SFX.inhale();if(!SIM)tone(220,.3,"triangle",.06,2);floatText(R.x,R.y-110,"SHIELD UP!","#9fd3ff",2);}
+  if(id==="inhale"){R.inhT=3+.5*lv("inhaleR");R.shT=0;R.refl=0;R.inv=Math.max(R.inv,R.inhT);SFX.inhale();if(!SIM)tone(220,.3,"triangle",.06,2);floatText(R.x,R.y-110,"SHIELD UP!","#9fd3ff",2);}
   if(id==="toss"){const s=950;let ax=R.fx,ay=R.fy;
     if(R.prx||R.pry){const l=Math.hypot(R.prx,R.pry);ax=R.prx/l;ay=R.pry/l;}
     else if(!R.bot&&!document.body.classList.contains("pad")&&performance.now()-MOUSE.t<4000){const dx=MOUSE.x-R.x,dy=MOUSE.y-(R.y-10),l=Math.hypot(dx,dy);if(l>20){ax=dx/l;ay=dy/l;}}
@@ -2494,12 +2494,20 @@ function bossDown(f){
   checkTasks();
 }
 // Shield (skill id "inhale"): you can't be hit, and every 0.25s it hammers and shoves back everything inside it
-function shield(dt){if(!(R.inhT>0))return;R.inv=Math.max(R.inv,.05);R.shT=(R.shT||0)-dt;if(R.shT>0)return;R.shT=.25;
-  const rad=stat("inhaleR");let hit=0;
+// Mirror Shield (the `inhaleR` upgrade) bounces shots back at whoever fired them. Balance: at most 2+2×level per shield,
+// at 60% of a normal hit, because a boss spiral can fire ~35 shots at once. Without it, shots just break on the shield.
+const REFL_DMG=.6,reflMax=()=>lv("inhaleR")?2+2*lv("inhaleR"):0;
+function shield(dt){if(!(R.inhT>0))return;R.inv=Math.max(R.inv,.05);const rad=stat("inhaleR");
+  for(const p of R.shots){if(p.life<=0||Math.hypot(p.x-R.x,p.y-(R.y-10))>rad)continue;p.life=0;burst(p.x,p.y,"#9fd3ff",4);
+    if(R.refl>=reflMax())continue;R.refl++;
+    let t=p.src&&R.foods.includes(p.src)?p.src:R.foods.find(f=>f.boss&&!(f.enter>0));
+    if(!t){let bd=1e9;for(const f of R.foods){if(f.clock)continue;const d=Math.hypot(f.x-p.x,f.y-p.y);if(d<bd){bd=d;t=f;}}}
+    if(t){dart(p.x,p.y,Math.atan2(t.y-p.y,t.x-p.x),t,{pierce:0,r:18,heavy:false});const d=R.darts[R.darts.length-1];d.m=REFL_DMG;d.refl=1;d.life=Math.max(d.life,Math.hypot(t.x-p.x,t.y-p.y)/R.thrV+.6);if(!SIM)tone(900,.05,"triangle",.03,1.5);}}
+  R.shT=(R.shT||0)-dt;if(R.shT>0)return;R.shT=.25;
+  let hit=0;
   for(const f of R.foods.slice()){if(f.clock||f.enter>0)continue;const dx=f.x-R.x,dy=f.y-R.y,d=Math.hypot(dx,dy)||1;if(d>rad+f.r)continue;
     hit=1;chomp(f,{shot:1,chain:1,amt:hitAmt(f)*(f.boss?.5:1.5)});if(!f.boss&&R.foods.includes(f)){f.vx+=dx/d*520;f.vy+=dy/d*520;}}
   for(const g of R.gulls)if(g.st!=="gone"&&Math.hypot(g.x-R.x,g.y-R.y)<rad+20){hit=1;hitGull(g,R.jaw*R.thrPowE*1.5);}
-  for(const p of R.shots)if(Math.hypot(p.x-R.x,p.y-R.y)<rad){p.life=0;burst(p.x,p.y,"#9fd3ff",3);}
   if(hit&&!SIM)tone(480,.04,"square",.025,.6);}
 // You throw dumbbells on your own: at the boss if it's in range, otherwise at the nearest goblin. No enemy, no throw.
 function thrTarget(){
@@ -2572,7 +2580,7 @@ function drawPwIcons(){
     circ(ctx,x,y,16);fs(ctx,"#2a1a12cc",0);ctx.beginPath();ctx.arc(x,y,16,-Math.PI/2,-Math.PI/2+Math.PI*2*R.pw[k]/R.pupD);ctx.lineWidth=4;ctx.strokeStyle=P.col;ctx.stroke();drawSpr(ctx,P.e,x,y,10);});
 }
 // Bosses fight back: shots, rings, spirals, floor slams and charges. Getting hit costs appetite time. Dashing makes you immune.
-function shoot(f,a,ang,spd){spd*=.8;R.shots.push({x:f.x,y:f.y,vx:Math.cos(ang)*spd,vy:Math.sin(ang)*spd,e:a.e,r:20,life:5,rot:rnd(0,6),near:0});}
+function shoot(f,a,ang,spd){spd*=.8;R.shots.push({src:f,x:f.x,y:f.y,vx:Math.cos(ang)*spd,vy:Math.sin(ang)*spd,e:a.e,r:20,life:5,rot:rnd(0,6),near:0});}
 function bossAttacks(dt){
   const f=R.foods.find(x=>x.boss);
   if(f&&f.enter<=0){
@@ -2775,7 +2783,7 @@ function draw(){
   ctx.lineCap="round";
   for(const l of R.loot)drawLoot(l,tm);
   for(const d of R.darts){ctx.strokeStyle="rgba(255,240,200,.35)";ctx.lineWidth=d.r*.9;ctx.beginPath();ctx.moveTo(d.x,d.y);ctx.lineTo(d.x-d.vx*.06,d.y-d.vy*.06);ctx.stroke();
-    if(d.heavy){ctx.fillStyle="rgba(255,255,255,.2)";circ(ctx,d.x,d.y,d.r*1.7);ctx.fill();}drawDumbbell(d.x,d.y,d.rot,d.r*1.25,d.heavy);}
+    if(d.heavy){ctx.fillStyle="rgba(255,255,255,.2)";circ(ctx,d.x,d.y,d.r*1.7);ctx.fill();}if(d.refl){ctx.fillStyle="rgba(120,200,255,.45)";circ(ctx,d.x,d.y,d.r*1.8);ctx.fill();}drawDumbbell(d.x,d.y,d.rot,d.r*1.25,d.heavy);}
   if(!R.ending)drawPwIcons();
   drawEvents(tm);
   // plates
