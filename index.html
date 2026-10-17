@@ -159,8 +159,8 @@ body.touch .glyph{display:none!important}
 @media (prefers-reduced-motion:reduce){.coach{animation:none}}
 .tab.locked{opacity:.55;filter:grayscale(.8)}
 .tab[data-new]::after{content:"NEW";position:absolute;top:-12px;right:-14px;padding:3px 8px;border-radius:999px;background:#f2c230;color:#2a1a12;border:3px solid #fff;font:900 14px/1 var(--ui);box-shadow:0 2px 0 rgba(0,0,0,.35)}
-.gitem.new{border-color:#f2c230!important;box-shadow:0 0 0 3px rgba(242,194,48,.45)}
-.gitem.new b::after{content:" NEW";color:#f2c230;font:900 12px var(--ui)}
+.gitem{position:relative}
+.gitem.new::after{content:"NEW";position:absolute;top:-11px;right:-10px;padding:3px 8px;border-radius:999px;background:#f2c230;color:#2a1a12;border:3px solid #fff;font:900 13px/1 var(--ui);box-shadow:0 2px 0 rgba(0,0,0,.35);pointer-events:none}
 .gymNote.unlock{background:#fff4c9;border-color:#e3a91f;color:#5a3b10}
 .gymNote{padding:10px 14px;border-radius:12px;background:#e8f5dc;border:3px solid #4f9a2c;color:#2f5d1f;font:800 17px/1.3 var(--ui)}
 .gymNote b{color:#1f4214}
@@ -885,7 +885,7 @@ const SKILLS=[
 
 /* ---------- SAVE ---------- */
 const KEY="bulkSeason.v2";
-const fresh=()=>({kcal:0,total:0,best:0,runs:0,lv:{start:1},v5:1,v6:1,tut:0,gymSeen:0,zones:["shop"],zone:"shop",si:0,sec:{shop:1},cleared:{},bhp:{},beaten:{},task:{},eat:{},shoo:0,
+const fresh=()=>({kcal:0,total:0,best:0,runs:0,lv:{start:1},v5:1,v6:1,tut:0,gymSeen:0,seenNew:{},zones:["shop"],zone:"shop",si:0,sec:{shop:1},cleared:{},bhp:{},beaten:{},task:{},eat:{},shoo:0,
   season:1,medals:0,seasonKcal:0,cash:0,cashT:0,g:{},sp:{},won:false,muted:false,music:true,seen:false});
 let S=fresh();
 // Every load keeps a backup of the save it found, so nothing is ever lost to an update (Save & devices → Restore backup)
@@ -1314,7 +1314,6 @@ function taskProg(t){
 let TAB="tree";
 function setTab(t){if(t==="markets"&&!document.body.classList.contains("phone"))t="tree";
   if(t==="gym"&&S.tut<2){toast(S.tut===0?"Play your first run to open your gym":"Open your gym from the results");SFX.no();return;}
-  if(TAB==="gym"&&t!=="gym"&&S.gymSeen<mktReached()){S.gymSeen=mktReached();save();}
   TAB=t;if(t==="tree")S.coachTree=0;$("#paneMk").hidden=t!=="markets";$("#tabMk").setAttribute("aria-selected",t==="markets");document.querySelector(".treeWrap").classList.toggle("dark",t==="gym");$("#paneTree").hidden=t!=="tree";$("#paneGym").hidden=t!=="gym";$("#tabTree").setAttribute("aria-selected",t==="tree");$("#tabGym").setAttribute("aria-selected",t==="gym");renderBiz();}
 $("#tabTree").onclick=()=>setTab("tree");$("#tabMk").onclick=()=>setTab("markets");
 // Phone layout moves the play button into the top bar and the market list + tasks into the Markets tab
@@ -1334,6 +1333,7 @@ const eqEls={},supEls={};
 function bizItem(list,it,isEq){
   const b=document.createElement("button");b.className="gitem";
   b.innerHTML=`<span class="gi">${it.e}</span><span><b></b><small></small></span><span class="gc"></span>`;
+  b.addEventListener("mouseenter",()=>seeNew(it,isEq));b.addEventListener("focus",()=>seeNew(it,isEq));
   b.onclick=()=>{const L=isEq?gl(it.id):sl(it.id);if(L>=it.max)return;if(gymLocked(it,L,isEq)){toast(`Unlocks at ${ZONES[gymNeed(it,L,isEq)].name}`);SFX.no();return;}const c=gcost(it,L);
     if(S.cash<c){toast(`Need ${money(c-S.cash)} more`);SFX.no();return;}
     const r0=rankN();S.cash-=c;(isEq?S.g:S.sp)[it.id]=L+1;save();SFX.buy(L);if(isEq&&L===0)banner(it.e,it.name,"New in your gym!");
@@ -1347,7 +1347,8 @@ setTab("tree");
 function gymCan(){return [...EQUIP.map(e=>[e,gl(e.id),1]),...SUPPS.map(p=>[p,sl(p.id),0])].filter(([it,L,eq])=>L<it.max&&!gymLocked(it,L,eq)&&S.cash>=gcost(it,L)).length;}
 function treeCan(){return NODES.filter(n=>avail(n)&&lv(n.id)<n.max&&S.kcal>=cost(n)).length;}
 // gym items that opened since you last looked (a new market unlocks a wave)
-function gymIsNew(it,L,eq){if(L>=it.max)return false;const n=gymNeed(it,L,eq);return n<=mktReached()&&n>S.gymSeen;}
+function gymIsNew(it,L,eq){if(L>=it.max)return false;const n=gymNeed(it,L,eq);return n<=mktReached()&&n>S.gymSeen&&!(S.seenNew||{})[it.id+":"+L];}
+function seeNew(it,isEq){const L=isEq?gl(it.id):sl(it.id);if(!gymIsNew(it,L,isEq))return;(S.seenNew=S.seenNew||{})[it.id+":"+L]=1;save();renderBiz();}
 function gymNew(){return [...EQUIP.map(e=>gymIsNew(e,gl(e.id),1)),...SUPPS.map(p=>gymIsNew(p,sl(p.id),0))].filter(Boolean).length;}
 // first-time coach: one bubble pointing at the one thing to do next
 function coach(){const c=$("#coach");if(!c)return;let el=null,txt="";
