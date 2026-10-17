@@ -165,7 +165,7 @@ body.touch .glyph{display:none!important}
 .gymNote{padding:10px 14px;border-radius:12px;background:#e8f5dc;border:3px solid #4f9a2c;color:#2f5d1f;font:800 17px/1.3 var(--ui)}
 .gymNote b{color:#1f4214}
 #gymBtn2.gold{animation:tabNag 1.6s ease-in-out infinite}
-.gitem:focus-visible,body.pad .gitem:focus{outline:4px solid #fff;outline-offset:2px;box-shadow:0 0 0 8px #2a1a12;transform:scale(1.03);z-index:2}   /* steady ring, no pulsing (owner) */
+.gitem:focus-visible,body.pad .gitem:focus{outline:none;box-shadow:0 0 0 3px #f2c230,0 0 18px 4px rgba(242,194,48,.55);transform:translateY(-2px);z-index:2}   /* steady ring, no pulsing (owner) */
 .cashv{color:#2f7a2a!important}
 /* Your Gym tab: slate, to match the rest of the redesign */
 .treeWrap.dark{background:#20242d;background-image:none;border-color:#0b0c10;color:var(--cream);box-shadow:0 8px 0 rgba(0,0,0,.45),inset 0 0 0 2px #2f3542}
@@ -203,11 +203,12 @@ body.touch .glyph{display:none!important}
 .urow .ut{display:flex;flex-direction:column;min-width:0}.urow .ut b{font:800 15px/1.1 var(--ui);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .urow .ub{display:flex;align-items:center;gap:6px;margin-top:3px;min-width:0}.urow .ut small{flex:1;font:600 12px/1.15 var(--ui);color:#6b5236;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
 .urow .up{flex:none;font:900 12px/1 var(--ui);white-space:nowrap;padding:3px 6px;border-radius:7px;background:rgba(42,26,18,.12)}
-.urow.can{background:#fff7dc;box-shadow:0 0 0 3px #fff,0 2px 0 rgba(60,35,10,.35)}.urow.can .up{background:#f2c230}
+.urow.can{background:#fffaf0}.urow.can .up{background:#f2c230}
 .urow.can::after{content:"!";position:absolute;right:-7px;top:-9px;width:20px;height:20px;border-radius:50%;background:#d8423a;color:#fff;border:2px solid #fff;font:900 14px/16px var(--ui);text-align:center}
 .urow.max{background:#f6efdc;opacity:.85}.urow.max .up{background:#f2c230}
 .urow.lock{background:#c9bea6;opacity:.7;filter:grayscale(.6)}
-.urow:focus-visible,body.pad .urow:focus{outline:4px solid #fff;outline-offset:2px;box-shadow:0 0 0 8px #2a1a12;z-index:2}   /* steady ring, no pulsing (owner) */
+.urow.lock:focus-visible,body.pad .urow.lock:focus{opacity:1;filter:none;background:#d9d0bb}
+.urow:focus-visible,body.pad .urow:focus{outline:none;border-color:#b8860b;box-shadow:0 0 0 3px #f2c230,0 0 16px 3px rgba(242,194,48,.55);transform:translateY(-2px);z-index:2}   /* steady ring, no pulsing (owner) */
 body.phone .urow .ut small{display:none}body.phone .urow .ut{flex-direction:row;align-items:center;justify-content:space-between;gap:4px}body.phone .urow .ub{margin:0}body.phone .urow{grid-template-columns:24px 1fr;padding:3px 5px}body.phone .urow .ue{font-size:18px}body.phone .ucol h3{font-size:14px;padding:4px 6px}
 .tpages{position:absolute;left:50%;bottom:10px;transform:translateX(-50%);display:flex;gap:6px;z-index:6}
 .tpg{position:relative;display:flex;align-items:center;gap:6px;padding:7px 12px;border-radius:999px;border:3px solid var(--out);background:#e9dcc2;color:var(--out);font:800 15px/1 var(--ui);box-shadow:0 3px 0 rgba(60,35,10,.45);white-space:nowrap}
@@ -2125,14 +2126,29 @@ function treeMove(cur,d){
     if(along<=0)continue;const v=side===0?along:along+side*2.5+100;if(side<=along*.6&&v<bs){bs=v;best=m;}}
   return best?nodeEls[best.id]:null;
 }
+// the upgrade list: up/down stay in the column (and leave the list at its ends), left/right go to the row level with you in the next column
+function listMove(cur,d){
+  const col=cur.closest(".ucol"),cols=[...document.querySelectorAll("#ulist .ucol")],vis=c=>[...c.querySelectorAll(".urow")].filter(b=>!b.hidden);
+  const rows=vis(col),i=rows.indexOf(cur);
+  if(d[1]){const n=rows[i+d[1]];if(n)return n;if(d[1]<0){$("#tabTree").focus();return true;}   // past the top: the tab; past the bottom: the nearest thing below that isn't in the list
+    const a=cur.getBoundingClientRect(),ax=a.left+a.width/2;let best=null,bs=1e9;
+    for(const el of navLayer().querySelectorAll("button")){if(el.disabled||el.offsetParent===null||el.closest("#ulist")||getComputedStyle(el).visibility==="hidden")continue;const b=el.getBoundingClientRect(),dy=(b.top+b.height/2)-(a.top+a.height/2);if(dy*d[1]<=4)continue;const sc=Math.abs(dy)+Math.abs(b.left+b.width/2-ax)*.6;if(sc<bs){bs=sc;best=el;}}
+    if(best){best.focus();return true;}return null;}
+  const k=cols.indexOf(col)+d[0];
+  if(k<0){jumpPanel("markets");return true;}
+  if(k>=cols.length)return true;   // already in the last column: stay put
+  const other=vis(cols[k]);if(!other.length)return null;const y=cur.getBoundingClientRect().top;
+  return other.reduce((b,r)=>Math.abs(r.getBoundingClientRect().top-y)<Math.abs(b.getBoundingClientRect().top-y)?r:b);
+}
 function navLayer(){for(const id of["charModal","helpModal","saveModal","seasonModal","resetModal","credits","results","pause"])if(!$("#"+id).hidden)return $("#"+id);return R?null:$("#gym");}
 function navMove(d){
   const layer=navLayer();if(!layer)return false;
-  const els=[...layer.querySelectorAll("button")].filter(b=>!b.disabled&&b.offsetParent!==null);
+  const inView=b=>{const sc=b.closest(".urows");if(!sc)return true;const r=b.getBoundingClientRect(),v=sc.getBoundingClientRect();return r.bottom>v.top+4&&r.top<v.bottom-4;};
+  const els=[...layer.querySelectorAll("button")].filter(b=>!b.disabled&&b.offsetParent!==null&&inView(b));
   if(!els.length)return false;
   const cur=document.activeElement;
   if(!cur||!layer.contains(cur)||cur===document.body){(layer.querySelector(".go,.btn.gold")||els[0]).focus();return true;}
-  if(cur.classList.contains("node")){const t=treeMove(cur,d);if(t){t.focus();return true;}if(d[0]<0){jumpPanel("markets");return true;}}
+  if(cur.classList.contains("urow")){const r=listMove(cur,d);if(r===true)return true;if(r){r.focus();r.scrollIntoView({block:"nearest"});return true;}}
   const a=cur.getBoundingClientRect(),ax=a.left+a.width/2,ay=a.top+a.height/2;
   let best=null,bs=1e9;
   for(const el of els){if(el===cur)continue;const b=el.getBoundingClientRect(),bx=b.left+b.width/2,by=b.top+b.height/2;
