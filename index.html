@@ -190,13 +190,20 @@ body.touch .glyph{display:none!important}
 .node{font-size:34px}
 .node.skill{width:84px;height:84px;border-width:4px;font-size:40px}
 .node.root{width:92px;height:92px;font-size:44px}
-.node.own{background:#fff7e3;box-shadow:inset 0 0 0 4px #e3a91f,0 3px 0 rgba(60,35,10,.45)}
-.node.max{background:#fffdf5;box-shadow:inset 0 0 0 5px #f2c230,0 0 0 3px #fff4c9,0 0 14px rgba(242,194,48,.7)}
-.node.can{background:#f1fae6;box-shadow:inset 0 0 0 4px #4f9a2c,0 3px 0 rgba(60,35,10,.45);animation:pulse 1.4s ease-in-out infinite}
+.node{background:color-mix(in srgb,var(--c) 32%,#d9c9a3);box-shadow:inset 0 0 0 5px var(--c),0 3px 0 rgba(60,35,10,.45)}
+.node.own{background:color-mix(in srgb,var(--c) 18%,#fff7e3);box-shadow:inset 0 0 0 6px var(--c),0 3px 0 rgba(60,35,10,.45)}
+.node.max{background:color-mix(in srgb,var(--c) 14%,#fffdf5);box-shadow:inset 0 0 0 6px var(--c),0 0 0 4px #f2c230,0 0 16px rgba(242,194,48,.8)}
+.node.can{background:color-mix(in srgb,var(--c) 22%,#fffaf0);box-shadow:inset 0 0 0 6px var(--c),0 0 0 4px #fff,0 3px 0 rgba(60,35,10,.45);animation:canPulse 1.3s ease-in-out infinite}
+@keyframes canPulse{50%{box-shadow:inset 0 0 0 6px var(--c),0 0 0 6px #fff,0 0 22px 6px color-mix(in srgb,var(--c) 70%,#fff)}}
+.node.can::after{content:"+";position:absolute;right:-8%;top:-8%;width:26px;height:26px;border-radius:50%;background:#fff;color:var(--out);border:3px solid var(--out);font:900 20px/20px var(--ui);text-align:center}
 .node.lock{background:#8f8a7d;filter:grayscale(.9);opacity:.75}
 .node.lock::after{content:"🔒";position:absolute;font-size:.6em;right:-8%;top:-8%}
 .node .lv{position:absolute;bottom:-14px;left:50%;transform:translateX(-50%);font:800 14px/1 var(--ui);background:var(--out);color:#fbe7b0;border-radius:6px;padding:2px 5px;white-space:nowrap;pointer-events:none}
-.node .gem{position:absolute;top:-6%;left:-6%;width:28%;height:28%;border-radius:50%;background:var(--c);border:2px solid var(--out)}
+.node .gem{display:none}
+.tlegend{position:absolute;top:10px;left:10px;z-index:3;display:flex;flex-wrap:nowrap;gap:5px;max-width:calc(100% - 270px);overflow:hidden;pointer-events:none}
+.tlegend span{display:flex;align-items:center;gap:5px;padding:4px 9px;border-radius:999px;background:rgba(43,30,20,.85);color:#fff3cf;font:800 13px/1 var(--ui);white-space:nowrap}
+.tlegend i{width:14px;height:14px;border-radius:50%;background:var(--c);border:2px solid #fff3cf}
+body.phone .tlegend span{font-size:12px;padding:3px 8px}
 /* selected node (controller/keyboard focus or mouse hover): big, ringed, glowing, with a name tag */
 .node::before{content:attr(data-tip);position:absolute;bottom:calc(100% + 16px);left:50%;transform:translateX(-50%) scale(.8);transform-origin:50% 100%;opacity:0;pointer-events:none;white-space:nowrap;background:var(--out);color:#fff3cf;font:800 17px/1 var(--disp);padding:8px 12px;border-radius:9px;border:2px solid #f2c230;box-shadow:0 4px 0 rgba(0,0,0,.35);transition:opacity .12s;z-index:5}
 .node:focus-visible,body.pad .node:focus{outline:none;z-index:4;transform:translate(-50%,-50%) scale(1.3);animation:sel 1.1s ease-in-out infinite}
@@ -548,7 +555,7 @@ body.touch .hnote .kbt{display:none} body.touch .hnote .tct{display:inline}
               <button class="btn gold" id="seasonBtn">New season</button>
             </div>
           </div>
-          <div class="treeScroll"><div class="tree" id="tree"><div class="treeInner" id="treeInner"><svg id="treeSvg"></svg></div>
+          <div class="treeScroll"><div class="tree" id="tree"><div class="tlegend" id="tlegend"></div><div class="treeInner" id="treeInner"><svg id="treeSvg"></svg></div>
             <div class="tzoom"><button class="btn small" id="tzIn" aria-label="Zoom in">+</button><button class="btn small" id="tzOut" aria-label="Zoom out">−</button><button class="btn small" id="tzFit">Fit</button><span class="glyph kb">+/−</span><span class="glyph pd pS">R stick</span></div>
             <div class="jumpHint"><span class="glyph kb">E</span><span class="glyph pd pS">RT</span> jump here</div></div></div>
         </div>
@@ -637,8 +644,8 @@ body.touch .hnote .kbt{display:none} body.touch .hnote .tct{display:inline}
     <div class="parch mcard help">
       <h2>How to play</h2>
       <div class="hsteps">
-        <div class="hstep"><span class="hi">🍔</span><b>Eat</b><p>Walk into food before your appetite runs out. Keep chomping without a break to build a combo for bonus kcal.</p></div>
-        <div class="hstep"><span class="hi">🎳</span><b>Throw</b><p>You throw dumbbells at enemies on your own: the boss first, then the nearest goblin. Grab power-ups for rapid fire, spread shots and more.</p></div>
+        <div class="hstep"><span class="hi">🍔</span><b>Eat</b><p>Knock down food monsters, then walk over the food they drop to eat it before your appetite runs out. Keep it going for a combo.</p></div>
+        <div class="hstep"><span class="hi">🎳</span><b>Throw</b><p>You throw dumbbells on your own: the boss first, then the nearest food monster. Grab power-ups for rapid fire, spread shots and more.</p></div>
         <div class="hstep"><span class="hi">👑</span><b>Beat the boss</b><p>Every market has 5 sections. Eat your way past the food goblins until the boss turns up, then beat it before your appetite runs out. Getting hit costs you time.</p></div>
         <div class="hstep"><span class="hi">🏋️</span><b>Get stronger</b><p>Spend kcal on the Skill Tree. Run Your Gym too: equipment brings members, members pay £, and £ buys supplements.</p></div>
       </div>
@@ -790,16 +797,16 @@ const NODES=[
  {id:"armor",p:"pad",g:"blue",x:-2,y:-3,e:"🦺",name:"Thick Skin",max:5,base:30000000,k:2.3,v:L=>1-.09*L,f:v=>`${pct(v)} time lost to hits`,d:"Boss hits and hazards cost you less appetite time."},
  {id:"appetite3",p:"clock",g:"blue",x:1,y:-3,e:"🧠",name:"Iron Will",max:5,base:5000000,k:2.3,v:L=>.1*L,f:v=>`${pct(v)} chance to shrug off a hit`,d:"Sometimes a hit just bounces off you: no time lost."},
  // ➡ DAMAGE (yellow)
- {id:"chew",p:"start",g:"yellow",x:1,y:0,e:"🦷",name:"Chew speed",max:5,base:50,k:2.3,v:L=>.36*Math.pow(.86,L),f:v=>`${(1/v).toFixed(1)} chomps / sec`,d:"How often you take a bite, and how often you throw a dumbbell."},
- {id:"jaw",p:"chew2",g:"yellow",x:2,y:-1,e:"👄",name:"Jaw strength",max:5,base:1500,k:2.3,v:L=>1+L,f:v=>`${v} bites per chomp`,d:"Chewy foods go down quicker, and your dumbbells hit harder."},
- {id:"chew2",p:"chew",g:"yellow",x:2,y:0,e:"⚙️",name:"Fast Jaws",max:5,base:400,k:2.3,v:L=>Math.pow(.88,L),f:v=>`chew ${pct(1/v-1)} faster`,d:"Chew and throw even faster."},
- {id:"combo",p:"chew2",g:"yellow",x:2,y:1,e:"🎵",name:"Rhythm",max:5,base:1500,k:2.3,v:L=>10+8*L,f:v=>`combo up to ×${(1+.02*v).toFixed(1)}`,d:"Keep chomping without a break. Each chomp adds 2% kcal, up to a cap."},
- {id:"bslam",p:"jaw",g:"yellow",x:2,y:-2,e:"🌀",name:"Belly Slam",max:5,base:20000,k:2.3,v:L=>.03*L,f:v=>`${pct(.04+v)} slam chance · bigger ring`,d:"Any chomp might set off a shockwave that bites every food around you and hits enemies too."},
- {id:"jaw2",p:"jaw",g:"yellow",x:3,y:-1,e:"🦈",name:"Mega Jaw",max:5,base:60000,k:2.3,v:L=>L,f:v=>`+${v} bites per chomp`,d:"Even bigger bites."},
- {id:"power",p:"chew2",g:"yellow",x:3,y:0,e:"💪",name:"Power Bites",max:5,base:5000,k:2.3,v:L=>1+.2*L,f:v=>`×${v.toFixed(1)} boss damage`,d:"Hit bosses harder."},
- {id:"combo2",p:"combo",g:"yellow",x:3,y:1,e:"🎶",name:"In the Zone",max:3,base:50000,k:2.3,v:L=>1.6+.35*L,f:v=>`${v.toFixed(2)}s combo window`,d:"Your combo lasts longer between chomps."},
- {id:"crit",p:"jaw2",g:"yellow",x:4,y:-1,e:"💥",name:"Big Bite",max:5,base:4000000,k:2.3,v:L=>.05*L,f:v=>`${pct(.05+v)} crit chance`,d:"Every chomp has a 5% chance to crit for ×3. This adds more."},
- {id:"power2",p:"power",g:"yellow",x:4,y:0,e:"🔨",name:"Crushing Bites",max:5,base:50000000,k:2.3,v:L=>1+.25*L,f:v=>`×${v.toFixed(2)} boss damage`,d:"Bosses crumble."},
+ {id:"chew",p:"start",g:"yellow",x:1,y:0,e:"✋",name:"Quick Hands",max:5,base:50,k:2.3,v:L=>.36*Math.pow(.86,L),f:v=>`${(1/v).toFixed(1)} throws / sec`,d:"How often you throw a dumbbell."},
+ {id:"jaw",p:"chew2",g:"yellow",x:2,y:-1,e:"✊",name:"Grip Strength",max:5,base:1500,k:2.3,v:L=>1+L,f:v=>`${v} damage per throw`,d:"Every dumbbell hits harder, so tough food monsters go down quicker."},
+ {id:"chew2",p:"chew",g:"yellow",x:2,y:0,e:"⚙️",name:"Fast Hands",max:5,base:400,k:2.3,v:L=>Math.pow(.88,L),f:v=>`throw ${pct(1/v-1)} faster`,d:"Throw even faster."},
+ {id:"combo",p:"chew2",g:"yellow",x:2,y:1,e:"🎵",name:"Rhythm",max:5,base:1500,k:2.3,v:L=>10+8*L,f:v=>`combo up to ×${(1+.02*v).toFixed(1)}`,d:"Keep hitting and eating without a break. Each one adds 2% kcal, up to a cap."},
+ {id:"bslam",p:"jaw",g:"yellow",x:2,y:-2,e:"🌀",name:"Belly Slam",max:5,base:20000,k:2.3,v:L=>.03*L,f:v=>`${pct(.04+v)} slam chance · bigger ring`,d:"Eating food might set off a shockwave that hammers every food monster around you, and bosses too."},
+ {id:"jaw2",p:"jaw",g:"yellow",x:3,y:-1,e:"🗜️",name:"Iron Grip",max:5,base:60000,k:2.3,v:L=>L,f:v=>`+${v} damage per throw`,d:"Even harder hits."},
+ {id:"power",p:"chew2",g:"yellow",x:3,y:0,e:"💪",name:"Power Throws",max:5,base:5000,k:2.3,v:L=>1+.2*L,f:v=>`×${v.toFixed(1)} boss damage`,d:"Hit bosses harder."},
+ {id:"combo2",p:"combo",g:"yellow",x:3,y:1,e:"🎶",name:"In the Zone",max:3,base:50000,k:2.3,v:L=>1.6+.35*L,f:v=>`${v.toFixed(2)}s combo window`,d:"Your combo lasts longer between hits."},
+ {id:"crit",p:"jaw2",g:"yellow",x:4,y:-1,e:"💥",name:"Big Hit",max:5,base:4000000,k:2.3,v:L=>.05*L,f:v=>`${pct(.05+v)} crit chance`,d:"Every hit has a 5% chance to crit for ×3. This adds more."},
+ {id:"power2",p:"power",g:"yellow",x:4,y:0,e:"🔨",name:"Crushing Throws",max:5,base:50000000,k:2.3,v:L=>1+.25*L,f:v=>`×${v.toFixed(2)} boss damage`,d:"Bosses crumble."},
  {id:"bulk",p:"power2",g:"yellow",x:4,y:1,e:"🦾",name:"Bulk Up",max:40,base:100000000,k:1.4,v:L=>1+.1*L,f:v=>`×${v.toFixed(1)} throw damage`,d:"The late-game grind: 40 levels of extra throw damage, so your kcal always has somewhere to go."},
  // ➡ THROWING (yellow, under Chew speed and Rhythm): dumbbells fire on their own at the nearest enemy, bosses first
  {id:"tpow",p:"chew",g:"yellow",x:1,y:1,e:"🎳",name:"Throw Power",max:5,base:150,k:2.3,v:L=>1+.15*L,f:v=>`×${v.toFixed(2)} throw damage`,d:"Your dumbbells hit enemies and bosses harder."},
@@ -814,28 +821,31 @@ const NODES=[
  // ⬅ GAINS (red)
  {id:"stomach",p:"start",g:"red",x:-1,y:0,e:"🍔",name:"Iron Stomach",max:5,base:40,k:2.3,v:L=>1+.06*L,f:v=>`×${v.toFixed(2)} kcal`,d:"Every kcal you eat is worth more."},
  {id:"metab",p:"stomach",g:"red",x:-2,y:0,e:"🔥",name:"Metabolism",max:5,base:500,k:2.3,v:L=>1+.2*L,f:v=>`×${v.toFixed(2)} kcal`,d:"Multiplies every kcal you eat."},
- {id:"lucky",p:"metab",g:"red",x:-2,y:-1,e:"⭐",name:"Chef's favourite",max:5,base:2000,k:2.3,v:L=>.02+.02*L,f:v=>`${pct(v)} golden food`,d:"Chance for food to be golden and worth much more."},
- {id:"crowd",p:"metab",g:"red",x:-2,y:1,e:"🛒",name:"Busy stalls",max:5,base:1500,k:2.3,v:L=>8+2*L,f:v=>`${v} foods out at once`,d:"More food on the floor."},
+ {id:"lucky",p:"metab",g:"red",x:-2,y:-1,e:"⭐",name:"Chef's favourite",max:5,base:2000,k:2.3,v:L=>.02+.02*L,f:v=>`${pct(v)} golden food`,d:"Chance for food monsters to be golden. They drop golden food worth much more."},
+ {id:"crowd",p:"metab",g:"red",x:-2,y:1,e:"🛒",name:"Busy stalls",max:5,base:1500,k:2.3,v:L=>8+2*L,f:v=>`${v} food monsters at once`,d:"More food monsters on the floor: more to knock down, more to eat."},
  {id:"metab2",p:"metab",g:"red",x:-3,y:0,e:"🌋",name:"Furnace",max:5,base:50000,k:2.3,v:L=>1+.2*L,f:v=>`×${v.toFixed(2)} kcal`,d:"Your metabolism runs red hot."},
  {id:"gold2",p:"lucky",g:"red",x:-3,y:-1,e:"👑",name:"Midas Mouth",max:5,base:200000,k:2.3,v:L=>5+L,f:v=>`golden food ×${v}`,d:"Golden food is worth even more."},
  {id:"feast",p:"gold2",g:"red",x:-4,y:-1,e:"🎉",name:"Feast Bell",max:4,base:3000000,k:2.3,v:L=>6+3*L,f:v=>`${v} golden foods per feast`,d:"Every boss you beat drops a feast of golden food."},
- {id:"crowd2",p:"crowd",g:"red",x:-3,y:1,e:"🏪",name:"Rush Hour",max:5,base:100000,k:2.3,v:L=>3*L,f:v=>`+${v} foods out at once`,d:"The market is heaving."},
+ {id:"crowd2",p:"crowd",g:"red",x:-3,y:1,e:"🏪",name:"Rush Hour",max:5,base:100000,k:2.3,v:L=>3*L,f:v=>`+${v} food monsters at once`,d:"The market is heaving."},
  {id:"metab3",p:"metab2",g:"red",x:-4,y:0,e:"☄️",name:"Meteor Metabolism",max:5,base:1000000000,k:2.3,v:L=>1+.25*L,f:v=>`×${v.toFixed(2)} kcal`,d:"The final word in burning calories."},
  // ⬇ ABILITIES (green skills, purple events)
  {id:"speed",p:"start",g:"green",x:0,y:1,e:"👟",name:"Footwork",max:5,base:40,k:2.3,v:L=>1+.12*L,f:v=>`×${v.toFixed(2)} speed`,d:"Walk faster."},
- {id:"dash",p:"speed",g:"green",x:0,y:2,e:"⚡",name:"Dash",skill:1,max:1,base:300,k:1,v:L=>L,f:()=>"Skill: burst forward",d:"Dash forward, chomping everything you touch. You can't be hit during a dash."},
- {id:"reach",p:"speed",g:"green",x:-1,y:1,e:"🤲",name:"Long arms",max:5,base:200,k:2.3,v:L=>6+8*L,f:v=>`+${v} reach`,d:"Grab food from further away."},
+ {id:"dash",p:"speed",g:"green",x:0,y:2,e:"⚡",name:"Dash",skill:1,max:1,base:300,k:1,v:L=>L,f:()=>"Skill: burst forward",d:"Dash forward, smashing any food monster you touch for double damage. You can't be hit during a dash."},
+ {id:"reach",p:"speed",g:"green",x:-1,y:1,e:"🤲",name:"Long arms",max:5,base:200,k:2.3,v:L=>6+8*L,f:v=>`+${v} reach`,d:"Dropped food flies to you from further away."},
  {id:"dashCD",p:"dash",g:"green",x:1,y:2,e:"🔋",name:"Quick Feet",max:4,base:4000,k:2.3,v:L=>4.5*Math.pow(.84,L),f:v=>`${v.toFixed(1)}s dash cooldown`,d:"Dash comes back sooner."},
- {id:"inhale",p:"dash",g:"green",x:0,y:3,e:"🌪️",name:"Big Inhale",skill:1,max:1,base:8000,k:1,v:L=>L,f:()=>"Skill: suck nearby food in",d:"Hoover up the food around you and chew twice as fast while you do. 9s cooldown."},
+ {id:"inhale",p:"dash",g:"green",x:0,y:3,e:"🌪️",name:"Big Inhale",skill:1,max:1,base:8000,k:1,v:L=>L,f:()=>"Skill: hoover up dropped food",d:"Suck in all the dropped food, clocks and power-ups around you, and throw twice as fast while you do. 9s cooldown."},
  {id:"inhaleR",p:"inhale",g:"green",x:1,y:3,e:"🧲",name:"Big Lungs",max:4,base:100000,k:2.3,v:L=>230*(1+.15*L),f:v=>`${Math.round(v)} inhale range`,d:"Big Inhale reaches further."},
- {id:"toss",p:"inhale",g:"green",x:0,y:4,e:"🥏",name:"Plate Toss",skill:1,max:1,base:200000,k:1,v:L=>L,f:()=>"Skill: throw a bumper plate",d:"Throw a spinning plate that bounces around smashing food into kcal. 7s cooldown."},
- {id:"tossN",p:"toss",g:"green",x:1,y:4,e:"🎯",name:"Heavier Plates",max:4,base:4000000,k:2.3,v:L=>4+3*L,f:v=>`${v} hits per plate`,d:"Each plate hits more food before it stops."},
- {id:"cheat",p:"toss",g:"green",x:0,y:5,e:"🍰",name:"Cheat Meal",skill:1,max:1,base:100000000,k:1,v:L=>L,f:()=>"Skill: food worth ×3",d:"For a few seconds every food is worth three times as much and you chew faster. 22s cooldown."},
+ {id:"toss",p:"inhale",g:"green",x:0,y:4,e:"🥏",name:"Plate Toss",skill:1,max:1,base:200000,k:1,v:L=>L,f:()=>"Skill: hurl a bumper plate",d:"Hurl a spinning bumper plate that bounces round the room hitting food monsters for 6× damage (3× on bosses). 7s cooldown."},
+ {id:"tossN",p:"toss",g:"green",x:1,y:4,e:"🎯",name:"Heavier Plates",max:4,base:4000000,k:2.3,v:L=>4+3*L,f:v=>`${v} hits per plate`,d:"Each plate hits more enemies before it stops."},
+ {id:"cheat",p:"toss",g:"green",x:0,y:5,e:"🍰",name:"Cheat Meal",skill:1,max:1,base:100000000,k:1,v:L=>L,f:()=>"Skill: food ×3, throw faster",d:"For a few seconds every food is worth three times as much and you throw 80% faster. 22s cooldown."},
  {id:"cheatT",p:"cheat",g:"green",x:1,y:5,e:"📅",name:"Long Weekend",max:4,base:1000000000,k:2.3,v:L=>4+L,f:v=>`${v}s cheat meal`,d:"Cheat Meal lasts longer."},
- {id:"drop",p:"reach",g:"purple",x:-1,y:2,e:"⬇️",name:"Plate Drop",max:5,base:6000,k:2.3,v:L=>L?8*Math.pow(.85,L-1):0,f:v=>v?`a plate falls every ${v.toFixed(1)}s`:"locked",d:"Every few seconds a bumper plate crashes down on a cluster of food and smashes it into kcal. Hits bosses too."},
- {id:"buddy",p:"drop",g:"purple",x:-1,y:3,e:"🤝",name:"Gym Buddy",max:5,base:100000,k:2.3,v:L=>L,f:v=>v?`${Math.ceil(v/2)} buddy · speed ${(1+.15*v).toFixed(2)}×`:"locked",d:"Friendly lifters join your runs and eat food for you. More levels add buddies and make them faster."},
- {id:"chain",p:"buddy",g:"purple",x:-1,y:4,e:"🌩️",name:"Gains Train",max:5,base:2000000,k:2.3,v:L=>.06*L,f:v=>`${pct(v)} chance to chain`,d:"Any chomp might zap onwards and take a bite out of up to 3 nearby foods."},
+ {id:"drop",p:"reach",g:"purple",x:-1,y:2,e:"⬇️",name:"Plate Drop",max:5,base:6000,k:2.3,v:L=>L?8*Math.pow(.85,L-1):0,f:v=>v?`a plate falls every ${v.toFixed(1)}s`:"locked",d:"Every few seconds a bumper plate crashes down on a crowd of food monsters. Hits bosses too."},
+ {id:"buddy",p:"drop",g:"purple",x:-1,y:3,e:"🤝",name:"Gym Buddies",max:5,base:100000,k:2.3,v:L=>L,f:v=>v?`${Math.ceil(v/2)} buddy · speed ${(1+.15*v).toFixed(2)}×`:"locked",d:"Buy them right here in the skill tree. Friendly lifters join your runs and pick up dropped food for you: level 1 = 1 buddy, level 3 = 2, level 5 = 3."},
+ {id:"chain",p:"buddy",g:"purple",x:-1,y:4,e:"🌩️",name:"Gains Train",max:5,base:2000000,k:2.3,v:L=>.06*L,f:v=>`${pct(v)} chance to chain`,d:"Any dumbbell hit might zap onwards into up to 3 nearby enemies for half damage."},
 ];
+// branch colours for the tree (and its key)
+const BRC={blue:"#3f7fd6",yellow:"#f0892a",red:"#d8423a",green:"#46a83a",purple:"#9a5fe0",gold:"#f2c230"};
+const BRANCH=[["blue","⏱️ Time"],["yellow","💥 Damage"],["red","🔥 Gains"],["green","⚡ Skills"],["purple","🎪 Events"]];
 const need=p=>Math.min(3,NI[p].max);   // parent level needed to open a node
 const NI=Object.fromEntries(NODES.map(n=>[n.id,n]));
 const SKILLS=[
@@ -1165,7 +1175,7 @@ NODES.forEach(n=>{
 for(const [t,x,y] of [["⏱ TIME",0,GY[0]+.35],["DAMAGE 💪",GX[1]-.45,-.55],["🔥 GAINS",GX[0]+.45,-.55],["⚡ ABILITIES",0,GY[1]-.35]]){const l=document.createElement("div");l.className="tlab";l.textContent=t;l.style.left=gpx(x)+"px";l.style.top=gpy(y)+"px";treeIn.appendChild(l);}
 NODES.forEach(n=>{
   const b=document.createElement("button");b.className="node"+(n.skill?" skill":"")+(n.id==="start"?" root":"");
-  b.style.left=gpx(n.x)+"px";b.style.top=gpy(n.y)+"px";b.style.setProperty("--c",COL[n.g]);
+  b.style.left=gpx(n.x)+"px";b.style.top=gpy(n.y)+"px";b.style.setProperty("--c",BRC[n.g]);
   b.innerHTML=`<span>${n.e}</span>${n.id==="start"?"":`<span class="gem"></span><span class="lv"></span>`}`;
   b.onmouseenter=()=>{infoId=n.id;renderInfo();};
   b.onfocus=()=>{infoId=n.id;renderInfo();followNode(n);};
@@ -1226,6 +1236,7 @@ function renderInfo(){
   b.className="btn"+(!max&&avail(n)&&S.kcal>=c?" gold":"");
 }
 $("#iBuy").onclick=()=>buyNode(NI[infoId]);
+$("#tlegend").innerHTML=BRANCH.map(([g,t])=>`<span style="--c:${BRC[g]}"><i></i>${t}</span>`).join("");
 
 const zoneEls={},secEls={};
 const ATK={spread:"sprays shots at you",ring:"fires rings of shots",spin:"spins out a spiral",slam:"slams the floor",charge:"charges at you",wave:"sends walls of food (find the gap)",rain:"drops food from above",homing:"fires homing shots",burst:"fires rapid bursts",boomer:"throws boomerangs",bounce:"bounces shots off the walls",mine:"lays food mines"};
@@ -1849,6 +1860,9 @@ function drawLights(tm){
 let R=null,paused=false;
 // A run never lasts more than 25 seconds of real play. Time pickups only win back time lost to hits.
 const MAXRUN=25;
+const KLOOT=1;   // kcal scale for eaten drops (tuned with the sim)
+// one dumbbell's damage: bosses use THR (they're big and never dodge), food monsters take the full hit
+const hitAmt=f=>f.boss?R.jaw*R.dmg*R.thrPow:R.jaw*R.thrPowE;
 const THR=.22,THRZ=[1,1,.6,.55,.5];   // throw damage vs one chomp (per market): throws never miss and never need you up close, so each one hits softer
 const runLen=()=>Math.min(MAXRUN,stat("appetite")+stat("appetite2"));
 function addTime(x){const room=MAXRUN-R.el-R.t;const a=Math.max(0,Math.min(x,room));R.t+=a;return a;}
@@ -1866,10 +1880,10 @@ function startRun(){HC.clear();vsReset();
      puddles:[],fires:[],gulls:[],scoots:[],waiters:[],rival:null,hzT:{gull:3,scoot:2.5,waiter:3},
      ate:{},golds:0,bossDmg:0,shooed:0,done:false,tasksDone:[],blink:0,flashT:0,
      darts:[],thrT:.4,thrCd:stat("chew")*stat("chew2")/stat("quick"),thrPow:THR*THRZ[ZI[zone.id]]*stat("tpow")*stat("heavy")*stat("bulk"),thrR:stat("trange"),thrV:760*stat("tspd"),thrN:stat("twin"),thrP:stat("pierce"),
-     pups:[],pw:{},pupT:5,pupE:11-1.5*lv("pdrop"),pupG:.12+.06*lv("pdrop"),pupD:stat("pump"),
+     loot:[],kills:0,thrPowE:stat("tpow")*stat("heavy")*stat("bulk"),pups:[],pw:{},pupT:5,pupE:11-1.5*lv("pdrop"),pupG:.12+.06*lv("pdrop"),pupD:stat("pump"),
      spot:sl("spotter"),second:sl("second")?2+sl("second"):0,hype:1-.12*sl("hype"),mag:1+.4*sl("magnet"),cdK:1-.08*sl("timer"),cash0:S.cash,
      mate:sl("partner")?{x:0,y:0,thrT:1,walk:0,face:1,m:.5+.15*sl("partner"),cd:1.6/(1+.2*sl("partner"))}:null};
-  if(rankN()>=3)R.thrPow*=1.25;
+  if(rankN()>=3){R.thrPow*=1.25;R.thrPowE*=1.25;}
   if(!SIM)layout();else{WW=1280;WH=720;}
   R.x=WW/2;R.y=(WALL+WH)/2+60;
   if(R.mate){R.mate.x=R.x-70;R.mate.y=R.y+10;}
@@ -1884,13 +1898,13 @@ function startRun(){HC.clear();vsReset();
   if(!SIM){
     $("#hZone").textContent=`${zone.name} · ${zone.secs[si].n}`;$("#hBossIco").textContent=secDone(zone,si)?"🏆":R.boss.e;
     const wb=R.bossWait>0?R.boss:null;
-    const tip=!S.seen?`${hintMove()} Walk into food to eat it. Your dumbbells fly at enemies on their own.`:wb?"":hzHint(zone)+(R.stage?" It's busier back here!":"");
+    const tip=!S.seen?`${hintMove()} Your dumbbells fly at the food monsters on their own. Walk over what they drop to eat it.`:wb?"":hzHint(zone)+(R.stage?" It's busier back here!":"");
     showHint(tip);S.seen=true;
     drawPort();
   }
 }
 const hintMove=()=>document.body.classList.contains("touch")?"Touch and drag anywhere to move.":document.body.classList.contains("pad")?"Left stick to move.":"WASD or arrows to move.";
-function hzHint(z){const h=z.hz;if(h.gull)return "Seagulls nick your food. Run into them to shoo them off!";if(h.fire)return "Watch the chilli spills. They flare up!";if(h.scooter)return "Scooters! Watch for the warning arrows.";if(h.waiter)return "Bump a waiter to make them drop food. Big Dave is eating too!";if(h.puddle)return "Wet floor! You'll slide on puddles.";return "";}
+function hzHint(z){const h=z.hz;if(h.gull)return "Seagulls swoop in to nick dropped food and peck you. Knock them out of the sky!";if(h.fire)return "Watch the chilli spills. They flare up!";if(h.scooter)return "Scooters! Watch for the warning arrows.";if(h.waiter)return "Bump a waiter to make them drop food. Big Dave is eating too!";if(h.puddle)return "Wet floor! You'll slide on puddles.";return "";}
 let hintT;function showHint(s){const h=$("#hint");if(!s){h.style.opacity=0;return;}h.textContent=s;h.style.opacity=1;clearTimeout(hintT);hintT=setTimeout(()=>h.style.opacity=0,4200);}
 
 function pickDef(z){const tot=z.foods.reduce((a,f)=>a+f.w,0);let r=Math.random()*tot;for(const f of z.foods){if((r-=f.w)<=0)return f;}return z.foods[0];}
@@ -2050,7 +2064,7 @@ function useSkill(id){
   if(!R||R.done||R.ending||paused||R.stun>0)return;
   if(!skillOn(id)||R.cds[id]>0)return;
   const sk=SKILLS.find(s=>s.id===id);R.cds[id]=sk.cd()*R.cdK;
-  if(id==="dash"){R.dashT=.2;R.dashId++;R.inv=Math.max(R.inv,.3);SFX.dash();for(let i=0;i<8;i++)puff(R.x,R.y+20,"#d8c7a8");}
+  if(id==="dash"){R.dashT=.22;R.dashId++;R.inv=Math.max(R.inv,.3);SFX.dash();for(let i=0;i<8;i++)puff(R.x,R.y+20,"#d8c7a8");}
   if(id==="inhale"){R.inhT=1.3;SFX.inhale();}
   if(id==="toss"){const s=950;let ax=R.fx,ay=R.fy;
     if(R.prx||R.pry){const l=Math.hypot(R.prx,R.pry);ax=R.prx/l;ay=R.pry/l;}
@@ -2133,29 +2147,36 @@ function update(dt){
       f.shotT=(f.shotT??rnd(1.5,3))-dt;if(f.shotT<=0&&f.pop>=1){f.shotT=rnd(3.4,4.8)/(1+.1*R.si);goblinShot(f);}
       keepIn(f,f.r);continue;}
     const dx=f.x-R.x,dy=f.y-R.y,d=Math.hypot(dx,dy)||1;
-    if(R.inhT>0&&d<inhR){const pull=(260+600*(1-d/inhR))*dt;f.x-=dx/d*Math.min(pull,d-10);f.y-=dy/d*Math.min(pull,d-10);f.vx*=.5;f.vy*=.5;}
+    if(f.clock){if(R.inhT>0&&d<inhR){f.x-=dx/d*Math.min(700*dt,d-10);f.y-=dy/d*Math.min(700*dt,d-10);}}
     else if(f.def.flee&&d<150){f.vx+=dx/d*300*dt;f.vy+=dy/d*300*dt;}
+    else{ // food monsters shuffle towards you (sometimes off somewhere else)
+      f.t=(f.t||0)+dt;
+      if(!f.goal||Math.hypot(f.goal.x-f.x,f.goal.y-f.y)<16||f.t>f.gt){const near=Math.random()<.55;f.goal=near?{x:R.x+rnd(-160,160),y:R.y+rnd(-120,120)}:{x:rnd(FX0()+60,FX1()-60),y:rnd(FY0()+60,FY1()-60)};f.gt=f.t+rnd(1.5,3.2);f.spd=f.spd||rnd(38,62)*(1+.06*R.si);}
+      const gx=f.goal.x-f.x,gy=f.goal.y-f.y,gd=Math.hypot(gx,gy)||1;if(f.pop>=1){f.x+=gx/gd*f.spd*dt;f.y+=gy/gd*f.spd*dt;f.step+=dt*5;}}
+    if(!f.clock&&f.pop>=1&&Math.hypot(R.x-f.x,R.y-10-f.y)<f.r+PR-6){const a=Math.atan2(R.y-f.y,R.x-f.x);knock("Ouch!",.2,.5,Math.cos(a)*360,Math.sin(a)*360);f.vx=-Math.cos(a)*420;f.vy=-Math.sin(a)*420;}
     if(f.vx||f.vy){f.x+=f.vx*dt;f.y+=f.vy*dt;f.vx*=Math.pow(.08,dt);f.vy*=Math.pow(.08,dt);f.step+=Math.hypot(f.vx,f.vy)*dt/8;if(Math.abs(f.vx)<1&&Math.abs(f.vy)<1)f.vx=f.vy=0;}
     keepIn(f,f.r);
   }
   // eating
   if(R.stun<=0){
-    if(R.dashT>0){for(const f of R.foods.slice()){if(f.dash===R.dashId||f.boss||f.mini)continue;if(Math.hypot(f.x-R.x,f.y-R.y)<f.r+PR+10){f.dash=R.dashId;chomp(f);}}}
+    // dashing smashes through food monsters
+    if(R.dashT>0){for(const f of R.foods.slice()){if(f.dash===R.dashId||f.boss||f.clock)continue;if(Math.hypot(f.x-R.x,f.y-R.y)<f.r+PR+10){f.dash=R.dashId;chomp(f,{shot:1,amt:hitAmt(f)*2});}}}
     if(R.chew<=0){
       let best=null,bd=1e9;
-      for(const f of R.foods){if(f.boss||f.mini)continue;const d=Math.hypot(f.x-R.x,f.y-(R.y-10))-f.r-PR-R.reach;if(d<0&&d<bd){bd=d;best=f;}}
+      for(const f of R.foods){if(!f.clock)continue;const d=Math.hypot(f.x-R.x,f.y-(R.y-10))-f.r-PR-R.reach;if(d<0&&d<bd){bd=d;best=f;}}
       if(best)chomp(best);
     }
   }
   throwing(dt);
   powerups(dt);
+  lootTick(dt);
   // plates
   for(const p of R.plates){
     p.x+=p.vx*dt;p.y+=p.vy*dt;p.rot+=dt*18;p.life-=dt;
     if(p.x<FX0()+16||p.x>FX1()-16){p.vx*=-1;p.x=clamp(p.x,FX0()+16,FX1()-16);}
     if(p.y<FY0()+10||p.y>FY1()-16){p.vy*=-1;p.y=clamp(p.y,FY0()+10,FY1()-16);}
     for(const f of R.foods.slice()){if(p.hits<=0)break;const last=p.hit.get(f)||-9;if(R.t>last-.25&&last!==-9)continue;
-      if(Math.hypot(f.x-p.x,f.y-p.y)<f.r+18){p.hit.set(f,R.t);p.hits--;chomp(f,{noFill:1,plate:1});SFX.smash();sparkle(f.x,f.y);
+      if(f.clock)continue;if(Math.hypot(f.x-p.x,f.y-p.y)<f.r+18){p.hit.set(f,R.t);p.hits--;chomp(f,{plate:1,amt:hitAmt(f)*(f.boss?3:6)});SFX.smash();sparkle(f.x,f.y);
         if(!f.boss){const a=Math.atan2(p.vy,p.vx)+rnd(-.6,.6);p.vx=Math.cos(a)*950;p.vy=Math.sin(a)*950;}}}
   }
   R.plates=R.plates.filter(p=>p.life>0&&p.hits>0);
@@ -2170,7 +2191,7 @@ function update(dt){
   for(const f of R.foods)if(f.clock){f.life-=dt;if(f.life<=0)f.left=-1;}
   R.foods=R.foods.filter(f=>!(f.clock&&f.left<0));
   // goblins keep turning up on the way to the boss (fewer once it's out)
-  R.miniT-=dt;const gob=R.foods.filter(f=>f.mini).length,gmax=(R.bossOut?2:3)+Math.floor(R.si/2)+Math.floor(ZI[R.zone.id]/2);
+  R.miniT-=dt;const gob=R.foods.filter(f=>f.mini).length,gmax=(R.bossOut?1:2)+Math.floor(R.si/2)+Math.floor(ZI[R.zone.id]/2);
   if(R.miniT<=0&&gob<gmax){R.miniT=rnd(2.2,3.6)/(1+.12*R.si);const g=spawnFood(false);g.def=R.zone.mini;g.left=g.def.bites;g.r=26*g.def.size;g.gold=false;g.mini=1;g.pop=0;puff(g.x,g.y,"#fff");}
   // fx
   for(const p of R.parts){p.x+=p.vx*dt;p.y+=p.vy*dt;p.vy+=p.g*dt;p.vx*=Math.pow(.2,dt);p.life-=dt;}
@@ -2183,7 +2204,7 @@ function update(dt){
 
 function bossMove(f,dt){
   const b=f.def;f.t=(f.t||0)+dt;
-  if(f.enter>0){f.enter-=dt;f.y+=(f.ty-f.y)*Math.min(1,dt*6);return;}
+  if(f.enter>0){f.enter-=dt;const k=Math.min(1,dt*6);f.x+=(f.tx-f.x)*k;f.y+=(f.ty-f.y)*k;f.step+=dt*8;return;}
   const dx=f.x-R.x,dy=f.y-R.y,d=Math.hypot(dx,dy)||1;
   if(b.mv==="wander"||b.mv==="dart"){
     if(!f.goal||Math.hypot(f.goal.x-f.x,f.goal.y-f.y)<20||f.t>f.gt){f.goal={x:rnd(FX0()+f.r,FX1()-f.r),y:rnd(FY0()+f.r,FY1()-f.r)};f.gt=f.t+(b.mv==="dart"?rnd(.8,1.6):rnd(2,4));}
@@ -2213,17 +2234,15 @@ function hazards(dt){
   R.fires=R.fires.filter(f=>f.temp==null||f.temp>0);
   // seagulls
   if(h.gull){R.hzT.gull-=dt;if(R.hzT.gull<=0&&R.gulls.length<h.gull+R.stage){R.hzT.gull=rnd(5,8)/R.hzF;
-      const tgt=R.foods.filter(f=>!f.boss&&!f.mini&&!f.clock&&!f.taken).sort((a,b)=>b.def.kcal-a.def.kcal)[0];
-      if(tgt){tgt.taken=1;const side=Math.random()<.5;R.gulls.push({x:side?-60:WW+60,y:rnd(40,WALL),tgt,st:"in",carry:null,flap:0,stun:0});}}
+      const tgt=R.loot.filter(l=>!l.taken).sort((a,b)=>b.def.kcal-a.def.kcal)[0];
+      const side=Math.random()<.5,hp=R.zone.mini.bites*1.2;
+      if(tgt)tgt.taken=1;R.gulls.push({gull:1,x:side?-60:WW+60,y:rnd(40,WALL),tgt:tgt||null,st:tgt?"in":"dive",dx:R.x,dy:R.y-20,carry:null,flap:0,stun:0,hp,max:hp,hit:0});}
     for(const g of R.gulls){g.flap+=dt*14;
-      if(g.st==="in"){if(!R.foods.includes(g.tgt)){g.st="out";}else{const dx=g.tgt.x-g.x,dy=g.tgt.y-30-g.y,d=Math.hypot(dx,dy);const s=300*dt;if(d<s+4){g.st="out";g.carry=g.tgt.def;g.gold=g.tgt.gold;R.foods.splice(R.foods.indexOf(g.tgt),1);floatText(g.x,g.y-30,"Nicked!",COL.red);}else{g.x+=dx/d*s;g.y+=dy/d*s;}}}
-      else{const ex=g.x<WW/2?-120:WW+120;g.x+=Math.sign(ex-g.x)*340*dt;g.y-=120*dt;}
-      if(g.st!=="gone"&&Math.hypot(g.x-R.x,g.y-(R.y-30))<PR+34&&R.stun<=0){
-        S.shoo++;R.shooed++;SFX.shoo();floatText(g.x,g.y-30,"Shoo!",COL.cream,1);burst(g.x,g.y,"#fff",10);
-        const bonus=40*R.mult*(ZI[R.zone.id]+1)*(R.zone.foods[0].kcal/10);R.kcal+=bonus;floatText(g.x,g.y-6,"+"+fmt(bonus),COL.gold);
-        if(g.carry){const nf=spawnFood(false,{x:g.x,y:Math.max(FY0()+30,g.y+30),vx:rnd(-80,80),vy:120});nf.def=g.carry;nf.left=g.carry.bites;nf.r=26*g.carry.size;nf.gold=g.gold;}
-        else if(g.tgt)g.tgt.taken=0;
-        g.st="gone";checkTasks();}
+      g.hit=Math.max(0,(g.hit||0)-dt*6);
+      if(g.st==="in"){if(!R.loot.includes(g.tgt)||g.tgt.life<=0){g.st="dive";g.dx=R.x;g.dy=R.y-20;}else{const dx=g.tgt.x-g.x,dy=g.tgt.y-30-g.y,d=Math.hypot(dx,dy);const s=300*dt;if(d<s+4){g.st="out";g.carry=g.tgt.def;g.gold=g.tgt.gold;g.tgt.life=0;floatText(g.x,g.y-30,"Nicked!",COL.red);}else{g.x+=dx/d*s;g.y+=dy/d*s;}}}
+      else if(g.st==="dive"){const dx=g.dx-g.x,dy=g.dy-g.y,d=Math.hypot(dx,dy);const s=380*dt;if(d<s+4)g.st="out";else{g.x+=dx/d*s;g.y+=dy/d*s;}
+        if(Math.hypot(g.x-R.x,g.y-(R.y-30))<PR+30){knock("Pecked!",.3,.6,(R.x-g.x)*4,(R.y-g.y)*4);g.st="out";}}
+      else{const ex=g.x<WW/2?-120:WW+120;g.x+=Math.sign(ex-g.x)*300*dt;g.y-=110*dt;}
     }
     R.gulls=R.gulls.filter(g=>g.st!=="gone"&&g.x>-140&&g.x<WW+140&&g.y>-140);
   }
@@ -2237,17 +2256,17 @@ function hazards(dt){
   if(h.waiter){R.hzT.waiter-=dt;if(R.hzT.waiter<=0&&R.waiters.length<2+(R.stage>1?1:0)){R.hzT.waiter=rnd(5,7)/R.hzF;const dir=Math.random()<.5?1:-1;R.waiters.push({dir,x:dir>0?-60:WW+60,y:rnd(FY0()+60,FY1()-50),walk:0,tray:true});}
     for(const w of R.waiters){w.x+=w.dir*150*dt;w.walk+=dt*8;
       if(Math.hypot(w.x-R.x,w.y-R.y)<PR+30&&R.stun<=0){
-        if(w.tray){w.tray=false;knock("Sorry!",.45,.0,-w.dir*200,0);floatText(w.x,w.y-70,"Oi!",COL.cream,1);for(let i=0;i<3;i++){const a=rnd(-Math.PI,0);spawnFood(false,{x:w.x,y:w.y-20,vx:Math.cos(a)*320,vy:Math.sin(a)*120+200});}}
+        if(w.tray){w.tray=false;knock("Sorry!",.45,.0,-w.dir*200,0);floatText(w.x,w.y-70,"Oi!",COL.cream,1);for(let i=0;i<3;i++)spawnLoot(pickDef(R.zone),w.x,w.y-10,false,{v:220,z:40,vz:200});}
         else if(R.inv<=0)R.vx+=-w.dir*30;}}
     R.waiters=R.waiters.filter(w=>w.x>-100&&w.x<WW+100);
   }
   // Big Dave, the rival eater
   const rv=R.rival;
   if(rv){rv.stun=Math.max(0,rv.stun-dt);rv.chew-=dt;rv.mouth=Math.max(0,rv.mouth-dt*6);
-    if(!rv.tgt||!R.foods.includes(rv.tgt)){let b=null,bd=1e9;for(const f of R.foods){if(f.boss)continue;const d=Math.hypot(f.x-rv.x,f.y-rv.y)+Math.hypot(f.x-R.x,f.y-R.y)*.25;if(d<bd){bd=d;b=f;}}rv.tgt=b;}
+    if(!rv.tgt||!R.loot.includes(rv.tgt)||rv.tgt.life<=0){let b=null,bd=1e9;for(const f of R.loot){const d=Math.hypot(f.x-rv.x,f.y-rv.y)+Math.hypot(f.x-R.x,f.y-R.y)*.25;if(d<bd){bd=d;b=f;}}rv.tgt=b;}
     if(rv.tgt&&rv.stun<=0){const dx=rv.tgt.x-rv.x,dy=rv.tgt.y-rv.y,d=Math.hypot(dx,dy)||1;
       if(d>rv.tgt.r+PR-4){const rs=170+25*R.stage;rv.vx=dx/d*rs;rv.vy=dy/d*rs;rv.face=dx<0?-1:1;}else{rv.vx=rv.vy=0;
-        if(rv.chew<=0){rv.chew=.55;rv.mouth=1;rv.tgt.left--;rv.tgt.hit=1;rv.tgt.sq=1;burst(rv.tgt.x,rv.tgt.y,"#fff",4,.7);if(rv.tgt.left<=0){R.foods.splice(R.foods.indexOf(rv.tgt),1);floatText(rv.x,rv.y-90,"Mine!",COL.green);rv.tgt=null;}}}}
+        if(rv.chew<=0){rv.chew=.4;rv.mouth=1;burst(rv.tgt.x,rv.tgt.y,"#fff",4,.7);rv.tgt.life=0;floatText(rv.x,rv.y-90,"Mine!",COL.green);rv.tgt=null;}}}
     else{rv.vx=rv.vy=0;}
     rv.x+=rv.vx*dt;rv.y+=rv.vy*dt;rv.walk+=Math.hypot(rv.vx,rv.vy)*dt/22;keepIn(rv,PR);
     const dx=rv.x-R.x,dy=rv.y-R.y,d=Math.hypot(dx,dy);
@@ -2266,15 +2285,11 @@ function knock(msg,stun,timeLoss,kx,ky){
 }
 
 // eat a whole food in one go (plate drops), worth a bit less than chewing it yourself
-function smashFood(f,mult){
-  if(f.boss){chomp(f,{plate:1,chain:1});return;}
-  const kc=f.def.kcal/f.def.bites*f.left*R.secK*R.mult*(f.gold?R.goldX:1)*mult;R.kcal+=kc;f.left=0;
-  floatText(f.x,f.y-f.r-8,"+"+fmt(kc),f.gold?COL.gold:COL.cream);burst(f.x,f.y,"#f5e6c4",8);eaten(f);
-}
+function smashFood(f,mult){if(f.clock)return;chomp(f,{shot:1,chain:1,amt:hitAmt(f)*(f.boss?2:5)});}
 function bellySlam(){
   R.pounds.push({x:R.x,y:R.y+10,t:0,max:R.slamR});R.shake=Math.max(R.shake,.6);
   floatText(R.x,R.y-120,"BELLY SLAM!",COL.gold,2);if(!SIM){tone(70,.35,"sawtooth",.07,.5);noise(.3,.12,200,.7,.4);}rumble(200,.6,.4);
-  for(const g of R.foods.slice())if(Math.hypot(g.x-R.x,g.y-R.y)<R.slamR)chomp(g,{chain:1,plate:1,aoe:1});
+  for(const g of R.foods.slice())if(!g.clock&&Math.hypot(g.x-R.x,g.y-R.y)<R.slamR)chomp(g,{shot:1,chain:1,amt:hitAmt(g)*(g.boss?1:3)});
 }
 function events(dt){
   for(const p of R.pounds)p.t+=dt;R.pounds=R.pounds.filter(p=>p.t<.5);
@@ -2289,11 +2304,9 @@ function events(dt){
   // Gym Buddies: friendly lifters who eat food and hand you the kcal
   const bs=(150+20*lv("buddy"))*(R.boost>0?1.2:1);
   for(const b of R.buds){b.chew-=dt;b.mouth=Math.max(0,b.mouth-dt*6);
-    if(!b.tgt||!R.foods.includes(b.tgt)||b.tgt.boss){let best=null,bd=1e9;for(const f of R.foods){if(f.boss||f.mini||f.clock)continue;const d=Math.hypot(f.x-b.x,f.y-b.y)+Math.hypot(f.x-R.x,f.y-R.y)*.6;if(d<bd){bd=d;best=f;}}b.tgt=best;}
+    if(!b.tgt||!R.loot.includes(b.tgt)||b.tgt.life<=0){let best=null,bd=1e9;for(const f of R.loot){if(f.taken)continue;const d=Math.hypot(f.x-b.x,f.y-b.y)+Math.hypot(f.x-R.x,f.y-R.y)*.6;if(d<bd){bd=d;best=f;}}b.tgt=best;}
     const t=b.tgt;if(t){const dx=t.x-b.x,dy=t.y-b.y,d=Math.hypot(dx,dy)||1;
-      if(d>t.r+PR-6){b.vx=dx/d*bs;b.vy=dy/d*bs;b.face=dx<0?-1:1;}else{b.vx=b.vy=0;
-        if(b.chew<=0){b.chew=.5;b.mouth=1;const bites=Math.min(t.left,Math.max(1,Math.round(R.jaw*.5)));const kc=t.def.kcal/t.def.bites*bites*R.secK*R.mult*(t.gold?R.goldX:1)*.7;R.kcal+=kc;t.left-=bites;t.hit=1;t.sq=1;
-          floatText(t.x,t.y-t.r-8,"+"+fmt(kc),"#bfe8a6");if(t.left<=0)eaten(t);}}}
+      if(d>t.r+PR-6){b.vx=dx/d*bs;b.vy=dy/d*bs;b.face=dx<0?-1:1;}else{b.vx=b.vy=0;if(b.chew<=0){b.chew=.25;b.mouth=1;t.life=0;eatLoot(t,{buddy:1});b.tgt=null;}}}
     else b.vx=b.vy=0;
     b.x+=b.vx*dt;b.y+=b.vy*dt;b.walk+=Math.hypot(b.vx,b.vy)*dt/22;keepIn(b,PR);}
 }
@@ -2318,7 +2331,7 @@ function chomp(f,o={}){
   if(bites<=0)return false;
   if(R.comboT>0)R.combo++;else R.combo=1;R.comboT=R.comboW;R.maxCombo=Math.max(R.maxCombo,R.combo);
   const cm=1+.02*Math.min(R.combo,R.comboCap);
-  const per=boss?def.kc:def.kcal/def.bites*R.secK;
+  const per=boss?def.kc:0;   // food monsters pay out when you eat what they drop
   const kc=per*bites*R.mult*cm*(f.gold?R.goldX:1)*(o.plate?.8:1)*(cheat&&!boss?3:1);
   R.kcal+=kc;
   if(!o.plate&&!o.shot){R.chew=R.cd;R.mouth=1;}
@@ -2328,10 +2341,9 @@ function chomp(f,o={}){
   burst(f.x,f.y,f.gold?COL.gold:"#f5e6c4",boss?6:7);sparkle(f.x,f.y-4,boss);
   if(kc>0)floatText(f.x+rnd(-10,10),f.y-f.r-8,"+"+fmt(kc),f.gold?COL.gold:COL.cream,f.gold||boss?1:0);
   if(!SIM){if(f.gold)SFX.gold();else if(o.shot)tone(boss?180:260,.05,"square",.035,.5);else SFX.chomp(R.combo);}
-  if(!o.chain&&!o.plate&&!o.shot&&Math.random()<R.slamP)bellySlam();
-  if(!o.chain&&!o.plate&&!o.shot&&lv("chain")&&Math.random()<stat("chain")){
+  if(o.shot&&!o.chain&&lv("chain")&&Math.random()<stat("chain")){
     const near=R.foods.filter(g=>g!==f&&!g.boss&&Math.hypot(g.x-f.x,g.y-f.y)<240).sort((a,b)=>Math.hypot(a.x-f.x,a.y-f.y)-Math.hypot(b.x-f.x,b.y-f.y)).slice(0,3);
-    let px=f.x,py=f.y;for(const g of near){R.zaps.push({x1:px,y1:py,x2:g.x,y2:g.y,life:.3});px=g.x;py=g.y;chomp(g,{chain:1,plate:1});}
+    let px=f.x,py=f.y;for(const g of near){if(g.clock)continue;R.zaps.push({x1:px,y1:py,x2:g.x,y2:g.y,life:.3});px=g.x;py=g.y;chomp(g,{shot:1,chain:1,amt:hitAmt(g)*.5});}
     if(near.length&&!SIM)tone(1200,.08,"square",.03,.5);}
   if(boss?f.hp<=.01:f.left<=0)eaten(f);
   return true;
@@ -2341,25 +2353,51 @@ function eaten(f){
   if(f.boss){bossDown(f);return;}
   if(f.mini&&Math.random()<R.pupG)dropPup(f.x,f.y);
   if(f.clock){const add=addTime(stat("clockV"));floatText(f.x,f.y-30,add>0?`⏱ +${add.toFixed(1)}s`:"⏱ Full!","#9fd3ff",2);if(!add){R.kcal+=Math.max(20,R.kcal*.03);}if(!SIM)SFX.gold();return;}
+  burst(f.x,f.y,f.gold?COL.gold:"#f5e6c4",12,1.2);puff(f.x,f.y,"#fff");R.kills=(R.kills||0)+1;
+  spawnLoot(def,f.x,f.y,f.gold);
+}
+// Loot: what a knocked-down food monster leaves behind. Walk over it to eat it.
+function spawnLoot(def,x,y,gold,o={}){if(R.loot.length>70)return;const a=rnd(0,Math.PI*2),v=o.v??rnd(60,150);
+  R.loot.push({def,gold:!!gold,x,y,vx:o.vx??Math.cos(a)*v,vy:o.vy??Math.sin(a)*v,z:o.z??0,vz:o.vz??260,life:o.life??11,pop:0,r:17*Math.min(1.25,def.size||1)});}
+function lootTick(dt){
+  const inhR=stat("inhaleR"),grab=PR+34+R.reach;
+  for(const l of R.loot){l.life-=dt;l.pop=Math.min(1,l.pop+dt*5);
+    l.vz-=900*dt;l.z=Math.max(0,l.z+l.vz*dt);if(l.z===0)l.vz=0;
+    l.x+=l.vx*dt;l.y+=l.vy*dt;l.vx*=Math.pow(.03,dt);l.vy*=Math.pow(.03,dt);keepIn(l,l.r);
+    const dx=R.x-l.x,dy=R.y-10-l.y,d=Math.hypot(dx,dy)||1;
+    const pull=R.inhT>0&&d<inhR?1100:d<grab?560:0;
+    if(pull&&!R.ending){const s=Math.min(d,pull*dt);l.x+=dx/d*s;l.y+=dy/d*s;}
+    if(d<PR+12&&l.z<20&&!R.ending&&l.pop>=1){l.life=0;eatLoot(l);}}
+  R.loot=R.loot.filter(l=>l.life>0);
+}
+function eatLoot(l,o={}){
+  const def=l.def,cheat=R.cheatT>0;
+  if(R.comboT>0)R.combo++;else R.combo=1;R.comboT=R.comboW;R.maxCombo=Math.max(R.maxCombo,R.combo);
+  const cm=1+.02*Math.min(R.combo,R.comboCap);
+  const kc=def.kcal*R.secK*R.mult*cm*(l.gold?R.goldX:1)*(cheat?3:1)*KLOOT*(o.buddy?.7:1);R.kcal+=kc;
+  floatText(l.x+rnd(-10,10),l.y-24,"+"+fmt(kc),o.buddy?"#bfe8a6":l.gold?COL.gold:COL.cream,l.gold?1:0);
+  R.mouth=1;if(!SIM){if(l.gold)SFX.gold();else SFX.chomp(R.combo);}sparkle(l.x,l.y-4);
   R.ate[def.name]=(R.ate[def.name]||0)+1;S.eat[def.name]=(S.eat[def.name]||0)+1;
-  burst(f.x,f.y,f.gold?COL.gold:"#f5e6c4",12,1.2);
-  if(f.gold){R.golds++;rumble(80,0,.5);if(!RM)R.shake=Math.max(R.shake,.4);const w=addTime(Math.min(R.wind,R.windLeft));if(w>0){R.windLeft-=w;floatText(R.x,R.y-120,`+${w.toFixed(1)}s`,COL.gold,1);}}
+  if(l.gold){R.golds++;rumble(80,0,.5);if(!RM)R.shake=Math.max(R.shake,.4);const w=addTime(Math.min(R.wind,R.windLeft));if(w>0){R.windLeft-=w;floatText(R.x,R.y-120,`+${w.toFixed(1)}s`,COL.gold,1);}}
   if(R.helps&&R.helpLeft>0){const h=addTime(Math.min(R.helps,R.helpLeft));R.helpLeft-=h;}
   if(def.spicy){R.boost=3;floatText(R.x,R.y-110,"Spicy! Speed up",COL.red,1);}
+  if(!o.buddy&&Math.random()<R.slamP)bellySlam();
   R.prog++;
   const z=R.zone;
   if(R.prog>=Math.max(3,Math.round(secAt(z,R.si)*R.hype))&&!R.bossOut){if(secDone(z,R.si))feast();else spawnBoss();}
   checkTasks();
 }
 const secAt=(z,i)=>Math.round(z.at*(1+.08*i));
-function feast(){R.prog=0;const n=stat("feast");for(let k=0;k<n;k++){const nf=spawnFood(false,null,true);nf.pop=0;}banner("🎉","FEAST!",`${n} golden foods`,"gold");if(!SIM)SFX.win();}
+function feast(){R.prog=0;const n=stat("feast");for(let k=0;k<n;k++)spawnLoot(pickDef(R.zone),rnd(FX0()+80,FX1()-80),rnd(FY0()+80,FY1()-60),true,{v:20,z:300,vz:0});banner("🎉","FEAST!",`${n} golden foods`,"gold");if(!SIM)SFX.win();}
 function spawnBoss(encore){
   const b=R.boss;let hp,max;
   if(encore){max=Math.round(bossHp(b)*(.6+.25*R.encores));hp=max;R.encores++;}
   else{max=bossHp(b);hp=max;}
   R.bossOut=true;
   const r=b.final?66:56;
-  R.foods.push({def:b,boss:true,encore:!!encore,x:WW/2,y:-120,ty:FY0()+r+40,enter:.8,r,hp,max,gold:false,pop:1,vx:0,vy:0,hit:0,sq:0,blink:2,step:0,wob:0,
+  let tx,ty,t=0;do{tx=rnd(FX0()+r+60,FX1()-r-60);ty=rnd(FY0()+r+40,FY1()-r-30);t++;}while(t<20&&Math.hypot(tx-R.x,ty-R.y)<300);
+  const side=Math.floor(Math.random()*3),sx=side===0?tx:side===1?-120:WW+120,sy=side===0?-120:ty;
+  R.foods.push({def:b,boss:true,encore:!!encore,x:sx,y:sy,tx,ty,enter:.9,r,hp,max,gold:false,pop:1,vx:0,vy:0,hit:0,sq:0,blink:2,step:0,wob:0,
     at:b.atk.map(a=>a.every*rnd(.5,.8)+1.2)});
   R.shake=.8;SFX.boss();rumble(450,1,.5);
   if(!SIM)$("#hBossIco").textContent=b.e;
@@ -2391,7 +2429,7 @@ function bossDown(f){
   if(sl("prize")){const pm=income()*20*sl("prize")+30*sl("prize");S.cash+=pm;R.prize=(R.prize||0)+pm;floatText(f.x,f.y-60,"+"+money(pm),"#8fe07a",1);}
   // the run ends on a win: the feast is paid out as bonus kcal
   const avg=R.zone.foods.reduce((a,q)=>a+q.kcal,0)/R.zone.foods.length,bonus=stat("feast")*avg*R.goldX*R.mult*R.secK;R.kcal+=bonus;R.feastBonus=bonus;
-  if(!f.encore){R.win=1;R.ending=2;R.endA=0;R.shots=[];R.slams=[];R.darts=[];R.pups=[];
+  if(!f.encore){for(const l of R.loot){if(l.life>0){l.life=0;eatLoot(l);}}R.win=1;R.ending=2;R.endA=0;R.shots=[];R.slams=[];R.darts=[];R.pups=[];
     if(!SIM){BQ.length=0;clearTimeout(bT);bT=0;$("#banner").hidden=true;SFX.win();}}   // let the celebration have the screen; results say what you beat
   if(!SIM)$("#hBossIco").textContent="🏆";
   checkTasks();
@@ -2399,10 +2437,11 @@ function bossDown(f){
 // You throw dumbbells on your own: at the boss if it's in range, otherwise at the nearest goblin. No enemy, no throw.
 function thrTarget(){
   const b=R.foods.find(f=>f.boss&&!(f.enter>0));if(b&&Math.hypot(b.x-R.x,b.y-R.y)<R.thrR+260+b.r)return b;   // bosses can be hit from further away
-  let best=null,bd=R.thrR;for(const f of R.foods){if(!f.mini||f.pop<1)continue;const d=Math.hypot(f.x-R.x,f.y-R.y)-f.r;if(d<bd){bd=d;best=f;}}return best;
+  let best=null,bd=R.thrR;for(const f of R.foods){if(f.boss||f.clock||f.pop<1)continue;const d=Math.hypot(f.x-R.x,f.y-R.y)-f.r;if(d<bd){bd=d;best=f;}}
+  for(const g of R.gulls){if(g.st==="gone")continue;const d=Math.hypot(g.x-R.x,g.y-R.y)-20;if(d<bd){bd=d;best=g;}}return best;
 }
 function throwing(dt){
-  R.thrT-=dt;
+  R.thrT-=dt*(R.cheatT>0?1.8:1)*(R.inhT>0?2:1);
   if(R.thrT<=0&&R.stun<=0&&!R.ending){const t=thrTarget();
     if(t){const pw=R.pw;R.thrT=R.thrCd*(pw.rapid>0?.4:1);
       const ox=R.x,oy=R.y-40,ang=Math.atan2(t.y-oy,t.x-ox),heavy=pw.heavy>0;
@@ -2417,13 +2456,15 @@ function throwing(dt){
     m.thrT-=dt;if(m.thrT<=0&&!R.ending){const t=thrTarget();if(t){m.thrT=R.thrCd*m.cd*(R.pw.rapid>0?.5:1);const a=Math.atan2(t.y-(m.y-40),t.x-m.x);
         dart(m.x,m.y-40,a,t,{pierce:R.thrP,r:14,heavy:false});R.darts[R.darts.length-1].m=m.m;m.face=t.x<m.x?-1:1;}else m.thrT=.1;}}
   for(const d of R.darts){
-    if(d.tgt&&R.foods.includes(d.tgt)){const want=Math.atan2(d.tgt.y-d.y,d.tgt.x-d.x),cur=Math.atan2(d.vy,d.vx),sp=Math.hypot(d.vx,d.vy);const df=((want-cur+Math.PI*3)%(Math.PI*2))-Math.PI;const na=cur+clamp(df,-4*dt,4*dt);d.vx=Math.cos(na)*sp;d.vy=Math.sin(na)*sp;}
+    if(d.tgt&&(R.foods.includes(d.tgt)||(d.tgt.gull&&d.tgt.st!=="gone"))){const want=Math.atan2(d.tgt.y-d.y,d.tgt.x-d.x),cur=Math.atan2(d.vy,d.vx),sp=Math.hypot(d.vx,d.vy);const df=((want-cur+Math.PI*3)%(Math.PI*2))-Math.PI;const na=cur+clamp(df,-4*dt,4*dt);d.vx=Math.cos(na)*sp;d.vy=Math.sin(na)*sp;}
     d.x+=d.vx*dt;d.y+=d.vy*dt;d.life-=dt;d.rot+=dt*16;
-    for(const f of R.foods){if(!(f.boss||f.mini)||d.hit.has(f)||f.enter>0)continue;
+    for(const g of R.gulls){if(g.st==="gone"||d.hit.has(g)||d.life<=0)continue;if(Math.hypot(g.x-d.x,g.y-d.y)<24+d.r){d.hit.add(g);hitGull(g,R.jaw*R.thrPowE*(d.heavy?2.5:1)*(d.m||1));if(d.pierce--<=0)d.life=0;}}
+    if(d.life<=0)continue;
+    for(const f of R.foods){if(f.clock||d.hit.has(f)||f.enter>0)continue;
       if(Math.hypot(f.x-d.x,f.y-d.y)<f.r+d.r){d.hit.add(f);
-        const amt=(f.boss?R.jaw*R.dmg:R.jaw)*R.thrPow*(d.heavy?2.5:1)*(d.m||1),crit=Math.random()<R.crit;
+        const amt=hitAmt(f)*(d.heavy?2.5:1)*(d.m||1),crit=Math.random()<R.crit;
         chomp(f,{shot:1,amt,crit});
-        if(f.mini&&R.foods.includes(f)){const a=Math.atan2(d.vy,d.vx);f.vx+=Math.cos(a)*180;f.vy+=Math.sin(a)*180;}
+        if(!f.boss&&R.foods.includes(f)){const a=Math.atan2(d.vy,d.vx);f.vx+=Math.cos(a)*160;f.vy+=Math.sin(a)*160;}
         if(d.pierce--<=0){d.life=0;break;}}}
     if(d.x<FX0()-30||d.x>FX1()+30||d.y<FY0()-60||d.y>FY1()+30)d.life=0;}
   R.darts=R.darts.filter(d=>d.life>0);
@@ -2441,6 +2482,11 @@ function powerups(dt){
       floatText(R.x,R.y-120,P.name+"!",P.col,2);burst(u.x,u.y,P.col,14,1.3);if(!SIM){SFX.gold();}rumble(120,.2,.6);}}
   R.pups=R.pups.filter(u=>u.life>0);
 }
+// seagulls are enemies now: knock one down and it drops whatever it nicked
+function hitGull(g,amt){g.hp-=amt;g.hit=1;burst(g.x,g.y,"#fff",5);if(!SIM)tone(320,.05,"square",.03,.5);
+  if(g.hp<=0){g.st="gone";S.shoo++;R.shooed++;if(!SIM)SFX.shoo();floatText(g.x,g.y-30,"Got it!",COL.cream,1);burst(g.x,g.y,"#fff",12);
+    if(g.carry)spawnLoot(g.carry,g.x,Math.min(FY1()-30,Math.max(FY0()+30,g.y+40)),g.gold,{z:120,vz:0});else spawnLoot(R.zone.foods[0],g.x,Math.min(FY1()-30,Math.max(FY0()+30,g.y+40)),false,{z:120,vz:0});
+    if(g.tgt)g.tgt.taken=0;checkTasks();}}
 function drawDumbbell(x,y,rot,s,heavy){ctx.save();ctx.translate(x,y);ctx.rotate(rot);ctx.lineWidth=3;ctx.strokeStyle=OUT;
   rr(ctx,-s,-s*.16,s*2,s*.32,s*.1);fs(ctx,"#e3e6ee",3);
   for(const sx of[-1,1]){rr(ctx,sx*s*.62-s*.24,-s*.62,s*.48,s*1.24,s*.16);fs(ctx,heavy?"#2b2f38":"#d8423a",3);ctx.fillStyle="rgba(255,255,255,.28)";ctx.fillRect(sx*s*.62-s*.16,-s*.48,s*.1,s*.7);}
@@ -2539,14 +2585,14 @@ function drawFood(f,tm){
   const sq=f.sq*.22;
   const sx=pop*(1+breathe+sq),sy=pop*(1-breathe-sq*.8);
   const partial=!f.boss&&f.left<f.def.bites?.85:1;
-  const moving=(Math.abs(f.vx)+Math.abs(f.vy)>30)||f.boss&&f.def.mv!=="still";
+  const moving=(Math.abs(f.vx)+Math.abs(f.vy)>30)||(!f.clock&&!f.boss)||f.boss&&f.def.mv!=="still";
   const hop=moving?Math.abs(Math.sin(f.step))*6:0;
   drawShadow(f.x,f.y+f.r*.85,f.r*.8*pop);
   if(f.gold){ctx.fillStyle=`rgba(242,194,48,${.18+.1*Math.sin(tm*6)})`;circ(ctx,f.x,f.y,f.r*1.5);ctx.fill();}
   if(f.clock){ctx.fillStyle=`rgba(120,200,255,${.2+.1*Math.sin(tm*6)})`;circ(ctx,f.x,f.y,f.r*1.5);ctx.fill();}
   if(f.mini){ctx.fillStyle=`rgba(216,66,58,${.16+.08*Math.sin(tm*5)})`;circ(ctx,f.x,f.y,f.r*1.45);ctx.fill();}
   // little legs on runners
-  if(f.def.flee||f.boss&&f.def.mv!=="still"){ctx.strokeStyle=OUT;ctx.lineWidth=Math.max(3,f.r*.1);ctx.lineCap="round";const lg=Math.sin(f.step*2)*f.r*.18;
+  if(!f.clock&&(f.def.flee||!f.boss||f.def.mv!=="still")){ctx.strokeStyle=OUT;ctx.lineWidth=Math.max(3,f.r*.1);ctx.lineCap="round";const lg=Math.sin(f.step*2)*f.r*.18;
     ctx.beginPath();ctx.moveTo(f.x-f.r*.3,f.y+f.r*.5-hop);ctx.lineTo(f.x-f.r*.3+lg,f.y+f.r*.85);ctx.moveTo(f.x+f.r*.3,f.y+f.r*.5-hop);ctx.lineTo(f.x+f.r*.3-lg,f.y+f.r*.85);ctx.stroke();}
   const flip=f.boss?f.x>R.x:(f.vx<-5);
   drawSpr(ctx,f.def.e,f.x,f.y-hop,f.r*partial,{sx,sy,gold:f.gold,flash:f.hit,flip});
@@ -2555,6 +2601,12 @@ function drawFood(f,tm){
     ctx.font=`900 20px ${DISP}`;ctx.textAlign="center";ctx.lineWidth=5;ctx.strokeStyle=OUT;ctx.strokeText(f.def.name,f.x,f.y-f.r-22);ctx.fillStyle=COL.gold;ctx.fillText(f.def.name,f.x,f.y-f.r-22);}
   else if(f.def.bites>1&&f.left<f.def.bites)hpBar(f.x,f.y+f.r+6,f.r*1.8,f.left/f.def.bites,f.def.bites>3?String(Math.ceil(f.left)):"");
 }
+// dropped food: small, bobbing, no eyes (it's dinner now), with a glow so it reads as a pickup
+function drawLoot(l,tm){const s=l.pop<1?l.pop*(1.3-.3*l.pop):1,b=Math.sin(tm*5+l.x*.05)*3,y=l.y-l.z-6+b;
+  if(l.life<2.5&&Math.sin(tm*22)<0)return;
+  drawShadow(l.x,l.y+l.r*.7,l.r*.75*s,.25);
+  ctx.fillStyle=l.gold?`rgba(242,194,48,${.3+.12*Math.sin(tm*6)})`:"rgba(255,244,214,.22)";circ(ctx,l.x,y,l.r*1.45*s);ctx.fill();
+  drawSpr(ctx,l.def.e,l.x,y,l.r*s,{gold:l.gold});}
 function drawPlayer(tm){
   const moving=Math.hypot(R.vx,R.vy)>40;
   const face=R.fx<-.1?-1:R.fx>.1?1:(R.face||1);R.face=face;
@@ -2633,6 +2685,7 @@ function draw(){
   drawPups(tm);
   // y-sorted actors
   const actors=[];
+  for(const l of R.loot)actors.push([l.y+l.r*.6,()=>drawLoot(l,tm)]);
   for(const f of R.foods)actors.push([f.y+f.r*.8,()=>drawFood(f,tm)]);
   actors.push([R.y+PR,()=>drawPlayer(tm)]);
   if(R.rival)actors.push([R.rival.y+PR,()=>drawRival(R.rival,tm)]);
@@ -2655,7 +2708,9 @@ function draw(){
   for(const p of R.plates){ctx.save();ctx.translate(p.x,p.y);ctx.rotate(p.rot);circ(ctx,0,0,18);fs(ctx,p.col,4);circ(ctx,0,0,6);fs(ctx,"#1a120e",3);ctx.fillStyle="rgba(255,255,255,.3)";ctx.fillRect(-12,-3,8,6);ctx.restore();}
   ctx.restore();
   // seagulls fly over everything
-  for(const g of R.gulls){const fl=Math.sin(g.flap)*.2;drawShadow(g.x,Math.min(FY1()-10,g.y+90),20,.2);drawSpr(ctx,"🕊️",g.x,g.y,26,{flip:g.x<WW/2===(g.st==="out"),sy:1+fl});if(g.carry)drawSpr(ctx,g.carry.e,g.x,g.y+24,14);}
+  for(const g of R.gulls){const fl=Math.sin(g.flap)*.2;drawShadow(g.x,Math.min(FY1()-10,g.y+90),20,.2);if(g.st==="dive"){ctx.fillStyle="rgba(216,66,58,.25)";circ(ctx,g.x,g.y,34);ctx.fill();}
+    drawSpr(ctx,"🕊️",g.x,g.y,26,{flip:g.x<WW/2===(g.st==="out"),sy:1+fl,flash:g.hit});if(g.carry)drawSpr(ctx,g.carry.e,g.x,g.y+24,14);
+    if(g.hp<g.max)hpBar(g.x,g.y-36,46,Math.max(0,g.hp/g.max),"");}
   // particles
   for(const p of R.parts){const a=Math.max(0,p.life/p.max);ctx.globalAlpha=a;
     if(p.k==="s"){star4(ctx,p.x,p.y,p.r*(1.2-a*.4),p.rot);ctx.fillStyle="#fff";ctx.fill();}
@@ -2850,17 +2905,19 @@ requestAnimationFrame(frame);
 /* ---------- DEBUG: balance simulator (open with #debug) ---------- */
 function botThink(dt){
   R.bt=(R.bt||0)-dt;
-  if(R.bt<=0||!(R.foods.includes(R.btgt)||R.pups.includes(R.btgt))){R.bt=.45;let b=null,bs=1e9;
-    for(const f of R.foods){if(f.boss||f.mini)continue;let d=Math.hypot(f.x-R.x,f.y-R.y);if(f.gold)d*=.4;if(f.def.flee)d*=1.3;if(d<bs){bs=d;b=f;}}
+  if(R.bt<=0||!(R.foods.includes(R.btgt)||R.pups.includes(R.btgt)||R.loot.includes(R.btgt))||R.btgt.life<=0){R.bt=.45;let b=null,bs=1e9;
+    for(const f of R.loot){if(f.taken)continue;let d=Math.hypot(f.x-R.x,f.y-R.y);if(f.gold)d*=.4;if(d<bs){bs=d;b=f;}}
+    for(const f of R.foods)if(f.clock){const d=Math.hypot(f.x-R.x,f.y-R.y)*.6;if(d<bs){bs=d;b=f;}}
+    if(!b){let e=null,ed=1e9;for(const f of R.foods){if(f.boss||f.clock)continue;const d=Math.hypot(f.x-R.x,f.y-R.y);if(d<ed){ed=d;e=f;}}if(e&&ed>R.thrR*.8){b=e;}}
     for(const u of R.pups){const d=Math.hypot(u.x-R.x,u.y-R.y)*.5;if(d<bs){bs=d;b=u;}}
     const bo=R.foods.find(f=>f.boss);if(bo&&Math.hypot(bo.x-R.x,bo.y-R.y)>R.thrR*.85)b=bo;R.btgt=b;}
   const t=R.btgt;if(!t)return[0,0];
   const dx=t.x-R.x,dy=t.y-R.y,d=Math.hypot(dx,dy)||1;
   R.fx=dx/d;R.fy=dy/d;
   if(d>200)useSkill("dash");
-  if(R.foods.filter(f=>Math.hypot(f.x-R.x,f.y-R.y)<stat("inhaleR")).length>=4)useSkill("inhale");
+  if(R.loot.filter(f=>Math.hypot(f.x-R.x,f.y-R.y)<stat("inhaleR")).length>=4)useSkill("inhale");
   if(d<500)useSkill("toss");
-  if(R.foods.filter(f=>!f.boss&&Math.hypot(f.x-R.x,f.y-R.y)<300).length>=5)useSkill("cheat");
+  if(R.loot.length>=4||R.foods.some(f=>f.boss))useSkill("cheat");
   return d<10?[0,0]:[dx/d*.8,dy/d*.8]; // ~human: slower, late retargeting
 }
 function simBuy(){

@@ -6,14 +6,14 @@ Play: https://pillowfishsticks.github.io/bulk-season/
 
 ## The loop
 
-1. **Run.** Runs are short (25 seconds at most). Walk into food to eat it before your *Appetite* runs out, and chain bites to build a combo.
-2. **Throw.** You don't eat enemies, you throw dumbbells at them. Throwing is automatic: the boss first if it's in range, otherwise the nearest food goblin, and nothing when there are no enemies. Grab power-ups for a few seconds of Rapid Fire, Spread Shot, a Dumbbell Ring or Heavy Iron.
+1. **Run.** Runs are short (25 seconds at most). The market is full of food monsters. Knock them down, then walk over the food they drop to eat it before your *Appetite* runs out. Keep hitting and eating to build a combo.
+2. **Throw.** You don't eat enemies, you throw dumbbells at them. Throwing is automatic: the boss first if it's in range, otherwise the nearest food monster or seagull, and nothing when there are no enemies. Grab power-ups for a few seconds of Rapid Fire, Spread Shot, a Dumbbell Ring or Heavy Iron.
 3. **Events.** Unlock things that happen on their own: plates crashing down on food, gym buddies who eat for you, and chomps that chain-zap nearby food.
 4. **Sections and bosses.** Each market has five sections, and each one should take you two or three runs (Corner Shop: Front Door, The Aisles, Freezer Aisle, Stock Room, The Till). Eat your way past food goblins (they chase you, shoot at you and bump into you) until the boss turns up, then knock it out with dumbbells before your appetite runs out. Hits cost you time. Beat a boss to open the next section; beat the fifth to open the next market.
 5. **Gym.** Spend kcal on the skill tree: up for more time, right for damage, left for kcal gains, down for skills and events. Under damage there's a throwing branch too: Throw Power, Quick Release, Long Throw, Fastball, Twin Throw, Straight Through, Heavy Iron, Power-up Drops and Pumped. Getting a node to level 3 opens the next ones. Run your own gym too: equipment brings members, members pay you money even while you're away, and money buys supplements: gym-only perks like a training partner who throws with you, a spotter who takes hits for you, One More Set, a hype man who brings the boss out sooner, and prize money for every boss. More members unlock gym ranks (Bronze to Legend) with permanent perks. Red badges on the tabs show when you can afford something.
 6. **New season.** Clear The Buffet and you can start again with medals that boost every kcal for good.
 
-Each market has its own hazards. None of them can kill you, but they knock you about: wet floors, seagulls that nick your chips, chilli spills that flare up, scooters, waiters and Big Dave, who's eating too.
+Each market has its own hazards. None of them can kill you, but they knock you about: wet floors, seagulls that nick your dropped food and peck you (shoot them down), chilli spills that flare up, scooters, waiters and Big Dave, who's eating too.
 
 ## Controls
 
