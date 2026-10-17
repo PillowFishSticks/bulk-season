@@ -192,6 +192,14 @@ body.touch .glyph{display:none!important}
 .treeInner svg{position:absolute;left:0;top:0;overflow:visible;pointer-events:none}
 .tzoom{position:absolute;right:10px;top:10px;display:flex;gap:6px;align-items:center;z-index:5}
 .tzoom .btn{min-width:40px;font-size:18px;padding:6px 10px}
+.tpages{position:absolute;left:50%;bottom:10px;transform:translateX(-50%);display:flex;gap:6px;z-index:6}
+.tpg{position:relative;display:flex;align-items:center;gap:6px;padding:7px 12px;border-radius:999px;border:3px solid var(--out);background:#e9dcc2;color:var(--out);font:800 15px/1 var(--ui);box-shadow:0 3px 0 rgba(60,35,10,.45);white-space:nowrap}
+.tpg .te{font-size:18px;line-height:1}
+.tpg.on{background:#f2c230}
+.tpg.lock{background:#8f8a7d;color:#3b3328;opacity:.8}
+.tpg[data-n]::after{content:attr(data-n);position:absolute;right:-8px;top:-10px;min-width:20px;height:20px;border-radius:999px;background:#d8423a;color:#fff;border:2px solid #fff;font:900 12px/16px var(--ui);text-align:center;padding:0 3px}
+body.phone .tpg{padding:5px 8px;font-size:12px}body.phone .tpg .tn{display:none}
+.node.anchor{opacity:.5}
 .jumpHint,.jumpHint2{position:absolute;left:12px;bottom:10px;font:800 13px/1 var(--ui);color:rgba(59,42,28,.7);z-index:5;pointer-events:none}
 .jumpHint2{position:static;margin-top:8px;color:var(--muted)}
 .node.peek{background:#cdbf9f;filter:none;opacity:.8;border-style:dashed}
@@ -206,9 +214,10 @@ body.touch .glyph{display:none!important}
 .node{background:color-mix(in srgb,var(--c) 32%,#d9c9a3);box-shadow:inset 0 0 0 5px var(--c),0 3px 0 rgba(60,35,10,.45)}
 .node.own{background:color-mix(in srgb,var(--c) 18%,#fff7e3);box-shadow:inset 0 0 0 6px var(--c),0 3px 0 rgba(60,35,10,.45)}
 .node.max{background:color-mix(in srgb,var(--c) 14%,#fffdf5);box-shadow:inset 0 0 0 6px var(--c),0 0 0 4px #f2c230,0 0 16px rgba(242,194,48,.8)}
-.node.can{background:color-mix(in srgb,var(--c) 22%,#fffaf0);box-shadow:inset 0 0 0 6px var(--c),0 0 0 4px #fff,0 3px 0 rgba(60,35,10,.45);animation:canPulse 1.3s ease-in-out infinite}
+.node.can{background:color-mix(in srgb,var(--c) 22%,#fffaf0);box-shadow:inset 0 0 0 6px var(--c),0 0 0 4px #fff,0 0 14px 4px color-mix(in srgb,var(--c) 60%,#fff),0 3px 0 rgba(60,35,10,.45)}
+@keyframes bangBob{50%{transform:translateY(-4px) scale(1.12)}}
 @keyframes canPulse{50%{box-shadow:inset 0 0 0 6px var(--c),0 0 0 6px #fff,0 0 22px 6px color-mix(in srgb,var(--c) 70%,#fff)}}
-.node.can::after{content:"!";position:absolute;right:-8%;top:-8%;width:26px;height:26px;border-radius:50%;background:#d8423a;color:#fff;border:3px solid #fff;font:900 19px/20px var(--ui);text-align:center;box-shadow:0 2px 0 rgba(0,0,0,.35)}
+.node.can::after{animation:bangBob 1.1s ease-in-out infinite;content:"!";position:absolute;right:-8%;top:-8%;width:26px;height:26px;border-radius:50%;background:#d8423a;color:#fff;border:3px solid #fff;font:900 19px/20px var(--ui);text-align:center;box-shadow:0 2px 0 rgba(0,0,0,.35)}
 .node.lock{background:#8f8a7d;filter:grayscale(.9);opacity:.75}
 .node.lock::after{content:"🔒";position:absolute;font-size:.6em;right:-8%;top:-8%}
 .node .lv{position:absolute;bottom:-14px;left:50%;transform:translateX(-50%);font:800 14px/1 var(--ui);background:var(--out);color:#fbe7b0;border-radius:6px;padding:2px 5px;white-space:nowrap;pointer-events:none}
@@ -223,8 +232,6 @@ body.phone .tlegend span{font-size:12px;padding:3px 8px}
 .node:focus-visible::before,body.pad .node:focus::before{opacity:1}
 @media (hover:hover){.node:hover{z-index:4}.node:hover::before{opacity:1}}
 @keyframes sel{0%{box-shadow:0 0 0 5px #fff,0 0 0 8px #2a1a12,0 0 0 8px rgba(255,255,255,.95),0 0 0 8px rgba(42,26,18,.85)}60%{box-shadow:0 0 0 5px #fff,0 0 0 8px #2a1a12,0 0 0 22px rgba(255,255,255,.3),0 0 0 30px rgba(42,26,18,.28)}100%{box-shadow:0 0 0 5px #fff,0 0 0 8px #2a1a12,0 0 0 32px rgba(255,255,255,0),0 0 0 40px rgba(42,26,18,0)}}
-.tree:focus-within .node:not(:focus){filter:saturate(.75) brightness(.88)}
-.tree:focus-within .node.lock:not(:focus){filter:grayscale(.9) brightness(.85)}
 .treeWrap:has(.node:focus) .info{background:rgba(255,226,120,.32);border-radius:14px;border-top-color:transparent;box-shadow:inset 0 0 0 3px rgba(122,90,50,.5)}
 /* every other menu button: thick white ring + glow + slight grow */
 .sec:focus-visible,body.pad .sec:focus{outline:5px solid #fff;outline-offset:3px;transform:scale(1.12);z-index:2;animation:selWave 1.2s ease-out infinite}
@@ -574,7 +581,7 @@ body.touch .hnote .kbt{display:none} body.touch .hnote .tct{display:inline}
               <button class="btn gold" id="seasonBtn">New season</button>
             </div>
           </div>
-          <div class="treeScroll"><div class="tree" id="tree"><div class="tlegend" id="tlegend"></div><div class="treeInner" id="treeInner"><svg id="treeSvg"></svg></div>
+          <div class="treeScroll"><div class="tree" id="tree"><div class="tlegend" id="tlegend"></div><div class="tpages" id="tpages"></div><div class="treeInner" id="treeInner"><svg id="treeSvg"></svg></div>
             <div class="tzoom"><button class="btn small" id="tzIn" aria-label="Zoom in">+</button><button class="btn small" id="tzOut" aria-label="Zoom out">−</button><button class="btn small" id="tzFit">Fit</button><span class="glyph kb">+/−</span><span class="glyph pd pS">R stick</span></div>
             <div class="jumpHint"><span class="glyph kb">E</span><span class="glyph pd pS">RT</span> jump here</div></div></div>
         </div>
@@ -739,42 +746,42 @@ const rnd=(a,b)=>a+Math.random()*(b-a);
 const F=(e,name,fill,kcal,o={})=>({e,name,fill,kcal,w:o.w??1,bites:o.bites??1,flee:!!o.flee,spicy:!!o.spicy,size:o.size??1});
 // Each market: foods, a boss (hp = bites, kc = kcal per bite), hazards and tasks. `at` = foods eaten in a run before the boss turns up.
 const ZONES=[
- {id:"shop",name:"Corner Shop",e:"🏪",cost:0,at:10,
+ {id:"shop",name:"Corner Shop",e:"🏪",cost:0,at:13,
   th:{glow:"220,235,255"},
   foods:[F("🍌","Banana",6,12,{w:3}),F("🍪","Cookie",5,18,{w:3}),F("🍫","Choc bar",8,32,{w:2}),F("🥪","Meal deal",14,60,{w:1.4,bites:2,size:1.15}),F("🥧","Pork pie",12,100,{w:.5})],
-  bb:{hp:18,hps:[10,36,52,200,390],kcb:6,reward:600},
+  bb:{hp:18,hps:[7,20,24,120,195],kcb:6,reward:600},
   secs:[{n:"Front Door",floor:"shop",wall:"shopDoor"},{n:"The Aisles",floor:"shop",wall:"shop"},{n:"Freezer Aisle",floor:"kitchen",wall:"freezers"},{n:"Stock Room",floor:"wood",wall:"stock"},{n:"The Till",floor:"wood",wall:"shopTill"}],
   bosses:[{e:"🥤",name:"Fizzy Pop",mv:"dart",spd:200,mi:6,atk:[{k:"burst",e:"💦",n:3,every:3,spd:300}]},{e:"🍞",name:"The Loaf",mv:"wander",spd:80,mi:5,atk:[{k:"wave",e:"🍞",every:3.6,spd:220}]},{e:"🍦",name:"Mr Whippy",mv:"wander",spd:90,mi:5,atk:[{k:"homing",e:"🧊",every:2.6,spd:220},{k:"bounce",e:"🧊",n:3,every:3.8,spd:280}]},{e:"🍿",name:"Popcorn Pete",mv:"dart",spd:210,mi:4,atk:[{k:"rain",e:"🍿",n:5,every:3.2}]},{e:"🧀",name:"The Big Cheese",mv:"wander",spd:80,mi:4,atk:[{k:"slam",every:3.4,r:110},{k:"wave",e:"🧀",every:4.4,spd:230}]}],
   hz:{puddle:3},
   tasks:[{k:"eat",f:"Cookie",pl:"Cookies",n:20,r:150},{k:"run",n:600,r:300},{k:"combo",n:12,r:500}]},
- {id:"chippy",name:"The Chippy",e:"🍟",cost:0,at:23,
+ {id:"chippy",name:"The Chippy",e:"🍟",cost:0,at:68,
   th:{glow:"255,236,190"},
   foods:[F("🍟","Chips",10,64,{w:3}),F("🥚","Pickled egg",5,36,{w:2}),F("🌭","Saveloy",9,74,{w:2}),F("🐟","Battered cod",16,180,{w:1,flee:1,size:1.2}),F("🍔","Chip butty",18,230,{w:.6,bites:2,size:1.2})],
-  bb:{hp:360,hps:[720,3300,6400,13000,26000],kcb:25,reward:10000},
+  bb:{hp:360,hps:[520,1500,2930,7200,12500],kcb:25,reward:10000},
   secs:[{n:"The Queue",floor:"chippy",wall:"chippy"},{n:"The Fryers",floor:"kitchen",wall:"chippyFry"},{n:"Spud Room",floor:"wood",wall:"curryKitchen"},{n:"Seafront",floor:"street",wall:"seafront"},{n:"Back Alley",floor:"asphalt",wall:"chippyAlley"}],
   bosses:[{e:"🥫",name:"Mushy Peas",mv:"wander",spd:60,mi:5,atk:[{k:"bounce",e:"🟢",n:5,every:2.8,spd:300}]},{e:"🌭",name:"Big Saveloy",mv:"dart",spd:220,mi:4,atk:[{k:"charge",every:3.6},{k:"homing",e:"🌭",every:2.8,spd:240}]},{e:"🥔",name:"Spud King",mv:"wander",spd:80,mi:4,atk:[{k:"mine",e:"🥔",n:3,every:4},{k:"slam",every:3.4,r:120}]},{e:"🦑",name:"Kraken Calamari",mv:"flee",spd:150,mi:4,atk:[{k:"boomer",e:"💧",n:5,every:3,spd:360},{k:"spin",e:"💧",every:6,spd:260}]},{e:"🐟",name:"Moby Cod",mv:"flee",spd:160,mi:4,atk:[{k:"wave",e:"💧",every:3.4,spd:240},{k:"charge",every:4.6}]}],
   hz:{grease:2,gull:2},
   tasks:[{k:"eat",f:"Chips",pl:"portions of Chips",n:40,r:5000},{k:"shoo",n:6,r:10000},{k:"run",n:40000,r:20000}]},
- {id:"curry",name:"Curry House",e:"🍛",cost:0,at:42,
+ {id:"curry",name:"Curry House",e:"🍛",cost:0,at:135,
   th:{glow:"255,170,90"},
   foods:[F("🍚","Pilau rice",10,170,{w:3}),F("🥟","Samosa",8,190,{w:2.5}),F("🍛","Tikka masala",18,540,{w:1.2,bites:2,size:1.2}),F("🌶️","Vindaloo chilli",6,250,{w:.8,spicy:1}),F("🍢","Seekh kebab",10,340,{w:1,flee:1})],
-  bb:{hp:7000,hps:[32000,71000,120000,160000,200000],hp0:3200,kcb:100,reward:160000},
+  bb:{hp:7000,hps:[18500,52000,80000,110000,126000],hp0:3200,kcb:100,reward:160000},
   secs:[{n:"Dining Room",floor:"curry",wall:"curry"},{n:"Spice Store",floor:"wood",wall:"spice"},{n:"The Kitchen",floor:"kitchen",wall:"curryKitchen"},{n:"Banquet Hall",floor:"parquet",wall:"banquet"},{n:"The Tandoor",floor:"terracotta",wall:"curryTandoor"}],
   bosses:[{e:"🥘",name:"The Balti Bowl",mv:"wander",spd:70,mi:4,atk:[{k:"ring",e:"🔥",n:8,every:3.2,spd:240}],fire:1},{e:"🧅",name:"Onion Bhaji",mv:"dart",spd:220,mi:4,atk:[{k:"boomer",e:"🧅",n:3,every:2.6,spd:380}]},{e:"🍢",name:"Kebab King",mv:"dart",spd:230,mi:4,atk:[{k:"burst",e:"🍢",n:3,every:2.6,spd:420},{k:"charge",every:4.5}]},{e:"🍚",name:"Biryani Boss",mv:"wander",spd:80,mi:3.5,atk:[{k:"rain",e:"🍚",n:6,every:3.2},{k:"spin",e:"🍚",every:5.5,spd:280}]},{e:"🍲",name:"The Phaal Pot",mv:"wander",spd:70,mi:3.5,atk:[{k:"slam",every:3,r:130},{k:"homing",e:"🌶️",every:2.4,spd:240}],fire:1}],
   hz:{fire:5},
   tasks:[{k:"eat",f:"Samosa",pl:"Samosas",n:40,r:100000},{k:"combo",n:30,r:200000},{k:"gold",n:3,r:400000}]},
- {id:"street",name:"Street Food",e:"🌮",cost:0,at:52,
+ {id:"street",name:"Street Food",e:"🌮",cost:0,at:170,
   th:{glow:"255,200,140"},
   foods:[F("🌮","Taco",8,600,{w:3}),F("🍡","Dango",6,500,{w:2.5}),F("🍜","Ramen",16,1550,{w:1.5,bites:2,size:1.2}),F("🌯","Burrito",22,2250,{w:1,bites:3,size:1.25}),F("🍩","Doughnut",8,1100,{w:1,flee:1})],
-  bb:{hp:30000,hps:[165000,200000,340000,640000,890000],hp0:8000,kcb:450,reward:2400000},
+  bb:{hp:30000,hps:[126000,135000,230000,420000,650000],hp0:8000,kcb:450,reward:2400000},
   secs:[{n:"Night Market",floor:"street",wall:"street"},{n:"Food Trucks",floor:"asphalt",wall:"streetTrucks"},{n:"Hawker Hall",floor:"kitchen",wall:"street"},{n:"Rooftop",floor:"asphalt",wall:"rooftop"},{n:"Neon Alley",floor:"neon",wall:"streetNeon"}],
   bosses:[{e:"🍙",name:"Onigiri Ollie",mv:"dart",spd:240,mi:4,atk:[{k:"wave",e:"🍙",every:3,spd:260},{k:"charge",every:4.2}]},{e:"🌯",name:"Mega Burrito",mv:"flee",spd:160,mi:3.5,atk:[{k:"bounce",e:"🌶️",n:5,every:2.6,spd:320},{k:"mine",e:"🌯",n:3,every:4.6}]},{e:"🥟",name:"Dim Sum Don",mv:"wander",spd:90,mi:3.5,atk:[{k:"boomer",e:"🥟",n:5,every:2.8,spd:360},{k:"burst",e:"🥟",n:3,every:3.6,spd:340}]},{e:"🍣",name:"Sushi Sam",mv:"dart",spd:250,mi:3.5,atk:[{k:"homing",e:"🍣",every:2,spd:270},{k:"charge",every:3.8}]},{e:"🥙",name:"Doner Mountain",mv:"dart",spd:230,mi:3,atk:[{k:"spin",e:"🥩",every:5,spd:320},{k:"rain",e:"🥩",n:6,every:3.6},{k:"slam",every:3.4,r:120}]}],
   hz:{scooter:1,puddle:2},
   tasks:[{k:"eat",f:"Taco",pl:"Tacos",n:60,r:5000000},{k:"run",n:20000000,r:10000000},{k:"combo",n:50,r:20000000}]},
- {id:"buffet",name:"The Buffet",e:"🍽️",cost:0,at:56,
+ {id:"buffet",name:"The Buffet",e:"🍽️",cost:0,at:190,
   th:{glow:"255,215,150"},
   foods:[F("🍕","Pizza slice",10,3200,{w:3}),F("🍗","Chicken leg",12,4200,{w:2}),F("🍤","Prawn",5,2400,{w:2,flee:1}),F("🍰","Gateau",18,7600,{w:1,bites:2,size:1.2}),F("🍖","Rib",16,6800,{w:1})],
-  bb:{hp:90000,hps:[1100000,1500000,2100000,2500000,2900000],hp0:14000,kcb:2000,reward:48000000},
+  bb:{hp:90000,hps:[690000,910000,1250000,1600000,2100000],hp0:14000,kcb:2000,reward:48000000},
   secs:[{n:"Dessert Table",floor:"buffet",wall:"buffetDessert"},{n:"Wedding Party",floor:"parquet",wall:"buffetWedding"},{n:"Seafood Bar",floor:"kitchen",wall:"seafood"},{n:"Cheese & Wine",floor:"wood",wall:"cheese"},{n:"The Carvery",floor:"buffet",wall:"buffet"}],
   bosses:[{e:"🍮",name:"The Trifle",mv:"wander",spd:70,mi:3,atk:[{k:"bounce",e:"🍓",n:6,every:2.6,spd:320},{k:"ring",e:"🍒",n:10,every:4.2,spd:260}]},{e:"🎂",name:"Wedding Cake",mv:"wander",spd:50,mi:2,atk:[{k:"rain",e:"🍰",n:7,every:3},{k:"slam",every:3,r:140}]},{e:"🦞",name:"Lobster Lord",mv:"dart",spd:220,mi:3,atk:[{k:"charge",every:3.4},{k:"boomer",e:"🦐",n:5,every:2.6,spd:380}]},{e:"🧀",name:"Brie Baron",mv:"wander",spd:80,mi:3,atk:[{k:"wave",e:"🧀",every:3,spd:260},{k:"mine",e:"🧀",n:4,every:4.4}]},{e:"🦃",name:"The Sunday Roast",mv:"wander",spd:60,mi:2.5,atk:[{k:"burst",e:"🥕",n:5,every:2.6,spd:380},{k:"homing",e:"🥔",every:2.4,spd:250},{k:"rain",e:"🍗",n:6,every:3.6},{k:"charge",every:5.2}]}],
   hz:{waiter:1,rival:1},
@@ -978,7 +985,9 @@ const bossHp=b=>Math.round(b.hp*Math.pow(1.5,S.season-1));
 const secOpen=(z,i)=>S.zones.includes(z.id)&&(S.sec[z.id]||0)>i;
 const secDone=(z,i)=>!!S.cleared[secKey(z,i)];
 const selZone=()=>ZONES[ZI[S.zone]],selSec=()=>clamp(S.si||0,0,NSEC-1);
-const avail=n=>!n.p||lv(n.p)>=need(n.p);
+// Skill tree pages, one per market (owner: tab across them instead of one huge tree). A node's page comes from its price; a page opens when you reach its market.
+const pgOpen=k=>S.zones.length-1>=k;
+const avail=n=>pgOpen(n.pg)&&(!n.p||lv(n.p)>=need(n.p));
 const medalsFor=k=>Math.floor(2*Math.sqrt(k/4.5e9));   // ~6 medals for a first season (seasons got longer on 2026-10-17)
 let SIM=false;
 
@@ -1201,6 +1210,8 @@ function nextBanner(){const b=BQ.shift(),el=$("#banner");if(!b){el.hidden=true;b
   bT=setTimeout(nextBanner,2100);}
 
 // Build the tree once; renderGym just updates classes and text (so controller focus survives a purchase)
+NODES.forEach(n=>{n.pg=n.id==="bulk"?4:n.id==="start"||!n.base?0:n.base<3000?0:n.base<150000?1:n.base<5e6?2:n.base<1e9?3:4;});
+let TP=0;   // the tree page you're looking at
 const treeEl=$("#tree"),treeIn=$("#treeInner"),svg=$("#treeSvg"),nodeEls={},lineEls={};
 let infoId="start",touchSel=null;
 // The tree sits on a grid: every link is one step up/down/left/right. CELL px per grid step.
@@ -1227,11 +1238,17 @@ NODES.forEach(n=>{
 /* pan + zoom */
 const TV={z:.85,x:0,y:0};
 const vw=()=>treeEl.clientWidth,vh=()=>treeEl.clientHeight;
-function applyTree(){TV.z=clamp(TV.z,.35,1.6);treeIn.style.transform=`translate(${TV.x}px,${TV.y}px) scale(${TV.z})`;}
+function applyTree(){TV.z=clamp(TV.z,.2,1.6);treeIn.style.transform=`translate(${TV.x}px,${TV.y}px) scale(${TV.z})`;}
 function centerOn(px,py){TV.x=vw()/2-px*TV.z;TV.y=vh()/2-py*TV.z;applyTree();}
 function followNode(n){const sx=TV.x+gpx(n.x)*TV.z,sy=TV.y+gpy(n.y)*TV.z,m=90*TV.z+30;if(sx<m||sx>vw()-m||sy<m||sy>vh()-m)centerOn(gpx(n.x),gpy(n.y));}
-function zoomBy(f,cx=vw()/2,cy=vh()/2){const z0=TV.z;TV.z=clamp(TV.z*f,.35,1.6);const k=TV.z/z0;TV.x=cx-(cx-TV.x)*k;TV.y=cy-(cy-TV.y)*k;applyTree();}
-function fitTree(){TV.z=clamp(Math.min(vw()/TW,vh()/TH)*.98,.35,1.6);TV.x=(vw()-TW*TV.z)/2;TV.y=(vh()-TH*TV.z)/2;applyTree();}
+function zoomBy(f,cx=vw()/2,cy=vh()/2){const z0=TV.z;TV.z=clamp(TV.z*f,.2,1.6);const k=TV.z/z0;TV.x=cx-(cx-TV.x)*k;TV.y=cy-(cy-TV.y)*k;applyTree();}
+function fitTree(){   // fit the nodes on this page (plus their anchors), clear of the legend at the top and the page tabs at the bottom
+  const vis=NODES.filter(n=>!nodeEls[n.id].hidden);if(!vis.length||!vw())return;
+  const xs=vis.map(n=>gpx(n.x)),ys=vis.map(n=>gpy(n.y)),x0=Math.min(...xs)-60,x1=Math.max(...xs)+60,y0=Math.min(...ys)-60,y1=Math.max(...ys)+75;
+  const sm=vh()<360,top=sm?34:58,bot=sm?54:74,aw=vw()-30,ah=Math.max(60,vh()-top-bot);
+  TV.z=clamp(Math.min(aw/(x1-x0),ah/(y1-y0)),.2,1.1);TV.x=(vw()-(x1-x0)*TV.z)/2-x0*TV.z;TV.y=top+(ah-(y1-y0)*TV.z)/2-y0*TV.z;applyTree();}
+function setPage(k,quiet){if(!pgOpen(k)){if(!quiet){toast(`Reach ${ZONES[k].name} to open these upgrades`);SFX.no();}return;}TP=k;renderGym();fitTree();if(!quiet)SFX.buy(k);}
+ZONES.forEach((z,k)=>{const b=document.createElement("button");b.className="tpg";b.innerHTML=`<span class="te">${z.e}</span><span class="tn">${z.name}</span>`;b.onclick=()=>setPage(k);$("#tpages").appendChild(b);});
 function homeTree(){TV.z=.85;centerOn(gpx(0),gpy(0));}
 $("#tzIn").onclick=()=>zoomBy(1.2);$("#tzOut").onclick=()=>zoomBy(1/1.2);$("#tzFit").onclick=fitTree;
 treeEl.addEventListener("wheel",e=>{e.preventDefault();const r=treeEl.getBoundingClientRect(),k=treeEl.clientWidth/r.width;zoomBy(e.deltaY<0?1.12:1/1.12,(e.clientX-r.left)*k,(e.clientY-r.top)*k);},{passive:false});
@@ -1249,7 +1266,7 @@ addEventListener("pointermove",e=>{if(!drag||pinch)return;const r=treeEl.getBoun
 addEventListener("pointerup",()=>{drag=null;treeEl.classList.remove("drag");setTimeout(()=>dragMoved=false,0);});
 // recentre whenever the tree area really changes size (fullscreen on a phone settles slowly, so a fixed delay missed it)
 let treeSz=null;new ResizeObserver(()=>{const w=treeEl.clientWidth,h=treeEl.clientHeight;if(!w||!h)return;
-  if(!treeSz)homeTree();else if(w!==treeSz[0]||h!==treeSz[1]){TV.x+=(w-treeSz[0])/2;TV.y+=(h-treeSz[1])/2;applyTree();}
+  if(!treeSz){TP=S.zones.length-1;S.tpSeen=TP;renderGym();fitTree();}else if(w!==treeSz[0]||h!==treeSz[1]){TV.x+=(w-treeSz[0])/2;TV.y+=(h-treeSz[1])/2;applyTree();}
   treeSz=[w,h];}).observe(treeEl);   // only the very first size centres on the root; after that your pan/zoom stays put
 function buyNode(n){
   const L=lv(n.id);
@@ -1420,16 +1437,22 @@ function renderGym(){
     $("#taskBar").style.width=(live?p/tk.t.n*100:0)+"%";$("#taskProg").textContent=live?`${p}/${tk.t.n}`:`${zone.name}`;$("#taskRew").textContent=`+${fmt(tk.t.r)} kcal`;}
   else{$("#taskTxt").textContent=`All ${zone.name} tasks done!`;$("#taskBar").style.width="100%";$("#taskProg").textContent="";$("#taskRew").textContent="";}
   $("#seasonCard").hidden=!S.beaten.buffet;
+  // a new market opens a new tree page: jump to it once
+  {const top=S.zones.length-1;if(top<(S.tpSeen??0)){S.tpSeen=top;TP=Math.min(TP,top);}if(top>(S.tpSeen??0)){S.tpSeen=top;TP=top;requestAnimationFrame(fitTree);}}
+  [...$("#tpages").children].forEach((b,k)=>{const open=pgOpen(k);b.className="tpg"+(k===TP?" on":"")+(open?"":" lock");b.querySelector(".te").textContent=open?ZONES[k].e:"🔒";
+    const c=open?NODES.filter(n=>n.pg===k&&avail(n)&&lv(n.id)<n.max&&S.kcal>=cost(n)).length:0;if(c&&k!==TP)b.dataset.n=String(c);else delete b.dataset.n;});
+  const anch=new Set(NODES.filter(n=>n.pg===TP&&n.p&&NI[n.p].pg<TP).map(n=>n.p));   // earlier upgrades this page grows from
   NODES.forEach(n=>{
     const b=nodeEls[n.id],L=lv(n.id),max=L>=n.max,ok=avail(n),can=ok&&!max&&S.kcal>=cost(n);
     const peek=!ok&&(!n.p||avail(NI[n.p]));   // parent is reachable: show a "?" so you know something's coming
-    b.className="node"+(n.skill?" skill":"")+(n.id==="start"?" root":"")+(L>0?" own":"")+(max?" max":"")+(can?" can":"")+(!ok?" lock":"")+(peek?" peek":"");
-    b.hidden=!ok&&!peek;b.firstElementChild.textContent=ok?n.e:"?";
+    const here=n.pg===TP,anchor=!here&&anch.has(n.id);
+    b.className="node"+(n.skill?" skill":"")+(n.id==="start"?" root":"")+(L>0?" own":"")+(max?" max":"")+(can&&here?" can":"")+(!ok?" lock":"")+(peek?" peek":"")+(anchor?" anchor":"");
+    b.hidden=(!here&&!anchor)||(!ok&&!peek);b.firstElementChild.textContent=ok?n.e:"?";
     const l=b.querySelector(".lv");if(l)l.textContent=n.skill?(L?"✓":fmt(cost(n))):(max?"MAX":`${L}/${n.max}`);
     b.setAttribute("aria-label",`${n.name}, level ${L} of ${n.max}`);
     b.dataset.tip=!ok?`??? · needs ${NI[n.p].name} ${need(n.p)}`:n.id==="start"?n.name:`${n.name}  ·  `+(max?(n.skill?"Unlocked":"MAX"):!ok?"🔒 Locked":`${fmt(cost(n))} kcal`);
     const ln=lineEls[n.id];
-    if(ln){ln.style.display=b.hidden?"none":"";const on=L>0,rd=ok;ln.setAttribute("stroke",on?"#3b2a1c":rd?BRC[n.g]:"#a8997c");ln.setAttribute("stroke-width",on?5:3.5);ln.setAttribute("stroke-dasharray",rd?"":"2 8");}
+    if(ln){ln.style.display=b.hidden||n.pg!==TP?"none":"";const on=L>0,rd=ok;ln.setAttribute("stroke",on?"#3b2a1c":rd?BRC[n.g]:"#a8997c");ln.setAttribute("stroke-width",on?5:3.5);ln.setAttribute("stroke-dasharray",rd?"":"2 8");}
   });
   renderInfo();
 }
@@ -2090,7 +2113,7 @@ let padHold=0,padHoldRep=0,padHoldEl=null;   // hold-to-buy only repeats on the 
 function jumpPanel(to){
   if(to==="markets"){const b=secEls[S.zone]&&secEls[S.zone][selSec()];(b||$("#goBtn")).focus();}
   else if(TAB==="gym"){const it=[...document.querySelectorAll("#paneGym .gitem")];(it.find(b=>b.classList.contains("can"))||it[0]).focus();}
-  else{const can=NODES.filter(n=>nodeEls[n.id].classList.contains("can")).sort((a,b)=>Math.hypot(a.x-50,a.y-32)-Math.hypot(b.x-50,b.y-32))[0];nodeEls[(can||NI.start).id].focus();}
+  else{const can=NODES.filter(n=>!nodeEls[n.id].hidden&&nodeEls[n.id].classList.contains("can")).sort((a,b)=>Math.hypot(a.x-50,a.y-32)-Math.hypot(b.x-50,b.y-32))[0];nodeEls[(can||NODES.find(n=>!nodeEls[n.id].hidden)||NI.start).id].focus();}
   SFX.buy(0);
 }
 // d-pad around the skill tree follows its branches
@@ -2177,7 +2200,7 @@ function update(dt){
     for(const p of R.parts){p.x+=p.vx*dt;p.y+=p.vy*dt;p.vy+=p.g*dt;p.life-=dt;}R.parts=R.parts.filter(p=>p.life>0);
     if(R.ending<=0||SIM)endRun();return;}
   R.t-=dt;R.el+=dt;
-  if(!R.bossOut&&!secDone(R.zone,R.si)&&R.el>R.T*.6)spawnBoss();   // a backup: the boss always shows up in time to fight it (normally it comes after enough kills)
+  if(!R.bossOut&&!secDone(R.zone,R.si)&&R.el>R.T*.75)spawnBoss();   // a backup: the boss always shows up in time to fight it (normally it comes after enough kills)
   if(R.bossWait>0){R.bossWait-=dt;if(R.bossWait<=0&&!R.bossOut)spawnBoss();}
   R.chew-=dt*(R.cheatT>0?1.6:1);
   R.mouth=Math.max(0,R.mouth-dt*6);R.boost-=dt;R.shake=Math.max(0,R.shake-dt*3);R.fullMsg-=dt;
@@ -2262,7 +2285,7 @@ function update(dt){
   // spawning
   R.spawn-=dt;
   const n=R.foods.filter(f=>!f.boss).length;
-  if(n<R.max&&R.spawn<=0){spawnFood(false);R.spawn=.45*Math.pow(.92,lv("crowd")+lv("crowd2"));}
+  if(n<R.max&&R.spawn<=0){spawnFood(false);R.spawn=.28*Math.pow(.92,lv("crowd")+lv("crowd2"));}
   hazards(dt);
   bossAttacks(dt);
   events(dt);
@@ -2467,7 +2490,7 @@ function eatLoot(l,o={}){
   if(R.prog>=Math.max(3,Math.round(secAt(z,R.si)*R.hype))&&!R.bossOut){if(secDone(z,R.si))feast();else spawnBoss();}
   checkTasks();
 }
-const secAt=(z,i)=>Math.round(z.at*(1+.08*i));
+const secAt=(z,i)=>Math.round(z.at*(1+(z.id==="shop"?.15:.08)*i));   // the shop ramps faster from a gentle first section
 function feast(){R.prog=0;const n=stat("feast");for(let k=0;k<n;k++)spawnLoot(pickDef(R.zone),rnd(FX0()+80,FX1()-80),rnd(FY0()+80,FY1()-60),true,{v:20,z:300,vz:0});banner("🎉","FEAST!",`${n} golden foods`,"gold");if(!SIM)SFX.win();}
 function spawnBoss(encore){
   const b=R.boss;let hp,max;
@@ -3009,13 +3032,13 @@ function leaveTitle(goFS){
   if(goFS&&!document.fullscreenElement){try{document.documentElement.requestFullscreen({navigationUI:"hide"}).then(()=>{if(document.body.classList.contains("touch"))screen.orientation.lock("landscape").catch(()=>{});}).catch(()=>{});}catch(e){}}
   if(!S.runs)openModal("helpModal","#helpClose");else $("#goBtn").focus();
   if(awayEarned>=1)setTimeout(()=>banner("💷","Welcome back!",`Your gym earned ${money(awayEarned)} while you were away`,"gold"),400);
-  homeTree();
+  TP=S.zones.length-1;S.tpSeen=TP;renderGym();requestAnimationFrame(fitTree);
 }
 $("#title").addEventListener("pointerdown",e=>{if(e.pointerType==="touch")setMode("touch");else leaveTitle(true);});
 // touch starts on the tap's end: that's when the browser allows fullscreen
 $("#title").addEventListener("click",()=>leaveTitle(true));
 if(DEBUG){$("#title").hidden=true;$("#gym").hidden=false;}
-homeTree(); // small screens: start the tree on its root
+fitTree(); // start the tree fitted to its page
 if(document.fonts&&document.fonts.ready)document.fonts.ready.then(()=>{SPR.clear();renderGym();fitScreen();});
 requestAnimationFrame(frame);
 
