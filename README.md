@@ -21,7 +21,7 @@ Each market has its own hazards. None of them can kill you, but they knock you a
 |---|---|---|---|
 | Move | WASD / arrows | Left stick / d-pad | Drag |
 | Dash | Space | A | Skill buttons |
-| Big Inhale | Q | B | |
+| Shield | Q | B | |
 | Plate Toss | E | X | |
 | Cheat Meal | R | Y | |
 | Pause | Esc | Start | II button |
