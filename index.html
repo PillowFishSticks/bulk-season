@@ -196,8 +196,6 @@ body.touch .glyph{display:none!important}
 .ucol{display:flex;flex-direction:column;min-height:0;background:rgba(120,80,30,.07);border-radius:12px;box-shadow:inset 0 0 0 2px rgba(122,90,50,.25);padding:8px}
 .ucol h3{margin:0 0 6px;padding:6px 10px;border-radius:9px;background:var(--c);color:#fff;font:900 18px/1 var(--disp);text-shadow:0 2px 0 rgba(0,0,0,.35);border:3px solid var(--out)}
 .urows{display:flex;flex-direction:column;gap:5px;overflow-y:auto;min-height:0;padding:2px 3px 6px;scrollbar-width:none}
-.ugrp{font:800 12px/1 var(--ui);letter-spacing:.06em;text-transform:uppercase;color:rgba(59,42,28,.75);margin:6px 2px 1px}
-.ugrp.lock{opacity:.6}
 .urow{display:grid;grid-template-columns:34px 1fr;align-items:center;gap:8px;text-align:left;padding:5px 8px;border-radius:10px;border:3px solid var(--out);border-left:8px solid var(--c);background:#efe3c8;color:var(--out);box-shadow:0 2px 0 rgba(60,35,10,.35);position:relative}
 .urow .ue{font-size:24px;line-height:1;text-align:center}
 .urow .ut{display:flex;flex-direction:column;min-width:0}.urow .ut b{font:800 15px/1.1 var(--ui);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
@@ -826,7 +824,7 @@ ZONES.forEach((z,zi)=>{const avg=z.foods.reduce((a,f)=>a+f.kcal,0)/z.foods.lengt
 // Nodes have a few levels each; getting a node to level 3 (or maxing a 1-2 level node) opens the next ones.
 const pct=v=>Math.round(v*100)+"%";
 const NODES=[
- {id:"start",g:"gold",x:0,y:0,e:"🏋️",name:"Rookie Lifter",max:1,base:0,k:1,v:L=>L,f:()=>"Every bulk starts somewhere",d:"Where every bulk starts. Upgrades come in four columns: Time, Damage, Gains and Abilities, and each market adds more."},
+ {id:"start",g:"gold",x:0,y:0,e:"🏋️",name:"Rookie Lifter",max:1,base:0,k:1,v:L=>L,f:()=>"Every bulk starts somewhere",d:"Where every bulk starts. Upgrades come in four columns: Time, Damage, Gains and Abilities. Some need another upgrade at level 3 first."},
  // ⬆ TIME (blue)
  {id:"appetite",p:"start",g:"blue",x:0,y:-1,e:"⏱️",name:"Appetite",max:5,base:40,k:2.3,v:L=>15+1.2*L,f:v=>`${v.toFixed(1)}s per run`,d:"How long each run lasts. Runs top out at 25 seconds."},
  {id:"digest",p:"appetite2",g:"blue",x:-1,y:-2,e:"🍽️",name:"Second Helpings",max:5,base:1500,k:2.3,v:L=>.04*L,f:v=>`+${v.toFixed(2)}s per food`,d:"Every food you finish wins back a little of the time you've lost to hits."},
@@ -989,9 +987,8 @@ const secOpen=(z,i)=>S.zones.includes(z.id)&&(S.sec[z.id]||0)>i;
 const secDone=(z,i)=>!!S.cleared[secKey(z,i)];
 const selZone=()=>ZONES[ZI[S.zone]],selSec=()=>clamp(S.si||0,0,NSEC-1);
 // Skill tree pages, one per market (owner: tab across them instead of one huge tree). A node's page comes from its price; a page opens when you reach its market.
-const pgOpen=k=>S.zones.length-1>=k;
-const needTxt=n=>pgOpen(n.pg)&&n.p?`${NI[n.p].name} to level ${need(n.p)}`:`to ${ZONES[n.pg].name}`;   // what opens this node
-const avail=n=>pgOpen(n.pg)&&(!n.p||NI[n.p].pg<n.pg||lv(n.p)>=need(n.p));   // a parent from an earlier market doesn't hold it back
+const needTxt=n=>n.p?`${NI[n.p].name} to level ${need(n.p)}`:"";   // what opens this node
+const avail=n=>!n.p||lv(n.p)>=need(n.p);   // a parent from an earlier market doesn't hold it back
 const medalsFor=k=>Math.floor(2*Math.sqrt(k/4.5e9));   // ~6 medals for a first season (seasons got longer on 2026-10-17)
 let SIM=false;
 
@@ -1221,22 +1218,21 @@ function nextBanner(){const b=BQ.shift(),el=$("#banner");if(!b){el.hidden=true;b
 NODES.forEach(n=>{n.pg=n.id==="bulk"?4:n.id==="start"||!n.base?0:n.base<3000?0:n.base<150000?1:n.base<5e6?2:n.base<1e9?3:4;});
 const UCOLS=[["time","⏱️ Time","blue"],["dmg","💥 Damage","yellow"],["gain","🔥 Gains","red"],["abil","⚡ Abilities","green"]];
 {const ROOT={appetite:"time",chew:"dmg",stomach:"gain",speed:"abil"};for(const n of NODES){let m=n;while(m.p&&m.p!=="start")m=NI[m.p];n.col=n.id==="start"?"dmg":ROOT[m.id]||"abil";}}
-const nodeEls={},ugroups={};let infoId="start",touchSel=null;
+const nodeEls={};let infoId="start",touchSel=null;
 const fitTree=()=>{},zoomBy=()=>{};   // no pan/zoom any more
 {const host=$("#ulist");
   for(const [cid,title,g] of UCOLS){const col=document.createElement("div");col.className="ucol";col.style.setProperty("--c",BRC[g]);col.innerHTML=`<h3>${title}</h3><div class="urows"></div>`;host.appendChild(col);
     const rows=col.querySelector(".urows");
-    ZONES.forEach((z,k)=>{const list=NODES.filter(n=>n.col===cid&&n.pg===k).sort((a,b)=>(a.id==="start"?-1:b.id==="start"?1:a.base-b.base));if(!list.length)return;
-      const h=document.createElement("div");h.className="ugrp";h.innerHTML=`<span>${z.e}</span> ${z.name}`;rows.appendChild(h);(ugroups[k]=ugroups[k]||[]).push(h);
-      for(const n of list){const b=document.createElement("button");b.className="urow";b.style.setProperty("--c",BRC[n.g]);
-        b.innerHTML=`<span class="ue">${n.e}</span><span class="ut"><b>${n.name}</b><span class="ub"><small></small><span class="up"></span></span></span>`;
-        b.onmouseenter=()=>{infoId=n.id;renderInfo();};b.onfocus=()=>{infoId=n.id;renderInfo();};
-        b.onclick=()=>{if(document.body.classList.contains("touch")&&touchSel!==n.id){touchSel=n.id;infoId=n.id;renderInfo();return;}infoId=n.id;buyNode(n);};
-        rows.appendChild(b);nodeEls[n.id]=b;}});}}
+    const list=NODES.filter(n=>n.col===cid).sort((a,b)=>(a.id==="start"?-1:b.id==="start"?1:a.base-b.base));
+    for(const n of list){const b=document.createElement("button");b.className="urow";b.style.setProperty("--c",BRC[n.g]);
+      b.innerHTML=`<span class="ue">${n.e}</span><span class="ut"><b>${n.name}</b><span class="ub"><span class="up"></span></span></span>`;
+      b.onmouseenter=()=>{infoId=n.id;renderInfo();};b.onfocus=()=>{infoId=n.id;renderInfo();};
+      b.onclick=()=>{if(document.body.classList.contains("touch")&&touchSel!==n.id){touchSel=n.id;infoId=n.id;renderInfo();return;}infoId=n.id;buyNode(n);};
+      rows.appendChild(b);nodeEls[n.id]=b;}}}
 function buyNode(n){
   const L=lv(n.id);
   if(L>=n.max){renderInfo();return;}
-  if(!avail(n)){toast(`Get ${needTxt(n)} first`);SFX.no();renderInfo();return;}
+  if(!avail(n)){toast(`Needs ${needTxt(n)} first`);SFX.no();renderInfo();return;}
   const c=cost(n);
   if(S.kcal<c){toast(`Need ${fmt(c-S.kcal)} more kcal`);SFX.no();renderInfo();return;}
   S.kcal-=c;S.lv[n.id]=L+1;save();SFX.buy(L);
@@ -1245,7 +1241,7 @@ function buyNode(n){
 }
 function renderInfo(){
   const n=NI[infoId],L=lv(n.id),max=L>=n.max,c=cost(n);
-  if(!avail(n)){$("#iE").textContent="❔";$("#iName").textContent="Something new…";$("#iDesc").textContent=`Get ${needTxt(n)} to reveal this upgrade.`;$("#iVal").textContent="";$("#iBuy").style.visibility="hidden";return;}
+  if(!avail(n)){$("#iE").textContent=n.e;$("#iName").textContent=n.name+(n.max>1?`  ·  ${L}/${n.max}`:"");$("#iDesc").textContent=n.d;$("#iVal").innerHTML=`🔒 Needs <em>${needTxt(n)}</em> first`;$("#iBuy").style.visibility="hidden";return;}
   $("#iBuy").style.visibility="";
   $("#iE").textContent=n.e;$("#iName").textContent=n.name+(n.max>1?`  ·  ${L}/${n.max}`:"");
   $("#iDesc").textContent=n.d;
@@ -1399,15 +1395,10 @@ function renderGym(){
     const live=k==="eat"||k==="shoo";
     $("#taskBar").style.width=(live?p/tk.t.n*100:0)+"%";$("#taskProg").textContent=live?`${p}/${tk.t.n}`:`${zone.name}`;$("#taskRew").textContent=`+${fmt(tk.t.r)} kcal`;}
   else{$("#taskTxt").textContent=`All ${zone.name} tasks done!`;$("#taskBar").style.width="100%";$("#taskProg").textContent="";$("#taskRew").textContent="";}
-  // the list: rows of markets you've reached, plus the next market's rows as a locked teaser
-  const top=S.zones.length-1;
-  for(const [k,hs] of Object.entries(ugroups)){const show=+k<=top+1;for(const h of hs){h.hidden=!show;h.classList.toggle("lock",+k>top);h.lastChild.textContent=" "+ZONES[k].name+(+k>top?" · reach it to unlock":"");}}
   NODES.forEach(n=>{
-    const b=nodeEls[n.id],L=lv(n.id),max=L>=n.max,ok=avail(n),can=ok&&!max&&S.kcal>=cost(n),open=pgOpen(n.pg);
-    b.hidden=n.pg>top+1;
+    const b=nodeEls[n.id],L=lv(n.id),max=L>=n.max,ok=avail(n),can=ok&&!max&&S.kcal>=cost(n);
     b.className="urow"+(L>0?" own":"")+(max?" max":"")+(can?" can":"")+(!ok?" lock":"");
-    b.querySelector("small").textContent=!ok?(open?`Needs ${needTxt(n)}`:`Reach ${ZONES[n.pg].name}`):n.id==="start"?`${S.lv.start||1} lv · bench`:n.skill?(L?"Skill unlocked":n.f(1)):n.f(n.v(L));
-    b.querySelector(".up").textContent=max?(n.skill?"✓":"MAX"):!ok?"🔒":`${n.skill?"":`${L}/${n.max} · `}${fmt(cost(n))}`;
+    b.querySelector(".up").textContent=max?(n.skill?"✓ Unlocked":"MAX"):!ok?`🔒 ${fmt(cost(n))}`:`${n.skill?"":`${L}/${n.max} · `}${fmt(cost(n))} kcal`;
     b.setAttribute("aria-label",`${n.name}, level ${L} of ${n.max}`);
   });
   renderInfo();
