@@ -20,7 +20,7 @@ Each market has its own hazards. None of them can kill you, but they knock you a
 | | Keyboard | Xbox controller | Touch |
 |---|---|---|---|
 | Move | WASD / arrows | Left stick / d-pad | Drag |
-| Dash | Space | A | Skill buttons |
+| Deadlift Slam | Space | A | Skill buttons |
 | Shield | Q | B | |
 | Gym Party | E | X | |
 | Cheat Meal | R | Y | |

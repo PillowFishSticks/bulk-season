@@ -686,7 +686,7 @@ body.touch .hnote .kbt{display:none} body.touch .hnote .tct{display:inline}
       </div>
       <div class="ctrls">
         <div class="crow">Move <span><span class="glyph kb">WASD</span><span class="glyph pd pS">L</span><span class="tc">Drag</span></span></div>
-        <div class="crow">⚡ Dash <span><span class="glyph kb">Space</span><span class="glyph pd pA">A</span><span class="tc">Skill button</span></span></div>
+        <div class="crow">🏋️ Deadlift Slam <span><span class="glyph kb">Space</span><span class="glyph pd pA">A</span><span class="tc">Skill button</span></span></div>
         <div class="crow">🛡️ Shield <span><span class="glyph kb">Q</span><span class="glyph pd pB">B</span><span class="tc">Skill button</span></span></div>
         <div class="crow">🎉 Gym Party <span><span class="glyph kb">E</span><span class="glyph pd pX">X</span><span class="tc">Skill button</span></span></div>
         <div class="crow">🍰 Cheat Meal <span><span class="glyph kb">R</span><span class="glyph pd pY">Y</span><span class="tc">Skill button</span></span></div>
@@ -869,9 +869,9 @@ const NODES=[
  {id:"metab3",p:"metab2",g:"red",x:-4,y:0,e:"☄️",name:"Meteor Metabolism",max:5,base:1000000000,k:2.3,v:L=>1+.25*L,f:v=>`×${v.toFixed(2)} kcal`,d:"The final word in burning calories."},
  // ⬇ ABILITIES (green skills, purple events)
  {id:"speed",p:"start",g:"green",x:0,y:1,e:"👟",name:"Footwork",max:5,base:40,k:2.3,v:L=>1+.12*L,f:v=>`×${v.toFixed(2)} speed`,d:"Walk faster."},
- {id:"dash",p:"speed",g:"green",x:0,y:2,e:"⚡",name:"Dash",skill:1,max:1,base:300,k:1,v:L=>L,f:()=>"Skill: burst forward",d:"Dash forward, smashing any food monster you touch for double damage. You can't be hit during a dash."},
+ {id:"dash",p:"speed",g:"green",x:0,y:2,e:"🏋️",name:"Deadlift Slam",skill:1,max:1,base:300,k:1,v:L=>L,f:()=>"Skill: slam a shockwave",d:"Heave the bar up (nothing can hit you while you lift), then slam it down: a shockwave that smashes and stuns everything nearby, breaks armour and clears bullets."},
  {id:"reach",p:"speed",g:"green",x:-1,y:1,e:"🤲",name:"Long arms",max:5,base:200,k:2.3,v:L=>6+8*L,f:v=>`+${v} reach`,d:"Power-ups and clocks fly to you from further away."},
- {id:"dashCD",p:"dash",g:"green",x:1,y:2,e:"🔋",name:"Quick Feet",max:4,base:4000,k:2.3,v:L=>4.5*Math.pow(.84,L),f:v=>`${v.toFixed(1)}s dash cooldown`,d:"Dash comes back sooner."},
+ {id:"dashCD",p:"dash",g:"green",x:1,y:2,e:"🔋",name:"Quick Recovery",max:4,base:4000,k:2.3,v:L=>6*Math.pow(.85,L),f:v=>`${v.toFixed(1)}s slam cooldown`,d:"Deadlift Slam comes back sooner."},
  {id:"inhale",p:"dash",g:"green",x:0,y:3,e:"🛡️",name:"Shield",skill:1,max:1,base:8000,k:1,v:L=>L,f:()=>"Skill: a barrier that hits back",d:"A glowing barrier for a few seconds: nothing can hurt you, enemy shots bounce back at whoever fired them (up to 10), and it hammers and shoves back any food monster that gets close. 10s cooldown."},
  {id:"inhaleR",p:"inhale",g:"green",x:1,y:3,e:"🪞",name:"Mirror Shield",max:4,base:100000,k:2.3,v:L=>150*(1+.15*L),f:v=>{const L=Math.round((v/150-1)/.15);return L?`reflects ${2+2*L} shots · bigger, +${(.5*L).toFixed(1)}s`:"shots just break"},d:"Your Shield bounces enemy shots back at whoever fired them (each hits for 60%), and gets a bit bigger and longer-lasting each level."},
  {id:"toss",p:"inhale",g:"green",x:0,y:4,e:"🎉",name:"Gym Party",skill:1,max:1,base:200000,k:1,v:L=>L,f:()=>"Skill: call your mates in",d:"Call the gym: 3 mates run in, circle you and throw dumbbells at everything for 4 seconds. 10s cooldown."},
@@ -889,7 +889,7 @@ const BRANCH=[["blue","⏱️ Time"],["yellow","💥 Damage"],["red","🔥 Gains
 const need=p=>Math.min(3,NI[p].max);   // parent level needed to open a node
 const NI=Object.fromEntries(NODES.map(n=>[n.id,n]));
 const SKILLS=[
- {id:"dash",name:"Dash",e:"⚡",kb:"Space",pd:"A",pc:"pA",cd:()=>stat("dashCD")},
+ {id:"dash",name:"Deadlift Slam",e:"🏋️",kb:"Space",pd:"A",pc:"pA",cd:()=>stat("dashCD")},
  {id:"inhale",name:"Shield",e:"🛡️",kb:"Q",pd:"B",pc:"pB",cd:()=>10},
  {id:"toss",name:"Gym Party",e:"🎉",kb:"E",pd:"X",pc:"pX",cd:()=>10},
  {id:"cheat",name:"Cheat Meal",e:"🍰",kb:"R",pd:"Y",pc:"pY",cd:()=>22},
@@ -955,7 +955,7 @@ const SUPPS=[
  {id:"second",e:"🔁",name:"One More Set",max:8,base:900,k:5,f:L=>`+${2+L}s at time-up, once a run`,d:"When time runs out, dig deep for a few more seconds. Goes past the 30 second limit."},
  {id:"hype",e:"📣",name:"Hype man",max:5,base:250,k:7,f:L=>`boss needs ${pct(.05*L)} fewer kills`,d:"The crowd chants for the boss, so it shows up a little sooner and you get longer to fight it."},
  {id:"magnet",e:"🧲",name:"Magnet straps",max:5,base:120,k:6,f:L=>`power-up reach +${pct(.4*L)}`,d:"Power-ups fly to you from further away."},
- {id:"timer",e:"⏲️",name:"Rest timer",max:5,base:500,k:7,f:L=>`skills recharge ${pct(.08*L)} faster`,d:"Dash, Shield, Gym Party and Cheat Meal all come back sooner."},
+ {id:"timer",e:"⏲️",name:"Rest timer",max:5,base:500,k:7,f:L=>`skills recharge ${pct(.08*L)} faster`,d:"Deadlift Slam, Shield, Gym Party and Cheat Meal all come back sooner."},
  {id:"prize",e:"💰",name:"Prize money",max:5,base:200,k:7,f:L=>`+${L*20}s of income per boss`,d:"Sponsors pay out every time you beat a boss. Spend it on the gym."},
 ];
 
@@ -2139,7 +2139,7 @@ function useSkill(id){
   if(!R||R.done||R.ending||paused||R.stun>0)return;
   if(!skillOn(id)||R.cds[id]>0)return;
   const sk=SKILLS.find(s=>s.id===id);R.cds[id]=sk.cd()*R.cdK;
-  if(id==="dash"){R.dashT=.22;R.dashId++;R.inv=Math.max(R.inv,.3);SFX.dash();for(let i=0;i<8;i++)puff(R.x,R.y+20,"#d8c7a8");}
+  if(id==="dash"){R.liftT=SLAM_LIFT;R.inv=Math.max(R.inv,SLAM_LIFT+.18);if(!SIM)tone(140,.3,"sawtooth",.04,.6);}   // Deadlift Slam (skill id still "dash" so saves keep it; owner replaced Dash)
   if(id==="inhale"){R.inhT=3+.5*lv("inhaleR");R.shT=0;R.refl=0;R.inv=Math.max(R.inv,R.inhT);SFX.inhale();if(!SIM)tone(220,.3,"triangle",.06,2);floatText(R.x,R.y-110,"SHIELD UP!","#9fd3ff",2);}
   if(id==="toss"){const L=stat("tossN"),n=3+L,life=4+.5*L;   // Gym Party (owner idea; replaced Plate Toss): mates run in and throw with you
     for(let i=0;i<n;i++){const side=Math.random()<.5?-1:1;
@@ -2201,6 +2201,8 @@ function update(dt){
   for(const p of R.puddles)if(Math.hypot((R.x-p.x)/p.rx,(R.y+18-p.y)/p.ry)<1){if(p.kind==="water"){accel=2;}else{accel=4;slow=.55;}}
   const sp=255*R.spd*(R.boost>0?1.5:1)*slow;
   if(R.stun>0){mx=my=0;accel=Math.min(accel,6);}
+  if(R.liftT>0){mx=my=0;R.vx*=.5;R.vy*=.5;R.liftT-=dt;if(R.liftT<=0){deadliftSlam();R.slamShow=.18;}}
+  R.slamShow=Math.max(0,(R.slamShow||0)-dt);
   if(R.dashT>0){R.dashT-=dt;R.vx=R.fx*1150;R.vy=R.fy*1150;R.trailT=(R.trailT||0)-dt;if(R.trailT<=0){R.trailT=.045;R.trail.push({x:R.x,y:R.y,life:.25});}}   // an afterimage every 0.045s, not every frame (drawing ~30 of them at 144 FPS was the dash frame drop)
   else{const a=Math.min(1,accel*dt);R.vx+=(mx*sp-R.vx)*a;R.vy+=(my*sp-R.vy)*a;}
   R.x+=R.vx*dt;R.y+=R.vy*dt;
@@ -2378,6 +2380,15 @@ function knock(msg,stun,timeLoss,kx,ky){
 }
 
 // eat a whole food in one go (plate drops), worth a bit less than chewing it yourself
+// Deadlift Slam: a shockwave round you. Monsters ×5 and stunned (armour breaks), bosses ×3, bullets in it are gone.
+const SLAM_LIFT=.3,SLAM_R=200;
+function deadliftSlam(){const rad=SLAM_R;
+  for(const f of R.foods.slice()){if(f.clock||f.enter>0||!R.foods.includes(f))continue;const dx=f.x-R.x,dy=f.y-R.y,d=Math.hypot(dx,dy)||1;if(d>rad+f.r)continue;
+    chomp(f,{shot:1,brk:1,amt:hitAmt(f)*(f.boss?3:5)});if(!f.boss&&R.foods.includes(f)){f.stun=Math.max(f.stun||0,1);f.vx+=dx/d*420;f.vy+=dy/d*420;f.fuse=0;}}
+  for(const g of R.gulls)if(g.st!=="gone"&&Math.hypot(g.x-R.x,g.y-R.y)<rad)hitGull(g,hitAmt(g)*5);
+  R.shots=R.shots.filter(p=>Math.hypot(p.x-R.x,p.y-R.y)>rad);
+  R.pounds.push({x:R.x,y:R.y+PR*.6,t:0,max:rad});R.shake=Math.max(R.shake,.7);rumble(260,1,.8);
+  if(!SIM){SFX.smash();tone(70,.35,"square",.07,.3);burst(R.x,R.y+PR,"#d8c7a8",16,1.4);for(let i=0;i<10;i++)puff(R.x+rnd(-60,60),R.y+PR,"#d8c7a8");}}
 function smashFood(f,mult){if(f.clock)return;chomp(f,{shot:1,chain:1,amt:hitAmt(f)*(f.boss?2:5)});}
 function bellySlam(){
   R.pounds.push({x:R.x,y:R.y+10,t:0,max:R.slamR});R.shake=Math.max(R.shake,.6);
@@ -2740,14 +2751,18 @@ function drawPlayer(tm){
   if(R.cheatT>0){ctx.fillStyle=`rgba(242,194,48,${.18+.08*Math.sin(tm*10)})`;circ(ctx,R.x,R.y-10,70);ctx.fill();}
   if(R.boost>0){ctx.fillStyle="rgba(216,66,58,.22)";circ(ctx,R.x,R.y-10,62);ctx.fill();}
   for(const t of R.trail){ctx.globalAlpha=t.life*1.6;drawLifter(ctx,t.x,t.y+PR,s,{fill:R.belly,bulk:bulk(),face,top:"#f7d27a",band:"#f7d27a"});}
-  ctx.globalAlpha=R.inv>0&&!(R.inhT>0)&&R.stun<=0&&Math.floor(tm*20)%2?.55:1;
+  ctx.globalAlpha=R.inv>0&&!(R.inhT>0)&&!(R.liftT>0)&&!(R.slamShow>0)&&R.stun<=0&&Math.floor(tm*20)%2?.55:1;
   drawShadow(R.x,R.y+PR,30);
   R.blink-=1/60;if(R.blink<-.12)R.blink=rnd(2,5);
   R.belly=Math.min(1,Object.values(R.ate).reduce((a,b)=>a+b,0)/60);
   if(R.ending){(R.win?drawCheer:drawKneel)(R.x,R.y+PR,s,tm);ctx.globalAlpha=1;return;}
-  drawLifter(ctx,R.x,R.y+PR,s,{...charOpts(),fill:R.belly,bulk:bulk(),mouth:R.mouth,walk:R.walk,moving,face,sx:1+squash,sy:1-squash,
+  const lift=R.liftT>0?1-R.liftT/SLAM_LIFT:0;
+  drawLifter(ctx,R.x,R.y+PR,s,{...charOpts(),fill:R.belly,bulk:bulk(),mouth:R.liftT>0?.6:R.mouth,walk:R.walk,moving,face,sx:1+squash,sy:1-squash,press:R.liftT>0?lift:null,strain:R.liftT>0,
     lx:Math.abs(R.fx)*1,ly:R.fy,blink:R.blink<0,dizzy:R.stun>0,bob:moving?-Math.abs(Math.sin(R.walk))*.08:Math.sin(tm*3)*.02});
   ctx.globalAlpha=1;
+  if(R.liftT>0||R.slamShow>0){const e=R.liftT>0?lift*lift*(3-2*lift):0,by=R.liftT>0?R.y+PR+s*(-1.5-e*.75):R.y+PR-8;
+    ctx.lineCap="round";ctx.lineWidth=7;ctx.strokeStyle=OUT;ctx.beginPath();ctx.moveTo(R.x-82,by);ctx.lineTo(R.x+82,by);ctx.stroke();ctx.lineWidth=3.5;ctx.strokeStyle="#c9ccd6";ctx.stroke();
+    for(const sg of[-1,1]){rr(ctx,R.x+sg*64-6,by-18,12,36,3);fs(ctx,COL.red,3);rr(ctx,R.x+sg*75-5,by-13,10,26,3);fs(ctx,COL.blue,3);}}
   if(R.stun>0){for(let i=0;i<3;i++){const a=tm*5+i*2.1;star4(ctx,R.x+Math.cos(a)*30,R.y-92+Math.sin(a)*8,9);ctx.fillStyle=COL.gold;ctx.fill();ctx.lineWidth=2;ctx.strokeStyle=OUT;ctx.stroke();}}
 }
 function endTitle(x,y,s,msg,col){const t=Math.min(1,(R.endA||0)/.3),pop=1+.25*(1-t);ctx.save();ctx.translate(x,y-s*3.6);ctx.scale(pop*t,pop*t);
@@ -3060,7 +3075,7 @@ function botThink(dt){
   const t=R.btgt;if(!t)return[0,0];
   const dx=t.x-R.x,dy=t.y-R.y,d=Math.hypot(dx,dy)||1;
   R.fx=dx/d;R.fy=dy/d;
-  if(d>200)useSkill("dash");
+  if(R.foods.filter(f=>!f.clock&&Math.hypot(f.x-R.x,f.y-R.y)<SLAM_R).length>=3||(t.boss&&d<SLAM_R+t.r))useSkill("dash");
   if(R.foods.filter(f=>!f.clock&&Math.hypot(f.x-R.x,f.y-R.y)<stat("inhaleR")+40).length>=3||R.shots.some(p=>Math.hypot(p.x-R.x,p.y-R.y)<160))useSkill("inhale");
   if(d<500)useSkill("toss");
   if(R.foods.filter(f=>!f.clock).length>=6||R.foods.some(f=>f.boss))useSkill("cheat");
