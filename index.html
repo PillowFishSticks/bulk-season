@@ -199,8 +199,8 @@ body.touch .glyph{display:none!important}
 .tpg.lock{background:#8f8a7d;color:#3b3328;opacity:.8}
 .tpg[data-n]::after{content:attr(data-n);position:absolute;right:-8px;top:-10px;min-width:20px;height:20px;border-radius:999px;background:#d8423a;color:#fff;border:2px solid #fff;font:900 12px/16px var(--ui);text-align:center;padding:0 3px}
 body.phone .tpg{padding:5px 8px;font-size:12px}body.phone .tpg .tn{display:none}
-.node.anchor{opacity:.5}
-.jumpHint,.jumpHint2{position:absolute;left:12px;bottom:10px;font:800 13px/1 var(--ui);color:rgba(59,42,28,.7);z-index:5;pointer-events:none}
+.node.badge{background:#f2c230;box-shadow:inset 0 0 0 6px #b8860b,0 3px 0 rgba(60,35,10,.45);cursor:default}
+.jumpHint,.jumpHint2{position:absolute;right:12px;top:56px;font:800 13px/1 var(--ui);color:rgba(59,42,28,.7);z-index:5;pointer-events:none}
 .jumpHint2{position:static;margin-top:8px;color:var(--muted)}
 .node.peek{background:#cdbf9f;filter:none;opacity:.8;border-style:dashed}
 .node.peek>span:first-child{filter:none;color:#7a6a50;font:900 30px/1 var(--disp)}
@@ -757,7 +757,7 @@ const ZONES=[
  {id:"chippy",name:"The Chippy",e:"🍟",cost:0,at:68,
   th:{glow:"255,236,190"},
   foods:[F("🍟","Chips",10,64,{w:3}),F("🥚","Pickled egg",5,36,{w:2}),F("🌭","Saveloy",9,74,{w:2}),F("🐟","Battered cod",16,180,{w:1,flee:1,size:1.2}),F("🍔","Chip butty",18,230,{w:.6,bites:2,size:1.2})],
-  bb:{hp:360,hps:[520,1500,2930,7200,12500],kcb:25,reward:10000},
+  bb:{hp:360,hps:[560,1600,3200,7800,14000],kcb:25,reward:10000},
   secs:[{n:"The Queue",floor:"chippy",wall:"chippy"},{n:"The Fryers",floor:"kitchen",wall:"chippyFry"},{n:"Spud Room",floor:"wood",wall:"curryKitchen"},{n:"Seafront",floor:"street",wall:"seafront"},{n:"Back Alley",floor:"asphalt",wall:"chippyAlley"}],
   bosses:[{e:"🥫",name:"Mushy Peas",mv:"wander",spd:60,mi:5,atk:[{k:"bounce",e:"🟢",n:5,every:2.8,spd:300}]},{e:"🌭",name:"Big Saveloy",mv:"dart",spd:220,mi:4,atk:[{k:"charge",every:3.6},{k:"homing",e:"🌭",every:2.8,spd:240}]},{e:"🥔",name:"Spud King",mv:"wander",spd:80,mi:4,atk:[{k:"mine",e:"🥔",n:3,every:4},{k:"slam",every:3.4,r:120}]},{e:"🦑",name:"Kraken Calamari",mv:"flee",spd:150,mi:4,atk:[{k:"boomer",e:"💧",n:5,every:3,spd:360},{k:"spin",e:"💧",every:6,spd:260}]},{e:"🐟",name:"Moby Cod",mv:"flee",spd:160,mi:4,atk:[{k:"wave",e:"💧",every:3.4,spd:240},{k:"charge",every:4.6}]}],
   hz:{grease:2,gull:2},
@@ -765,7 +765,7 @@ const ZONES=[
  {id:"curry",name:"Curry House",e:"🍛",cost:0,at:135,
   th:{glow:"255,170,90"},
   foods:[F("🍚","Pilau rice",10,170,{w:3}),F("🥟","Samosa",8,190,{w:2.5}),F("🍛","Tikka masala",18,540,{w:1.2,bites:2,size:1.2}),F("🌶️","Vindaloo chilli",6,250,{w:.8,spicy:1}),F("🍢","Seekh kebab",10,340,{w:1,flee:1})],
-  bb:{hp:7000,hps:[18500,52000,80000,110000,126000],hp0:3200,kcb:100,reward:160000},
+  bb:{hp:7000,hps:[20000,56000,86000,120000,140000],hp0:3200,kcb:100,reward:160000},
   secs:[{n:"Dining Room",floor:"curry",wall:"curry"},{n:"Spice Store",floor:"wood",wall:"spice"},{n:"The Kitchen",floor:"kitchen",wall:"curryKitchen"},{n:"Banquet Hall",floor:"parquet",wall:"banquet"},{n:"The Tandoor",floor:"terracotta",wall:"curryTandoor"}],
   bosses:[{e:"🥘",name:"The Balti Bowl",mv:"wander",spd:70,mi:4,atk:[{k:"ring",e:"🔥",n:8,every:3.2,spd:240}],fire:1},{e:"🧅",name:"Onion Bhaji",mv:"dart",spd:220,mi:4,atk:[{k:"boomer",e:"🧅",n:3,every:2.6,spd:380}]},{e:"🍢",name:"Kebab King",mv:"dart",spd:230,mi:4,atk:[{k:"burst",e:"🍢",n:3,every:2.6,spd:420},{k:"charge",every:4.5}]},{e:"🍚",name:"Biryani Boss",mv:"wander",spd:80,mi:3.5,atk:[{k:"rain",e:"🍚",n:6,every:3.2},{k:"spin",e:"🍚",every:5.5,spd:280}]},{e:"🍲",name:"The Phaal Pot",mv:"wander",spd:70,mi:3.5,atk:[{k:"slam",every:3,r:130},{k:"homing",e:"🌶️",every:2.4,spd:240}],fire:1}],
   hz:{fire:5},
@@ -773,7 +773,7 @@ const ZONES=[
  {id:"street",name:"Street Food",e:"🌮",cost:0,at:170,
   th:{glow:"255,200,140"},
   foods:[F("🌮","Taco",8,600,{w:3}),F("🍡","Dango",6,500,{w:2.5}),F("🍜","Ramen",16,1550,{w:1.5,bites:2,size:1.2}),F("🌯","Burrito",22,2250,{w:1,bites:3,size:1.25}),F("🍩","Doughnut",8,1100,{w:1,flee:1})],
-  bb:{hp:30000,hps:[126000,135000,230000,420000,650000],hp0:8000,kcb:450,reward:2400000},
+  bb:{hp:30000,hps:[140000,150000,250000,450000,700000],hp0:8000,kcb:450,reward:2400000},
   secs:[{n:"Night Market",floor:"street",wall:"street"},{n:"Food Trucks",floor:"asphalt",wall:"streetTrucks"},{n:"Hawker Hall",floor:"kitchen",wall:"street"},{n:"Rooftop",floor:"asphalt",wall:"rooftop"},{n:"Neon Alley",floor:"neon",wall:"streetNeon"}],
   bosses:[{e:"🍙",name:"Onigiri Ollie",mv:"dart",spd:240,mi:4,atk:[{k:"wave",e:"🍙",every:3,spd:260},{k:"charge",every:4.2}]},{e:"🌯",name:"Mega Burrito",mv:"flee",spd:160,mi:3.5,atk:[{k:"bounce",e:"🌶️",n:5,every:2.6,spd:320},{k:"mine",e:"🌯",n:3,every:4.6}]},{e:"🥟",name:"Dim Sum Don",mv:"wander",spd:90,mi:3.5,atk:[{k:"boomer",e:"🥟",n:5,every:2.8,spd:360},{k:"burst",e:"🥟",n:3,every:3.6,spd:340}]},{e:"🍣",name:"Sushi Sam",mv:"dart",spd:250,mi:3.5,atk:[{k:"homing",e:"🍣",every:2,spd:270},{k:"charge",every:3.8}]},{e:"🥙",name:"Doner Mountain",mv:"dart",spd:230,mi:3,atk:[{k:"spin",e:"🥩",every:5,spd:320},{k:"rain",e:"🥩",n:6,every:3.6},{k:"slam",every:3.4,r:120}]}],
   hz:{scooter:1,puddle:2},
@@ -781,7 +781,7 @@ const ZONES=[
  {id:"buffet",name:"The Buffet",e:"🍽️",cost:0,at:190,
   th:{glow:"255,215,150"},
   foods:[F("🍕","Pizza slice",10,3200,{w:3}),F("🍗","Chicken leg",12,4200,{w:2}),F("🍤","Prawn",5,2400,{w:2,flee:1}),F("🍰","Gateau",18,7600,{w:1,bites:2,size:1.2}),F("🍖","Rib",16,6800,{w:1})],
-  bb:{hp:90000,hps:[690000,910000,1250000,1600000,2100000],hp0:14000,kcb:2000,reward:48000000},
+  bb:{hp:90000,hps:[750000,980000,1400000,1700000,2300000],hp0:14000,kcb:2000,reward:48000000},
   secs:[{n:"Dessert Table",floor:"buffet",wall:"buffetDessert"},{n:"Wedding Party",floor:"parquet",wall:"buffetWedding"},{n:"Seafood Bar",floor:"kitchen",wall:"seafood"},{n:"Cheese & Wine",floor:"wood",wall:"cheese"},{n:"The Carvery",floor:"buffet",wall:"buffet"}],
   bosses:[{e:"🍮",name:"The Trifle",mv:"wander",spd:70,mi:3,atk:[{k:"bounce",e:"🍓",n:6,every:2.6,spd:320},{k:"ring",e:"🍒",n:10,every:4.2,spd:260}]},{e:"🎂",name:"Wedding Cake",mv:"wander",spd:50,mi:2,atk:[{k:"rain",e:"🍰",n:7,every:3},{k:"slam",every:3,r:140}]},{e:"🦞",name:"Lobster Lord",mv:"dart",spd:220,mi:3,atk:[{k:"charge",every:3.4},{k:"boomer",e:"🦐",n:5,every:2.6,spd:380}]},{e:"🧀",name:"Brie Baron",mv:"wander",spd:80,mi:3,atk:[{k:"wave",e:"🧀",every:3,spd:260},{k:"mine",e:"🧀",n:4,every:4.4}]},{e:"🦃",name:"The Sunday Roast",mv:"wander",spd:60,mi:2.5,atk:[{k:"burst",e:"🥕",n:5,every:2.6,spd:380},{k:"homing",e:"🥔",every:2.4,spd:250},{k:"rain",e:"🍗",n:6,every:3.6},{k:"charge",every:5.2}]}],
   hz:{waiter:1,rival:1},
@@ -936,15 +936,15 @@ const trophies=()=>ZONES.filter(z=>S.beaten[z.id]).length;
 const kcalMult=()=>stat("metab")*stat("metab2")*stat("metab3")*stat("stomach")*(1+.1*trophies())*(1+.15*S.medals)*(rankN()>=1?1.15:1)*(rankN()>=5?1.5:1);
 /* ---------- YOUR GYM: equipment brings members, members pay £, £ buys equipment and supplements ---------- */
 const EQUIP=[
- {id:"weights",t:0,e:"💪",name:"Free weights",max:10,base:15,k:1.55,add:3},
- {id:"tread",t:0,e:"🏃",name:"Treadmills",max:8,base:110,k:1.6,add:6},
- {id:"flyers",t:0,e:"📣",name:"Flyers",max:10,base:60,k:1.9,mm:.1},
- {id:"bar",t:1,e:"🥤",name:"Smoothie bar",max:5,base:300,k:2.2,sp:.25},
- {id:"bikes",t:1,e:"🚴",name:"Spin bikes",max:8,base:700,k:1.65,add:10},
- {id:"showers",t:2,e:"🚿",name:"Showers",max:5,base:2500,k:2.3,mm:.15},
- {id:"racks",t:2,e:"🏋️",name:"Squat racks",max:6,base:5000,k:1.7,add:18},
- {id:"sauna",t:3,e:"🧖",name:"Sauna",max:5,base:20000,k:2.4,sp:.4},
- {id:"yoga",t:3,e:"🧘",name:"Yoga studio",max:6,base:60000,k:1.75,add:30},
+ {id:"weights",t:0,e:"💪",name:"Free weights",max:20,base:15,k:1.55,add:3},
+ {id:"tread",t:0,e:"🏃",name:"Treadmills",max:16,base:110,k:1.6,add:6},
+ {id:"flyers",t:0,e:"📣",name:"Flyers",max:20,base:60,k:1.9,mm:.1},
+ {id:"bar",t:1,e:"🥤",name:"Smoothie bar",max:10,base:300,k:2.2,sp:.25},
+ {id:"bikes",t:1,e:"🚴",name:"Spin bikes",max:16,base:700,k:1.65,add:10},
+ {id:"showers",t:2,e:"🚿",name:"Showers",max:10,base:2500,k:2.3,mm:.15},
+ {id:"racks",t:2,e:"🏋️",name:"Squat racks",max:12,base:5000,k:1.7,add:18},
+ {id:"sauna",t:3,e:"🧖",name:"Sauna",max:10,base:20000,k:2.4,sp:.4},
+ {id:"yoga",t:3,e:"🧘",name:"Yoga studio",max:12,base:60000,k:1.75,add:30},
  {id:"pool",t:4,e:"🕶️",name:"The Gear Guy",max:12,base:400000,k:2.2,add:60,mm:.1}   // the late money sink,
 ];
 // Supplements are gym-only: every one does something the skill tree can't (owner request 2026-10-17)
@@ -970,7 +970,7 @@ const RANKS=[
  {n:300,e:"🥈",name:"Silver",perk:"supplements 20% cheaper"},   // ~The Chippy
  {n:1500,e:"🥇",name:"Gold",perk:"+25% throw damage"},        // ~Curry House
  {n:5000,e:"💎",name:"Platinum",perk:"power-ups last 50% longer"},   // ~Street Food
- {n:15000,e:"🏆",name:"Legend",perk:"×1.5 kcal"},       // ~The Buffet
+ {n:30000,e:"🏆",name:"Legend",perk:"×1.5 kcal"},       // ~The Buffet
 ];
 const rankN=()=>{const m=members();let r=0;for(const k of RANKS)if(m>=k.n)r++;return r;};
 const gcost=(it,L)=>Math.round(it.base*Math.pow(it.k,L)*(SUPPS.includes(it)&&rankN()>=2?.8:1));
@@ -987,7 +987,8 @@ const secDone=(z,i)=>!!S.cleared[secKey(z,i)];
 const selZone=()=>ZONES[ZI[S.zone]],selSec=()=>clamp(S.si||0,0,NSEC-1);
 // Skill tree pages, one per market (owner: tab across them instead of one huge tree). A node's page comes from its price; a page opens when you reach its market.
 const pgOpen=k=>S.zones.length-1>=k;
-const avail=n=>pgOpen(n.pg)&&(!n.p||lv(n.p)>=need(n.p));
+const needTxt=n=>n.p&&pgOpen(n.pg)?`${NI[n.p].name} to level ${need(n.p)}`:`to ${ZONES[n.pg].name}`;   // what opens this node
+const avail=n=>pgOpen(n.pg)&&(!n.p||lv(n.p)>=need(n.p));   // n.p is the parent on the node's own page (see relayout)
 const medalsFor=k=>Math.floor(2*Math.sqrt(k/4.5e9));   // ~6 medals for a first season (seasons got longer on 2026-10-17)
 let SIM=false;
 
@@ -1199,6 +1200,8 @@ const CHARS=[
  {id:"coach",name:"Coach Carl",d:"Blows the whistle on cheat days.",o:{sk:"#d9a07a",top:"#2f5d8a",hair:"#9a9a9a",band:null,cap:"#d8423a",whistle:1,shorts:"#2f5d8a"}},
 ];
 const charOpts=()=>(CHARS.find(c=>c.id===S.char)||CHARS[0]).o;
+// helpers (Gym Party mates, Gym Buddies) look like a random character from the picker, never the one you're playing (owner)
+const helperLook=()=>{const pool=CHARS.filter(c=>c.id!==(S.char||"lifter"));return pool[Math.floor(Math.random()*pool.length)].o;};
 /* ---------- GYM UI ---------- */
 let toastT;
 function toast(msg){if(SIM)return;let t=$(".toast");if(!t){t=document.createElement("div");t.className="toast";$("#app").appendChild(t);}t.textContent=msg;t.hidden=false;clearTimeout(toastT);toastT=setTimeout(()=>t.hidden=true,1800);}
@@ -1211,6 +1214,27 @@ function nextBanner(){const b=BQ.shift(),el=$("#banner");if(!b){el.hidden=true;b
 
 // Build the tree once; renderGym just updates classes and text (so controller focus survives a purchase)
 NODES.forEach(n=>{n.pg=n.id==="bulk"?4:n.id==="start"||!n.base?0:n.base<3000?0:n.base<150000?1:n.base<5e6?2:n.base<1e9?3:4;});
+// Each page after the first is its own connected tree around a market badge at 0,0 (owner: pages must look like the first one, no gaps).
+// Nodes whose parent is on an earlier page form a "spine" going out from the badge in their branch's direction (cheapest first);
+// their own children branch off one grid step at a time. Lines are real prerequisites, like on the first page.
+(function relayout(){
+  const DIRS={appetite:[0,-1],chew:[1,0],stomach:[-1,0],speed:[0,1]};
+  const DIR={};for(const n of NODES){let m=n;while(m.p&&m.p!=="start")m=NI[m.p];DIR[n.id]=DIRS[m.id]||[0,1];}const dirOf=n=>DIR[n.id];   // from the original parents, before any are rewired
+  for(let k=1;k<5;k++){
+    const pageN=NODES.filter(n=>n.pg===k);if(!pageN.length)continue;
+    const kids={};pageN.forEach(n=>{if(n.p&&NI[n.p].pg===k)(kids[n.p]=kids[n.p]||[]).push(n);});
+    const occ=new Set(["0,0"]),key=(x,y)=>x+","+y,place=(n,x,y)=>{n.x=x;n.y=y;occ.add(key(x,y));};
+    const spines=[];
+    for(const [dk,d] of Object.entries(DIRS)){const sp=pageN.filter(n=>!(n.p&&NI[n.p].pg===k)&&dirOf(n)===d).sort((a,b)=>a.base-b.base);
+      sp.forEach((n,i)=>{place(n,d[0]*(i+1),d[1]*(i+1));n.p=i?sp[i-1].id:null;n.proot=!i;});spines.push([d,sp]);}
+    const grow=(n,din,flip)=>{const cs=(kids[n.id]||[]).sort((a,b)=>a.base-b.base);let f=flip;
+      for(const c of cs){const pa=[din[1],din[0]],pb=[-din[1],-din[0]],opts=f?[pb,pa,din]:[pa,pb,din];f=!f;
+        let ok=null;for(const o of opts){if(!occ.has(key(n.x+o[0],n.y+o[1]))){ok=o;break;}}
+        if(!ok){for(let r=2;r<6&&!ok;r++)for(const o of opts)if(!occ.has(key(n.x+o[0]*r,n.y+o[1]*r))){ok=[o[0]*r,o[1]*r];break;}}
+        place(c,n.x+ok[0],n.y+ok[1]);grow(c,[Math.sign(ok[0]),Math.sign(ok[1])],f);}};
+    for(const [d,sp] of spines)sp.forEach((n,i)=>grow(n,d,i%2===1));
+  }
+})();
 let TP=0;   // the tree page you're looking at
 const treeEl=$("#tree"),treeIn=$("#treeInner"),svg=$("#treeSvg"),nodeEls={},lineEls={};
 let infoId="start",touchSel=null;
@@ -1219,7 +1243,9 @@ const CELL=124,GX=[Math.min(...NODES.map(n=>n.x))-1,Math.max(...NODES.map(n=>n.x
 const TW=(GX[1]-GX[0])*CELL,TH=(GY[1]-GY[0])*CELL;
 const gpx=x=>(x-GX[0])*CELL,gpy=y=>(y-GY[0])*CELL;
 treeIn.style.width=TW+"px";treeIn.style.height=TH+"px";svg.setAttribute("width",TW);svg.setAttribute("height",TH);
+const pageBadges=ZONES.map((z,k)=>{if(!k)return null;const b=document.createElement("div");b.className="node root badge";b.style.left=gpx(0)+"px";b.style.top=gpy(0)+"px";b.innerHTML=`<span>${z.e}</span>`;b.dataset.tip=z.name+" upgrades";b.hidden=true;treeIn.appendChild(b);return b;});
 NODES.forEach(n=>{
+  if(!n.p&&n.pg>0){const l=document.createElementNS("http://www.w3.org/2000/svg","line");l.setAttribute("x1",gpx(0));l.setAttribute("y1",gpy(0));l.setAttribute("x2",gpx(n.x));l.setAttribute("y2",gpy(n.y));l.setAttribute("stroke-linecap","round");svg.appendChild(l);lineEls[n.id]=l;}
   if(n.p){const p=NI[n.p],l=document.createElementNS("http://www.w3.org/2000/svg","line");
     l.setAttribute("x1",gpx(p.x));l.setAttribute("y1",gpy(p.y));l.setAttribute("x2",gpx(n.x));l.setAttribute("y2",gpy(n.y));
     l.setAttribute("stroke-linecap","round");svg.appendChild(l);lineEls[n.id]=l;}
@@ -1271,7 +1297,7 @@ let treeSz=null;new ResizeObserver(()=>{const w=treeEl.clientWidth,h=treeEl.clie
 function buyNode(n){
   const L=lv(n.id);
   if(L>=n.max){renderInfo();return;}
-  if(!avail(n)){toast(`Get ${NI[n.p].name} to level ${need(n.p)} first`);SFX.no();renderInfo();return;}
+  if(!avail(n)){toast(`Get ${needTxt(n)} first`);SFX.no();renderInfo();return;}
   const c=cost(n);
   if(S.kcal<c){toast(`Need ${fmt(c-S.kcal)} more kcal`);SFX.no();renderInfo();return;}
   S.kcal-=c;S.lv[n.id]=L+1;save();SFX.buy(L);
@@ -1280,7 +1306,7 @@ function buyNode(n){
 }
 function renderInfo(){
   const n=NI[infoId],L=lv(n.id),max=L>=n.max,c=cost(n);
-  if(!avail(n)){$("#iE").textContent="❔";$("#iName").textContent="Something new…";$("#iDesc").textContent=`Get ${NI[n.p].name} to level ${need(n.p)} to reveal this upgrade.`;$("#iVal").textContent="";$("#iBuy").style.visibility="hidden";return;}
+  if(!avail(n)){$("#iE").textContent="❔";$("#iName").textContent="Something new…";$("#iDesc").textContent=`Get ${needTxt(n)} to reveal this upgrade.`;$("#iVal").textContent="";$("#iBuy").style.visibility="hidden";return;}
   $("#iBuy").style.visibility="";
   $("#iE").textContent=n.e;$("#iName").textContent=n.name+(n.max>1?`  ·  ${L}/${n.max}`:"");
   $("#iDesc").textContent=n.d;
@@ -1290,7 +1316,7 @@ function renderInfo(){
   if(n.skill){$("#iVal").innerHTML=L?"<em>Unlocked</em>":`<em>${n.f(1)}</em>`;}
   else $("#iVal").innerHTML=max?`<em>${n.f(n.v(L))}</em> (maxed)`:`${n.f(n.v(L))} → <em>${n.f(n.v(L+1))}</em>`;
   b.disabled=max;
-  b.innerHTML=(max?(n.skill?"Unlocked":"Maxed"):!avail(n)?`Needs ${NI[n.p].name} ${need(n.p)}`:`Buy · ${fmt(c)} kcal`)+(max||!avail(n)?"":' <span class="glyph pd pA">A</span>');
+  b.innerHTML=(max?(n.skill?"Unlocked":"Maxed"):!avail(n)?`Needs ${needTxt(n)}`:`Buy · ${fmt(c)} kcal`)+(max||!avail(n)?"":' <span class="glyph pd pA">A</span>');
   b.className="btn"+(!max&&avail(n)&&S.kcal>=c?" gold":"");
 }
 $("#iBuy").onclick=()=>buyNode(NI[infoId]);
@@ -1441,16 +1467,16 @@ function renderGym(){
   {const top=S.zones.length-1;if(top<(S.tpSeen??0)){S.tpSeen=top;TP=Math.min(TP,top);}if(top>(S.tpSeen??0)){S.tpSeen=top;TP=top;requestAnimationFrame(fitTree);}}
   [...$("#tpages").children].forEach((b,k)=>{const open=pgOpen(k);b.className="tpg"+(k===TP?" on":"")+(open?"":" lock");b.querySelector(".te").textContent=open?ZONES[k].e:"🔒";
     const c=open?NODES.filter(n=>n.pg===k&&avail(n)&&lv(n.id)<n.max&&S.kcal>=cost(n)).length:0;if(c&&k!==TP)b.dataset.n=String(c);else delete b.dataset.n;});
-  const anch=new Set(NODES.filter(n=>n.pg===TP&&n.p&&NI[n.p].pg<TP).map(n=>n.p));   // earlier upgrades this page grows from
+  pageBadges.forEach((b,k)=>{if(b)b.hidden=k!==TP;});
   NODES.forEach(n=>{
     const b=nodeEls[n.id],L=lv(n.id),max=L>=n.max,ok=avail(n),can=ok&&!max&&S.kcal>=cost(n);
     const peek=!ok&&(!n.p||avail(NI[n.p]));   // parent is reachable: show a "?" so you know something's coming
-    const here=n.pg===TP,anchor=!here&&anch.has(n.id);
-    b.className="node"+(n.skill?" skill":"")+(n.id==="start"?" root":"")+(L>0?" own":"")+(max?" max":"")+(can&&here?" can":"")+(!ok?" lock":"")+(peek?" peek":"")+(anchor?" anchor":"");
-    b.hidden=(!here&&!anchor)||(!ok&&!peek);b.firstElementChild.textContent=ok?n.e:"?";
+    const here=n.pg===TP;
+    b.className="node"+(n.skill?" skill":"")+(n.id==="start"?" root":"")+(L>0?" own":"")+(max?" max":"")+(can&&here?" can":"")+(!ok?" lock":"")+(peek?" peek":"");
+    b.hidden=!here||(!ok&&!peek);b.firstElementChild.textContent=ok?n.e:"?";
     const l=b.querySelector(".lv");if(l)l.textContent=n.skill?(L?"✓":fmt(cost(n))):(max?"MAX":`${L}/${n.max}`);
     b.setAttribute("aria-label",`${n.name}, level ${L} of ${n.max}`);
-    b.dataset.tip=!ok?`??? · needs ${NI[n.p].name} ${need(n.p)}`:n.id==="start"?n.name:`${n.name}  ·  `+(max?(n.skill?"Unlocked":"MAX"):!ok?"🔒 Locked":`${fmt(cost(n))} kcal`);
+    b.dataset.tip=!ok?`??? · get ${needTxt(n)}`:n.id==="start"?n.name:`${n.name}  ·  `+(max?(n.skill?"Unlocked":"MAX"):!ok?"🔒 Locked":`${fmt(cost(n))} kcal`);
     const ln=lineEls[n.id];
     if(ln){ln.style.display=b.hidden||n.pg!==TP?"none":"";const on=L>0,rd=ok;ln.setAttribute("stroke",on?"#3b2a1c":rd?BRC[n.g]:"#a8997c");ln.setAttribute("stroke-width",on?5:3.5);ln.setAttribute("stroke-dasharray",rd?"":"2 8");}
   });
@@ -1626,8 +1652,9 @@ let WW=1280,WH=720,SCL=1,OX=0,OY=0,DPR=1,ROOM=null,ROOMQ=1,VIG=null;
 const WALL=140,SIDE=34,BOT=34,PR=28;
 const FX0=()=>SIDE,FX1=()=>WW-SIDE,FY0=()=>WALL,FY1=()=>WH-BOT;
 function layout(){
-  DPR=Math.min(2,window.devicePixelRatio||1);
   const vw=innerWidth,vh=innerHeight;
+  // render resolution budget: at most 1.5x and about 1440p worth of pixels (filling a 4K canvas was what dropped the frame rate in busy runs)
+  DPR=Math.min(1.5,window.devicePixelRatio||1);DPR=Math.min(DPR,Math.sqrt(2560*1440/Math.max(1,vw*vh)));
   cv.width=Math.round(vw*DPR);cv.height=Math.round(vh*DPR);
   fitScreen();
   const hud=$("#hud"),top=(hud.getBoundingClientRect().height||70)+6,bot=document.body.classList.contains("touch")?6:($("#skillbar").getBoundingClientRect().height||70)+16;
@@ -1930,6 +1957,8 @@ function buildRoom(z,si=0){
   for(let y=WALL;y<WH;y+=40){rr(c,4,y,SIDE-8,36,5);c.stroke();rr(c,WW-SIDE+4,y,SIDE-8,36,5);c.stroke();}
   for(let x=0;x<WW;x+=60){rr(c,x+3,WH-BOT+5,54,BOT-10,5);c.stroke();}
   c.strokeStyle=OUT;c.lineWidth=6;c.strokeRect(SIDE,WALL-2,WW-2*SIDE,WH-BOT-WALL+2);c.strokeRect(3,3,WW-6,WH-6);
+  // lamp light pools are baked into the room once (they used to be big gradient fills every frame)
+  c.globalCompositeOperation="lighter";for(const lx of LAMPS()){const g=c.createRadialGradient(lx,40,6,lx,WALL+60,320);g.addColorStop(0,`rgba(${z.th.glow},.19)`);g.addColorStop(1,`rgba(${z.th.glow},0)`);c.fillStyle=g;c.fillRect(lx-300,0,600,WALL+360);}c.globalCompositeOperation="source-over";
   ROOM=k;
   const v=document.createElement("canvas");v.width=Math.ceil(WW*q/2);v.height=Math.ceil(WH*q/2);const vc=v.getContext("2d");vc.scale(q/2,q/2);
   const vg=vc.createRadialGradient(WW/2,WH*.55,Math.min(WW,WH)*.25,WW/2,WH*.55,Math.max(WW,WH)*.72);vg.addColorStop(0,"rgba(0,0,0,0)");vg.addColorStop(.6,"rgba(0,0,0,.22)");vg.addColorStop(1,"rgba(0,0,0,.72)");vc.fillStyle=vg;vc.fillRect(0,0,WW,WH);
@@ -1985,7 +2014,7 @@ function startRun(){HC.clear();vsReset();
   if(!SIM){buildRoom(zone,si);}
   SKILLS.forEach(s=>R.cds[s.id]=0);
   setupHazards();
-  for(let i=0;i<Math.ceil(lv("buddy")/2);i++)R.buds.push({x:WW*(.3+.4*i),y:FY1()-60,vx:0,vy:0,tgt:null,chew:0,walk:0,face:1,mouth:0});
+  for(let i=0;i<Math.ceil(lv("buddy")/2);i++)R.buds.push({x:WW*(.3+.4*i),y:FY1()-60,vx:0,vy:0,tgt:null,chew:0,walk:0,face:1,mouth:0,look:helperLook()});
   for(let i=0;i<Math.min(10,Math.ceil(R.max*.75));i++)spawnFood(true);   // a small opening crowd: the rest arrive over time, so the build-up to the boss can't be skipped
   // a boss you've already damaged is waiting at the start of the run
   S.bhp={};   // bosses come back at full HP every run
@@ -2164,7 +2193,7 @@ function useSkill(id){
   if(id==="inhale"){R.inhT=3+.5*lv("inhaleR");R.shT=0;R.refl=0;R.inv=Math.max(R.inv,R.inhT);SFX.inhale();if(!SIM)tone(220,.3,"triangle",.06,2);floatText(R.x,R.y-110,"SHIELD UP!","#9fd3ff",2);}
   if(id==="toss"){const L=stat("tossN"),n=3+L,life=4+.5*L;   // Gym Party (owner idea; replaced Plate Toss): mates run in and throw with you
     for(let i=0;i<n;i++){const side=Math.random()<.5?-1:1;
-      R.party.push({x:side<0?FX0()-40:FX1()+40,y:rnd(FY0()+60,FY1()-60),i,n,life,thrT:rnd(.4,.8),walk:0,face:-side,look:PARTY_LOOKS[(i+R.partyN)%PARTY_LOOKS.length],side});}
+      R.party.push({x:side<0?FX0()-40:FX1()+40,y:rnd(FY0()+60,FY1()-60),i,n,life,thrT:rnd(.4,.8),walk:0,face:-side,look:helperLook(),side});}
     R.partyN+=n;floatText(R.x,R.y-110,"GYM PARTY!",COL.gold,2);SFX.toss();if(!SIM)tone(520,.2,"square",.05,1.5);R.shake=Math.max(R.shake,.2);rumble(120,.4,.3);}
   if(id==="cheat"){R.cheatT=stat("cheatT");SFX.gold();floatText(R.x,R.y-90,"CHEAT MEAL!",COL.gold,2);}
 }
@@ -2187,10 +2216,11 @@ $("#quitBtn").onclick=()=>{paused=false;$("#pause").hidden=true;endRun();};
 document.addEventListener("visibilitychange",()=>{if(document.hidden&&R&&!R.done&&!paused)togglePause();});
 
 /* ---------- FX ---------- */
-function floatText(x,y,s,col,big=0){if(SIM)return;R.txt.push({x,y,s,col,life:1,big,vy:-70});}
-function burst(x,y,col,n=8,sp=1){if(SIM)return;if(RM)n=Math.min(n,3);for(let i=0;i<n;i++){const a=Math.random()*Math.PI*2,v=(90+Math.random()*200)*sp;R.parts.push({x,y,vx:Math.cos(a)*v,vy:Math.sin(a)*v-80,g:520,life:.5+Math.random()*.35,max:.85,col,r:rnd(3,6),k:"c"});}}
-function sparkle(x,y,big){if(SIM)return;R.parts.push({x,y,vx:0,vy:0,g:0,life:.22,max:.22,col:"#fff",r:big?46:30,k:"s",rot:Math.random()});}
-function puff(x,y,col){if(SIM)return;R.parts.push({x:x+rnd(-14,14),y:y+rnd(-6,6),vx:rnd(-60,60),vy:rnd(-40,0),g:0,life:.45,max:.45,col,r:rnd(7,12),k:"p"});}
+function floatText(x,y,s,col,big=0){if(SIM)return;if(R.txt.length>36&&!big)return;R.txt.push({x,y,s,col,life:1,big,vy:-70});}
+function burst(x,y,col,n=8,sp=1){if(SIM)return;if(RM)n=Math.min(n,3);if(R.parts.length>260)n=Math.min(n,2);if(R.parts.length>420)return;   // particle budget keeps busy fights smooth
+  for(let i=0;i<n;i++){const a=Math.random()*Math.PI*2,v=(90+Math.random()*200)*sp;R.parts.push({x,y,vx:Math.cos(a)*v,vy:Math.sin(a)*v-80,g:520,life:.5+Math.random()*.35,max:.85,col,r:rnd(3,6),k:"c"});}}
+function sparkle(x,y,big){if(SIM||R.parts.length>420)return;R.parts.push({x,y,vx:0,vy:0,g:0,life:.22,max:.22,col:"#fff",r:big?46:30,k:"s",rot:Math.random()});}
+function puff(x,y,col){if(SIM||R.parts.length>420)return;R.parts.push({x:x+rnd(-14,14),y:y+rnd(-6,6),vx:rnd(-60,60),vy:rnd(-40,0),g:0,life:.45,max:.45,col,r:rnd(7,12),k:"p"});}
 
 /* ---------- UPDATE ---------- */
 function update(dt){
@@ -2279,7 +2309,7 @@ function update(dt){
     const dx=gx-m.x,dy=gy-m.y,d=Math.hypot(dx,dy);
     if(d>8){const sp=Math.min(d*5,560);m.x+=dx/d*sp*dt;m.y+=dy/d*sp*dt;m.walk+=sp*dt/22;m.face=dx<0?-1:1;}
     if(m.life>0){m.life-=dt;m.thrT-=dt;
-      if(m.thrT<=0&&d<90&&!R.ending){const t=thrTarget();if(t){m.thrT=.4;const a=Math.atan2(t.y-(m.y-40),t.x-m.x);dart(m.x+m.face*20,m.y-16,a,t,{pierce:R.thrP,r:14,heavy:false,noK:1});R.darts[R.darts.length-1].m=PARTY_M*(R.thrK||1);m.face=t.x<m.x?-1:1;}else m.thrT=.15;}}
+      if(m.thrT<=0&&d<90&&!R.ending){const t=thrTarget();if(t){m.thrT=.6;const a=Math.atan2(t.y-(m.y-40),t.x-m.x);dart(m.x+m.face*20,m.y-16,a,t,{pierce:R.thrP,r:14,heavy:false,noK:1});R.darts[R.darts.length-1].m=PARTY_M*1.5*(R.thrK||1);m.face=t.x<m.x?-1:1;}else m.thrT=.15;}}
   }
   R.party=R.party.filter(m=>m.life>0||(m.x>-100&&m.x<WW+100));
   // spawning
@@ -2565,9 +2595,10 @@ function throwing(dt){
   if(R.thrT<=0&&R.stun<=0&&!R.ending){const t=thrTarget();
     if(t){const pw=R.pw,eff=R.thrCd*(pw.rapid>0?.4:1)/(R.cheatT>0?1.8:1),gap=Math.max(eff,THR_GAP);R.thrT=gap;R.thrK=gap/eff;   // capped rate, same damage
       R.hand=-(R.hand||1);const ox=R.x+R.hand*24,oy=R.y-16,ang=Math.atan2(t.y-oy,t.x-ox),heavy=pw.heavy>0;
-      const n=R.thrN+(pw.spread>0?4:0),fan=pw.spread>0?.22:.14,base={pierce:R.thrP,r:heavy?24:16,heavy,bounce:heavy?3:0};
-      for(let k=0;k<n;k++){const o=n>1?(k-(n-1)/2)*fan:0;dart(ox,oy,ang+o,Math.abs(o)<.01?t:null,base);}
-      if(pw.ring>0)for(let k=0;k<8;k++)dart(ox,oy,ang+Math.PI/8+k*Math.PI/4,null,base);
+      // at most 3 dumbbells per throw (owner: late game was a bullet storm, and it cost frame rate); extra Twin Throw / Spread Shot dumbbells become damage
+      const n=R.thrN+(pw.spread>0?4:0),shown=Math.min(n,3),fan=pw.spread>0?.22:.14,base={pierce:R.thrP,r:heavy?24:16,heavy,bounce:heavy?3:0,mul:n/shown};
+      for(let k=0;k<shown;k++){const o=shown>1?(k-(shown-1)/2)*fan:0;dart(ox,oy,ang+o,Math.abs(o)<.01?t:null,base);}
+      if(pw.ring>0){R.ringT=(R.ringT||0)-gap;if(R.ringT<=0){const every=1;R.ringT=every;const rb={...base,mul:every/gap};for(let k=0;k<8;k++)dart(ox,oy,ang+Math.PI/8+k*Math.PI/4,null,rb);}}   // the ring goes off once a second, hitting as hard as the throws it replaces
       R.mouth=Math.max(R.mouth,.5);R.throwA=.18;if(!SIM)tone(560,.04,"triangle",.02,1.5);}
     else R.thrT=.08;}
   R.throwA=Math.max(0,(R.throwA||0)-dt);
@@ -2592,7 +2623,7 @@ function throwing(dt){
     if(d.x<FX0()-30||d.x>FX1()+30||d.y<FY0()-60||d.y>FY1()+30)d.life=0;}
   R.darts=R.darts.filter(d=>d.life>0);
 }
-function dart(x,y,ang,tgt,o){o.bounce=o.bounce||0;const mk=o.noK?1:(R.thrK||1);const reach=Math.max(R.thrR*1.25,tgt?Math.hypot(tgt.x-x,tgt.y-y)*1.3:0);R.darts.push({x,y,vx:Math.cos(ang)*R.thrV,vy:Math.sin(ang)*R.thrV,tgt,life:reach/R.thrV+.15,rot:rnd(0,6),hit:new Set(),pierce:o.pierce,r:o.r,heavy:o.heavy,bounce:o.bounce,m:mk});}
+function dart(x,y,ang,tgt,o){o.bounce=o.bounce||0;const mk=(o.noK?1:(R.thrK||1))*(o.mul||1);const reach=Math.max(R.thrR*1.25,tgt?Math.hypot(tgt.x-x,tgt.y-y)*1.3:0);R.darts.push({x,y,vx:Math.cos(ang)*R.thrV,vy:Math.sin(ang)*R.thrV,tgt,life:reach/R.thrV+.15,rot:rnd(0,6),hit:new Set(),pierce:o.pierce,r:o.r,heavy:o.heavy,bounce:o.bounce,m:mk});}
 // Power-ups: grab one for a few seconds of better throws
 const PUPS={rapid:{e:"🔥",name:"Rapid Fire",col:"#ff8a3a"},spread:{e:"🔱",name:"Spread Shot",col:"#5fc8ff"},ring:{e:"💫",name:"Dumbbell Ring",col:"#c48bff"},heavy:{e:"🪨",name:"Heavy Iron",col:"#d9d2c2"}};   // heavy: big dumbbells, ×2.5 damage, each ricochets to 3 more enemies
 function dropPup(x,y){if(R.pups.length>=3)return;const ks=Object.keys(PUPS);R.pups.push({k:ks[Math.floor(Math.random()*ks.length)],x:clamp(x,FX0()+40,FX1()-40),y:clamp(y,FY0()+40,FY1()-40),life:9,pop:0});}
@@ -2819,7 +2850,7 @@ function draw(){
   if(R.mate){const m=R.mate;actors.push([m.y+PR,()=>{if(R.ending){(R.win?drawCheer:drawKneel)(m.x,m.y+PR,30,tm,{look:MATE_LOOK,face:m.face,ph:.4});return;}drawShadow(m.x,m.y+PR,26);drawLifter(ctx,m.x,m.y+PR,30,{walk:m.walk,moving:true,face:m.face,top:"#2f9e6b",band:"#f2c230",shorts:"#22303f",lx:m.face,ly:0,fill:.2});
     ctx.font=`800 14px ${UIF}`;ctx.textAlign="center";ctx.lineWidth=4;ctx.strokeStyle=OUT;ctx.strokeText("Partner",m.x,m.y-60);ctx.fillStyle="#b9f0c9";ctx.fillText("Partner",m.x,m.y-60);}]);}
   for(const m of R.party)actors.push([m.y+PR,()=>{if(R.ending){(R.win?drawCheer:drawKneel)(m.x,m.y+PR,27,tm,{look:m.look,face:m.face,ph:m.i*.7});return;}drawShadow(m.x,m.y+PR,24);drawLifter(ctx,m.x,m.y+PR,27,{walk:m.walk,moving:true,face:m.face,...m.look,lx:m.face,ly:0,fill:.25});}]);
-  for(const b of R.buds)actors.push([b.y+PR,()=>{if(R.ending){(R.win?drawCheer:drawKneel)(b.x,b.y+PR,28,tm,{look:BUD_LOOK,face:b.face,ph:b.x*.01});return;}drawShadow(b.x,b.y+PR,26);drawLifter(ctx,b.x,b.y+PR,28,{mouth:b.mouth,walk:b.walk,moving:Math.hypot(b.vx,b.vy)>20,face:b.face,top:"#3f7fd6",band:"#ffffff",shorts:"#22303f",lx:b.face,ly:0,fill:.3});
+  for(const b of R.buds)actors.push([b.y+PR,()=>{if(R.ending){(R.win?drawCheer:drawKneel)(b.x,b.y+PR,28,tm,{look:b.look,face:b.face,ph:b.x*.01});return;}drawShadow(b.x,b.y+PR,26);drawLifter(ctx,b.x,b.y+PR,28,{mouth:b.mouth,walk:b.walk,moving:Math.hypot(b.vx,b.vy)>20,face:b.face,...b.look,lx:b.face,ly:0,fill:.3});
     ctx.font=`800 14px ${UIF}`;ctx.textAlign="center";ctx.lineWidth=4;ctx.strokeStyle=OUT;ctx.strokeText("Buddy",b.x,b.y-58);ctx.fillStyle="#bfe1ff";ctx.fillText("Buddy",b.x,b.y-58);}]);
   for(const w of R.waiters)actors.push([w.y+30,()=>{drawShadow(w.x,w.y+30,26);drawSpr(ctx,"🤵",w.x,w.y-8+Math.abs(Math.sin(w.walk))*-4,30,{flip:w.dir<0});if(w.tray){rr(ctx,w.x-30+w.dir*16,w.y-62,60,10,5);fs(ctx,"#c9ccd6",3);drawSpr(ctx,R.zone.foods[0].e,w.x+w.dir*16-12,w.y-74,13);drawSpr(ctx,R.zone.foods[3].e,w.x+w.dir*16+12,w.y-74,13);}}]);
   for(const s of R.scoots)if(s.warn<=0)actors.push([s.y+26,()=>{drawShadow(s.x,s.y+26,38);drawSpr(ctx,"🛵",s.x,s.y-6,40,{flip:s.dir<0});}]);
@@ -2854,7 +2885,7 @@ function draw(){
   // lamps flicker + light pools
   ctx.globalCompositeOperation="lighter";{
   const glow=R.zone.th.glow;
-  for(const lx of LAMPS()){const fl=.85+.15*Math.sin(tm*11+lx)*Math.sin(tm*7.3+lx*.3);const g=ctx.createRadialGradient(lx,40,6,lx,WALL+60,320);g.addColorStop(0,`rgba(${glow},${.22*fl})`);g.addColorStop(1,`rgba(${glow},0)`);ctx.fillStyle=g;ctx.fillRect(lx-300,0,600,WALL+360);}
+  for(const lx of LAMPS()){const fl=.5+.5*Math.sin(tm*11+lx)*Math.sin(tm*7.3+lx*.3);const g=ctx.createRadialGradient(lx,46,4,lx,46,70);g.addColorStop(0,`rgba(${glow},${.18*fl})`);g.addColorStop(1,`rgba(${glow},0)`);ctx.fillStyle=g;ctx.fillRect(lx-70,0,140,120);}   // just the flicker near each bulb
   ctx.globalCompositeOperation="source-over";}
   if(VIG)ctx.drawImage(VIG,0,0,WW,WH);
   if(R.ending){ctx.fillStyle=`rgba(0,0,0,${.35*Math.min(1,(R.endA||0)/.8)})`;ctx.fillRect(-WW,-WH,WW*3,WH*3);}
