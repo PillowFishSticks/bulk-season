@@ -145,6 +145,8 @@ body.touch .glyph{display:none!important}
 .ranks .rtxt{flex:1 1 220px;min-width:0;font:800 14px/1.2 var(--ui);color:#fff7e3}
 .ranks .rbar{height:8px;border-radius:4px;background:#12141a;overflow:hidden;margin-top:4px}.ranks .rbar i{display:block;height:100%;background:#f2c230;transform-origin:left}
 .tab{position:relative}
+.mbtns .btn{position:relative}
+.mbtns .btn[data-n]::after{content:attr(data-n);position:absolute;top:-12px;right:-12px;min-width:30px;height:30px;padding:0 7px;box-sizing:border-box;border-radius:15px;background:#d8423a;color:#fff;border:3px solid #fff;font:900 16px/24px var(--ui);text-align:center;box-shadow:0 2px 0 rgba(0,0,0,.35)}
 .tab[data-n]::after{content:attr(data-n);position:absolute;top:-10px;right:-10px;min-width:28px;height:28px;padding:0 6px;box-sizing:border-box;border-radius:14px;background:#d8423a;color:#fff;border:3px solid #fff;font:900 15px/22px var(--ui);text-align:center;box-shadow:0 2px 0 rgba(0,0,0,.35)}
 .tab[data-n]:not([aria-selected="true"]){animation:tabNag 1.6s ease-in-out infinite}
 @keyframes tabNag{0%,100%{transform:none}50%{transform:translateY(-3px)}}
@@ -327,7 +329,9 @@ body.phone .info p{font-size:18px}
 body.phone .info .btn{font-size:24px;padding:14px 22px}
 .menuList .btn{font-size:20px}
 /* phone: banners (boss arriving, gold food...) are a compact strip under the HUD instead of a full-screen splash */
-body.phone #banner{place-items:start center;padding-top:calc(76px + env(safe-area-inset-top,0px))}
+body.phone #banner{place-items:start start;padding:calc(76px + env(safe-area-inset-top,0px)) 0 0 10px}
+body.phone #banner.hub{place-items:start end;padding:calc(70px + env(safe-area-inset-top,0px)) 10px 0 0}
+body.phone #banner .bwrap{transform:none}
 body.phone #banner .bwrap{grid-template-columns:auto auto;column-gap:10px;row-gap:3px;justify-items:start;text-align:left;padding:7px 16px 7px 10px;background:rgba(14,10,8,.9);border:3px solid var(--out);border-radius:14px;box-shadow:0 4px 0 rgba(0,0,0,.5);animation:bdrop .3s cubic-bezier(.3,1.5,.6,1)}
 body.phone #banner .rays{display:none}
 body.phone #banner .bico{grid-row:1/3;font-size:36px}
@@ -424,12 +428,16 @@ body.touch .pauseBtn{right:auto;left:50%;transform:translateX(-50%);bottom:calc(
 .mbtns .btn{flex:1 1 150px}
 .mlist{display:grid;gap:10px}
 .mlist .btn{padding:14px;font-size:19px}
-#banner{position:absolute;inset:0;display:grid;place-items:center;pointer-events:none;z-index:8}
-#banner .bwrap{position:relative;display:grid;place-items:center;gap:6px;text-align:center;animation:bin .35s cubic-bezier(.3,1.6,.6,1)}
+#banner{position:absolute;inset:0;display:grid;place-items:start start;padding:calc(104px * var(--hk,1) + env(safe-area-inset-top,0px)) 0 0 16px;pointer-events:none;z-index:8}
+#banner.hub{place-items:start end;padding:calc(110px * var(--k,1)) 24px 0 0}
+#banner .bwrap{position:relative;display:grid;grid-template-columns:auto auto;column-gap:12px;row-gap:3px;justify-items:start;align-items:center;text-align:left;padding:8px 18px 8px 12px;background:rgba(14,10,8,.88);border:3px solid var(--out);border-radius:14px;box-shadow:0 4px 0 rgba(0,0,0,.5);transform:scale(var(--hk,1));transform-origin:0 0;animation:bslide .3s cubic-bezier(.3,1.4,.6,1)}
+#banner.hub .bwrap{transform:scale(var(--k,1));transform-origin:100% 0}
+@keyframes bslide{from{opacity:0;translate:-30px 0}to{opacity:1;translate:0 0}}
+#banner .rays{display:none}
 #banner .rays{position:absolute;width:420px;height:420px;left:50%;top:50%;margin:-210px 0 0 -210px;border-radius:50%;background:repeating-conic-gradient(rgba(255,214,90,.55) 0 7deg,transparent 7deg 22deg);-webkit-mask:radial-gradient(circle,#000 18%,transparent 68%);mask:radial-gradient(circle,#000 18%,transparent 68%);animation:spin 8s linear infinite}
-#banner .bico{position:relative;font-size:96px;line-height:1;filter:drop-shadow(0 0 0 var(--out)) drop-shadow(3px 0 0 var(--out)) drop-shadow(-3px 0 0 var(--out)) drop-shadow(0 3px 0 var(--out)) drop-shadow(0 -3px 0 var(--out))}
-#banner .bt{position:relative;font:italic 900 clamp(34px,6vw,64px)/1 var(--disp);color:#4fb52e;-webkit-text-stroke:3px var(--out);paint-order:stroke fill;text-shadow:0 5px 0 var(--out)}
-#banner .bs{position:relative;font:800 clamp(16px,2vw,22px)/1.2 var(--disp);color:var(--cream);text-shadow:0 2px 0 var(--out),0 0 8px #000;max-width:90vw}
+#banner .bico{position:relative;grid-row:1/3;font-size:44px;line-height:1;filter:drop-shadow(0 0 0 var(--out)) drop-shadow(3px 0 0 var(--out)) drop-shadow(-3px 0 0 var(--out)) drop-shadow(0 3px 0 var(--out)) drop-shadow(0 -3px 0 var(--out))}
+#banner .bt{position:relative;font:italic 900 30px/1 var(--disp);color:#4fb52e;-webkit-text-stroke:2px var(--out);paint-order:stroke fill;text-shadow:0 3px 0 var(--out)}
+#banner .bs{position:relative;font:800 16px/1.2 var(--disp);color:var(--cream);text-shadow:0 2px 0 var(--out);max-width:min(460px,60vw)}
 #banner.boss .bt{color:var(--red)} #banner.gold .bt{color:var(--gold)}
 @keyframes spin{to{transform:rotate(360deg)}}
 @keyframes bin{from{transform:scale(.3);opacity:0}}
@@ -1180,7 +1188,7 @@ function toast(msg){if(SIM)return;let t=$(".toast");if(!t){t=document.createElem
 const BQ=[];let bT=0;
 function banner(e,title,sub,kind=""){if(SIM)return;BQ.push({e,title,sub,kind});if(!bT)nextBanner();}
 function nextBanner(){const b=BQ.shift(),el=$("#banner");if(!b){el.hidden=true;bT=0;return;}
-  el.className=b.kind;$("#bIco").textContent=b.e;$("#bTitle").textContent=b.title;$("#bSub").textContent=b.sub||"";
+  el.className=b.kind+(R?"":" hub");$("#bIco").textContent=b.e;$("#bTitle").textContent=b.title;$("#bSub").textContent=b.sub||"";
   el.hidden=false;const w=el.firstElementChild;w.style.animation="none";void w.offsetWidth;w.style.animation="";
   bT=setTimeout(nextBanner,2100);}
 
@@ -1285,7 +1293,7 @@ function secInfo(z,i){
   if(!secOpen(z,i)){const pz=i?z:ZONES[ZI[z.id]-1],pi=i?i-1:NSEC-1;el.innerHTML=`<b>🔒 ${z.name} · ${sc.n}</b><br>Beat ${pz.bosses[pi].e} ${pz.bosses[pi].name} at ${pz.secs[pi].n} to open this.`;return;}
   const threat=b.atk.map(a=>ATK[a.k]).join(", ");
   el.innerHTML=`<b>${z.name} · ${sc.n}</b><br>`+(secDone(z,i)?`✅ ${b.e} ${b.name} beaten. Fill the bar here for a golden feast. Food ×${SECK[i]}`:
-    `Boss: ${b.e} ${b.name}`+` · ${bossHp(b)} bites`+` · Food ×${SECK[i]}<br><span class="threat">⚠ It ${threat}.</span>`);
+    `Boss: ${b.e} ${b.name}`+` · ${fmt(bossHp(b))} HP`+` · Food ×${SECK[i]}<br><span class="threat">⚠ It ${threat}.</span>`);
 }
 function taskOf(z){const i=S.task[z.id]||0;return z.tasks[i]?{t:z.tasks[i],i}:null;}
 function taskText(t,z){
@@ -2450,7 +2458,7 @@ function spawnBoss(encore){
   R.shake=.8;SFX.boss();rumble(450,1,.5);
   if(!SIM)$("#hBossIco").textContent=b.e;
   R.bossStart=hp;R.bossAt=R.el;
-  banner(b.e,encore?`Encore: ${b.name}`:b.name,encore?`Back for seconds · ${max} bites`:`${R.zone.secs[R.si].n} boss · ${max} bites · beat it before time runs out!`,"boss");
+  banner(b.e,encore?`Encore: ${b.name}`:b.name,encore?`Back for seconds · ${fmt(max)} HP`:`${R.zone.secs[R.si].n} boss · ${fmt(max)} HP · beat it before time runs out!`,"boss");
 }
 function bossDown(f){
   const z=R.zone,b=f.def,zi=ZI[z.id];
@@ -2840,6 +2848,8 @@ function endRun(){
   {const earned=S.cash-R.cash0,n=gymCan(),g=$("#rGym");
     g.hidden=!(n||R.prize);g.innerHTML=`💷 Your gym made <b>${money(earned)}</b> while you ran${R.prize?` (incl. ${money(R.prize)} prize money)`:""}.`+(n?` <b>${n} upgrade${n>1?"s":""} ready</b> in Your Gym!`:"");
     $("#gymBtn2").className="btn"+(n?" gold":"");$("#gymBtn2").textContent="🏋️ Your Gym";g.classList.remove("unlock");
+    // red counters like the hub tabs: what you can afford right now
+    {const tc=treeCan();for(const [el,c] of [[$("#gymBtn2"),S.tut===2?n:0],[$("#backBtn"),tc]]){if(c)el.dataset.n=String(Math.min(c,99));else delete el.dataset.n;}}
     if(S.tut===1){g.hidden=false;g.innerHTML="Nice first run! Now open <b>your own gym</b>: members pay you £ while you play, and you spend it on gym-only perks.";$("#gymBtn2").className="btn gold";$("#gymBtn2").textContent="🏋️ Open your gym";}
     else if(R.newMkt!=null){const nm=R.newMkt,eqs=EQUIP.filter(e=>(e.t||0)===nm).map(e=>e.e+" "+e.name);
       g.hidden=false;g.classList.add("unlock");g.innerHTML=`🔓 <b>New in Your Gym:</b> ${eqs.length?eqs.join(", ")+", and ":""}the next level of every supplement!`;$("#gymBtn2").className="btn gold";}}
