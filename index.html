@@ -938,7 +938,7 @@ const EQUIP=[
  {id:"racks",t:2,e:"🏋️",name:"Squat racks",max:6,base:5000,k:1.7,add:18},
  {id:"sauna",t:3,e:"🧖",name:"Sauna",max:5,base:20000,k:2.4,sp:.4},
  {id:"yoga",t:3,e:"🧘",name:"Yoga studio",max:6,base:60000,k:1.75,add:30},
- {id:"pool",t:4,e:"🏊",name:"Swimming pool",max:12,base:400000,k:2.2,add:60,mm:.1}   // the late money sink,
+ {id:"pool",t:4,e:"🕶️",name:"The Gear Guy",max:12,base:400000,k:2.2,add:60,mm:.1}   // the late money sink,
 ];
 // Supplements are gym-only: every one does something the skill tree can't (owner request 2026-10-17)
 const SUPPS=[
@@ -1557,8 +1557,14 @@ function drawGym(t,dt){
   c.fillStyle="rgba(0,0,0,.4)";c.fillRect(0,120,W,8);
   // smoothie bar
   if(gl("bar")){rr(c,960,138,220,46,6);fs(c,"#7a4d2b",4);c.fillStyle="#9a6538";c.fillRect(964,140,212,8);for(let k=0;k<Math.min(5,gl("bar")+1);k++)drawSpr(c,["🥤","🍌","🥛","🍓","🥤"][k],990+k*40,130,11);}
-  // pool
-  if(gl("pool")){rr(c,560,282,330,40,10);fs(c,"#4fa3d9",3);for(let k=0;k<5;k++){c.strokeStyle="rgba(255,255,255,.5)";c.lineWidth=2;c.beginPath();c.moveTo(580+k*60+Math.sin(t*2+k)*6,292);c.quadraticCurveTo(600+k*60,288,620+k*60+Math.sin(t*2+k)*6,292);c.stroke();}}
+  // The Gear Guy (id still "pool" so saves keep their levels; owner's idea after the pool looked like a stray blue strip): a shady bloke by a stack of crates
+  if(gl("pool")){const L=gl("pool"),gx=915,gy=214,n=Math.min(5,1+Math.floor(L/3));c.strokeStyle=OUT;
+    for(let i=0;i<n;i++){const row=Math.floor(i/2),cx=gx-14+(i%2)*38-(i===4?19:0)+(row===1?6:0),cy=gy-26-row*26;rr(c,cx-18,cy-24,36,26,3);fs(c,"#8a5a2e",3);
+      c.save();c.font=`900 9px ${UIF}`;c.textAlign="center";c.fillStyle="#2a1a12";c.fillText("GEAR",cx,cy-8);c.restore();c.strokeStyle=OUT;}
+    const look=Math.sin(t*.9)>0?1:-1;
+    drawLifter(c,gx-30,gy+8,16,{top:"#26282e",shorts:"#1b1c20",band:null,cap:"#141518",face:look,lx:look,ly:.3});
+    if((t%7)<2.2){rr(c,gx-104,gy-70,52,22,8);fs(c,"#fff7e3",2.5);c.save();c.font=`800 12px ${UIF}`;c.textAlign="center";c.fillStyle="#2a1a12";c.fillText("psst…",gx-78,gy-55);c.restore();}
+    c.strokeStyle=OUT;}
   // equipment
   for(const sp of gymSpots()){const {x,y}=sp;
     if(sp.id==="weights"){rr(c,x-34,y-34,68,40,4);fs(c,"#3a3f4a",3);for(let r=0;r<2;r++)for(let k=0;k<4;k++){const dx=x-26+k*17,dy=y-24+r*16;c.fillStyle="#1b1b1b";c.fillRect(dx-6,dy-1,12,3);circ(c,dx-6,dy,4);fs(c,PAL[k],1.5);circ(c,dx+6,dy,4);fs(c,PAL[k],1.5);}}
@@ -2956,8 +2962,7 @@ function frame(now){
   const p0=performance.now();
   if(R&&!R.done&&!paused)update(dt);
   const p1=performance.now();
-  if(R)draw();
-  if(DEBUG){const p2=performance.now();(window.__perf=window.__perf||[]).push([p1-p0,p2-p1]);if(window.__perf.length>2000)window.__perf.shift();}
+  if(R){draw();if(DEBUG){const p2=performance.now();(window.__perf=window.__perf||[]).push([p1-p0,p2-p1]);if(window.__perf.length>2000)window.__perf.shift();}}
   else if(!$("#gym").hidden&&TAB==="gym")drawGym(now/1000,dt);
   else if(!$("#title").hidden)drawHub(now/1000,$("#titleCv"));
   document.body.classList.toggle("nocur",document.body.classList.contains("pad")||(!!R&&!paused&&!R.done&&now-lastMouse>1500));
