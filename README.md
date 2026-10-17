@@ -22,7 +22,7 @@ Each market has its own hazards. None of them can kill you, but they knock you a
 | Move | WASD / arrows | Left stick / d-pad | Drag |
 | Dash | Space | A | Skill buttons |
 | Shield | Q | B | |
-| Plate Toss | E | X | |
+| Gym Party | E | X | |
 | Cheat Meal | R | Y | |
 | Pause | Esc | Start | II button |
 | Fullscreen | F | | |
@@ -33,7 +33,7 @@ It's one file with no build step. Open `index.html` in any browser, or host the 
 
 Progress saves by itself in your browser after every run and purchase. To play on another device, open **Save & devices** in the gym, copy the code, and load it on the other device.
 
-Using an Xbox controller? Press any button once so the browser picks it up. Plate Toss aims with the right stick, and LB/RB switch markets in the gym.
+Using an Xbox controller? Press any button once so the browser picks it up. LB/RB switch markets in the gym.
 
 ## Desktop version (Windows)
 
