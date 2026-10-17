@@ -844,7 +844,8 @@ const NODES=[
  {id:"chain",p:"buddy",g:"purple",x:-1,y:4,e:"🌩️",name:"Gains Train",max:5,base:2000000,k:2.3,v:L=>.06*L,f:v=>`${pct(v)} chance to chain`,d:"Any dumbbell hit might zap onwards into up to 3 nearby enemies for half damage."},
 ];
 // branch colours for the tree (and its key)
-const BRC={blue:"#3f7fd6",yellow:"#f0892a",red:"#d8423a",green:"#46a83a",purple:"#9a5fe0",gold:"#f2c230"};
+// no green here on purpose: green reads as "you can buy this" (owner feedback)
+const BRC={blue:"#3f7fd6",yellow:"#f0892a",red:"#d8423a",green:"#8e5bd0",purple:"#e0559a",gold:"#f2c230"};
 const BRANCH=[["blue","⏱️ Time"],["yellow","💥 Damage"],["red","🔥 Gains"],["green","⚡ Skills"],["purple","🎪 Events"]];
 const need=p=>Math.min(3,NI[p].max);   // parent level needed to open a node
 const NI=Object.fromEntries(NODES.map(n=>[n.id,n]));
@@ -1368,7 +1369,7 @@ function renderGym(){
     b.setAttribute("aria-label",`${n.name}, level ${L} of ${n.max}`);
     b.dataset.tip=!ok?`??? · needs ${NI[n.p].name} ${need(n.p)}`:n.id==="start"?n.name:`${n.name}  ·  `+(max?(n.skill?"Unlocked":"MAX"):!ok?"🔒 Locked":`${fmt(cost(n))} kcal`);
     const ln=lineEls[n.id];
-    if(ln){ln.style.display=b.hidden?"none":"";const on=L>0,rd=ok;ln.setAttribute("stroke",on?"#3b2a1c":rd?"#4f9a2c":"#a8997c");ln.setAttribute("stroke-width",on?5:3.5);ln.setAttribute("stroke-dasharray",rd?"":"2 8");}
+    if(ln){ln.style.display=b.hidden?"none":"";const on=L>0,rd=ok;ln.setAttribute("stroke",on?"#3b2a1c":rd?BRC[n.g]:"#a8997c");ln.setAttribute("stroke-width",on?5:3.5);ln.setAttribute("stroke-dasharray",rd?"":"2 8");}
   });
   renderInfo();
 }
