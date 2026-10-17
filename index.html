@@ -1337,7 +1337,7 @@ function bizItem(list,it,isEq){
   b.addEventListener("mouseenter",()=>seeNew(it,isEq));b.addEventListener("focus",()=>seeNew(it,isEq));
   b.onclick=()=>{const L=isEq?gl(it.id):sl(it.id);if(L>=it.max)return;if(gymLocked(it,L,isEq)){toast(`Unlocks at ${ZONES[gymNeed(it,L,isEq)].name}`);SFX.no();return;}const c=gcost(it,L);
     if(S.cash<c){toast(`Need ${money(c-S.cash)} more`);SFX.no();return;}
-    const r0=rankN();S.cash-=c;(isEq?S.g:S.sp)[it.id]=L+1;save();SFX.buy(L);if(isEq&&L===0)banner(it.e,it.name,"New in your gym!");
+    seeNew(it,isEq,1);const r0=rankN();S.cash-=c;(isEq?S.g:S.sp)[it.id]=L+1;save();SFX.buy(L);if(isEq&&L===0)banner(it.e,it.name,"New in your gym!");
     const r1=rankN();if(r1>r0){const k=RANKS[r1-1];banner(k.e,`${k.name} gym!`,`New perk: ${k.perk}`,"gold");}renderGym();};
   list.appendChild(b);return b;
 }
@@ -1348,8 +1348,9 @@ setTab("tree");
 function gymCan(){return [...EQUIP.map(e=>[e,gl(e.id),1]),...SUPPS.map(p=>[p,sl(p.id),0])].filter(([it,L,eq])=>L<it.max&&!gymLocked(it,L,eq)&&S.cash>=gcost(it,L)).length;}
 function treeCan(){return NODES.filter(n=>avail(n)&&lv(n.id)<n.max&&S.kcal>=cost(n)).length;}
 // gym items that opened since you last looked (a new market unlocks a wave)
-function gymIsNew(it,L,eq){if(L>=it.max)return false;const n=gymNeed(it,L,eq);return n<=mktReached()&&n>S.gymSeen&&!(S.seenNew||{})[it.id+":"+L];}
-function seeNew(it,isEq){const L=isEq?gl(it.id):sl(it.id);if(!gymIsNew(it,L,isEq))return;(S.seenNew=S.seenNew||{})[it.id+":"+L]=1;save();renderBiz();}
+// 'new' is per unlock (the market that opened it), not per level, so buying a level doesn't make the next one look new
+function gymIsNew(it,L,eq){if(L>=it.max)return false;const n=gymNeed(it,L,eq);return n<=mktReached()&&n>S.gymSeen&&!(S.seenNew||{})[it.id+":m"+n];}
+function seeNew(it,isEq,quiet){const L=isEq?gl(it.id):sl(it.id);if(!gymIsNew(it,L,isEq))return;(S.seenNew=S.seenNew||{})[it.id+":m"+gymNeed(it,L,isEq)]=1;if(!quiet){save();renderBiz();}}
 function gymNew(){return [...EQUIP.map(e=>gymIsNew(e,gl(e.id),1)),...SUPPS.map(p=>gymIsNew(p,sl(p.id),0))].filter(Boolean).length;}
 // first-time coach: one bubble pointing at the one thing to do next
 function coach(){const c=$("#coach");if(!c)return;let el=null,txt="";
